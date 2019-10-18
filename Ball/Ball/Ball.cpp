@@ -2,52 +2,87 @@
 #include "Bar.h"
 #include "Number.h"
 #include <ctime>
+#include "debug.h"
 
 CBall::CBall()
 {	
 	srand(time(NULL));		
 }
 
-void CBall::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CBall::Update(DWORD dt, CNumber *leftNum, CNumber *rightNum, vector<LPGAMEOBJECT> *coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+	CGameObject::Update(dt);
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
-	coEvents.clear();
-
-	// update ball vx, vy, position to center screen when the ball touch left||right edge screen
-	if (x < -20 || x > 305)
-	{
-		SetPosition(150, 80);
-		vx = 0;
-		vy = 0;
-	}
+	coEvents.clear();	
 	
 	CalcPotentialCollisions(coObjects, coEvents);
+
+	// debug
+	DebugOut(L"[BEFO] collision: %d\n", coEvents.size());
 	
 	// No collision occured, proceed normally		
-	if (y <= 1)		// ball touch the top edge
+	if (coEvents.size() == 0)
 	{
-		vy = -(vy - 0.02f);
-		vx = (vx > 0) ? vx + 0.01 : vx - 0.01;
-	}
-	if (y >= 187)	// ball touch the bottom edge
-	{
-		vy = -(vy + 0.02f);
-		vx = (vx > 0) ? vx + 0.01 : vx - 0.01;
-	}
+		// debug
+		DebugOut(L"[NONE] collision: %d\n", coEvents.size());		
 
-	// collision occured: touch left||right bar
-	if (coEvents.size() != 0)
-	{
-		float min_tx, min_ty, nx = 0, ny;
+		x += dx;
+		y += dy;
 
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+		// reset the ball and increase point of the win side (touched the left or right of screen)
+		if (x < -20)
+		{
+			SetPosition(150, 90);
+			vx = 0;
+			vy = 0;
+
+			if (rightNum->num == 9)
+				leftNum->num = 0;
+
+			rightNum->IncreaseNum();
+		}
+		if (x > 305)
+		{
+			SetPosition(150, 90);
+			vx = 0;
+			vy = 0;
+
+			if (leftNum->num == 9)
+				rightNum->num = 0;
+
+			leftNum->IncreaseNum();
+		}
+
+		// handle the ball move when touched the top or bottom of screen
+		if (y <= 1)
+		{
+			vy = -(vy - 0.02f);
+			vx = (vx > 0) ? vx + 0.01 : vx - 0.01;
+		}
+		if (y >= 180)
+		{
+			vy = -(vy + 0.02f);
+			vx = (vx > 0) ? vx + 0.01 : vx - 0.01;
+		}		
+	}
+	// Collision occured with the bars
+	else 
+	{
+		// debug
+		DebugOut(L"[COLL] collision: %d\n", coEvents.size());
+
+		/*float min_tx, min_ty, nx = 0, ny;
+
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);*/
 
 		vx = (vx > 0) ? -(vx + 0.01) : -(vx - 0.01);
 		vy = (vy > 0) ? vy + 0.01 : vy - 0.01;
+
+		x += dx;
+		y += dy;
 	}
 
 	// clean up collision events
@@ -73,6 +108,6 @@ void CBall::SetSpeed()
 	int randomx = rand() % 2;
 	int randomy = rand() % 2;
 
-	vx = speed[randomx];
-	vy = speed[randomy];
+	vx = speed[0];
+	vy = speed[0];
 }

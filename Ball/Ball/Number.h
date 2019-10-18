@@ -19,7 +19,6 @@ public:
 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 
-	void Update(DWORD dt, int xBall);
 	void Render();
 	void AddAnimation(int aniId);
 	void IncreaseNum();

@@ -8,12 +8,6 @@ CNumber::~CNumber()
 {
 }
 
-void CNumber::Update(DWORD dt, int xBall)
-{
-	/*if (xBall < -17)
-		num++;*/
-}
-
 void CNumber::Render()
 {
 	animations[num]->Render(x, y);

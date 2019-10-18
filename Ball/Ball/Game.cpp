@@ -63,6 +63,7 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 	r.top = top;
 	r.right = right;
 	r.bottom = bottom;
+	
 	spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
 }
 
@@ -167,9 +168,7 @@ void CGame::ProcessKeyboard()
 			//DebugOut(L"[ERROR] DINPUT::GetDeviceState failed. Error: %d\n", hr);
 			return;
 		}
-	}
-
-	keyHandler->KeyState((BYTE *)&keyStates);
+	}	
 
 	// Collect all buffered events
 	DWORD dwElements = KEYBOARD_BUFFER_SIZE;
@@ -185,11 +184,14 @@ void CGame::ProcessKeyboard()
 	{
 		int KeyCode = keyEvents[i].dwOfs;
 		int KeyState = keyEvents[i].dwData;
-		if ((KeyState & 0x80) > 0)
+		/*if ((KeyState & 0x80) > 0)
 			keyHandler->OnKeyDown(KeyCode);
 		else
-			keyHandler->OnKeyUp(KeyCode);
+			keyHandler->OnKeyUp(KeyCode);*/
+		keyHandler->OnKeyDown(KeyCode, KeyState);
 	}
+
+	//keyHandler->KeyState((BYTE *)&keyStates);
 }
 
 void CGame::InitMouse(LPKEYEVENTHANDLER handler)
@@ -284,12 +286,10 @@ void CGame::ProcessMouse()
 			//DebugOut(L"[ERROR] DINPUT::GetDeviceState failed. Error: %d\n", hr);
 			return;
 		}
-	}
-
-	//keyHandler->MouseState(&mouseStates);
+	}	
 
 	// Collect all buffered events
-	DWORD dwElements = KEYBOARD_BUFFER_SIZE;
+	DWORD dwElements = MOUSE_BUFFER_SIZE;
 	hr = didv_mouse->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), mouseEvents, &dwElements, 0);
 	if (FAILED(hr))
 	{
@@ -300,11 +300,13 @@ void CGame::ProcessMouse()
 	// Scan through all buffered events, check if the key is pressed or released
 	for (DWORD i = 0; i < dwElements; i++)
 	{		
-		int mouseState = mouseEvents[i].dwOfs;
-		int mouseData = mouseEvents[i].dwData;
+		int mouseCode = mouseEvents[i].dwOfs;
+		int mouseState = mouseEvents[i].dwData;
 		
-		keyHandler->MouseButton(mouseState, mouseData);
+		keyHandler->OnMouseDown(mouseCode, mouseState);
 	}
+
+	//keyHandler->MouseState(&mouseStates);
 }
 
 CGame::~CGame()

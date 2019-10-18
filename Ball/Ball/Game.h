@@ -2,22 +2,22 @@
 #include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-
-#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#include "Constants.h"
 
-#define KEYBOARD_BUFFER_SIZE 1024
-#define MOUSE_BUFFER_SIZE 100
+//#define DIRECTINPUT_VERSION 0x0800
+//
+//#define KEYBOARD_BUFFER_SIZE 1024
+//#define MOUSE_BUFFER_SIZE 100
 /*
 Abstract class to define keyboard event handlers
 */
 class CKeyEventHandler
 {
 public:
-	virtual void KeyState(BYTE *state) = 0;
-	virtual void OnKeyDown(int KeyCode) = 0;
-	virtual void OnKeyUp(int KeyCode) = 0;	
-	virtual void MouseButton(int mouseState, int mouseData) = 0;
+	virtual void OnKeyDown(int KeyCode, int KeyState) = 0;
+	virtual void OnKeyUp(int KeyCode) = 0;
+	virtual void OnMouseDown(int mouseCode, int mouseState) = 0;
 };
 
 typedef CKeyEventHandler * LPKEYEVENTHANDLER;

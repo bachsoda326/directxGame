@@ -2,9 +2,11 @@
 
 void CBar::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+	CGameObject::Update(dt);
 
-	// make bar cannot move when touch top||bottom edge
+	x += dx;
+	y += dy;
+
 	if (y <= 1 || y >= 150)
 		SetState(BAR_STATE_STAND);
 }
