@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Burst_1" imagePath="Aladdin.png" width="1121" height="2718">             
+    <sprite id="00" x="373" y="25" w="7" h="6" oX="3" oY="3" />  
+    <sprite id="01" x="394" y="23" w="7" h="10" oX="3" oY="5" />
+    <sprite id="02" x="414" y="18" w="20" h="18" oX="10" oY="9" />
+    <sprite id="03" x="444" y="17" w="29" h="22" oX="14" oY="11" />
+    <sprite id="04" x="485" y="14" w="31" h="25" oX="15" oY="12" />
+    <sprite id="05" x="532" y="13" w="30" h="27" oX="15" oY="13" />        
+  </Animation>
+  <Animation name="Split_Half" imagePath="Aladdin.png" width="1121" height="2718"> 
+    <sprite id="06" x="598" y="18" w="20" h="26" oX="7" oY="6" />
+    <sprite id="07" x="639" y="23" w="14" h="4" oX="7" oY="4" />
+    <sprite id="08" x="665" y="22" w="14" h="5" oX="7" oY="0" />
+    <sprite id="09" x="696" y="19" w="13" h="10" oX="6" oY="5" />
+    <sprite id="010" x="728" y="19" w="13" h="10" oX="6" oY="5" />
+  </Animation>
+</Animations>
