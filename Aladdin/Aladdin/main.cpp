@@ -1,4 +1,4 @@
-/* =============================================================
+﻿/* =============================================================
 INTRODUCTION TO GAME PROGRAMMING SE102
 
 SAMPLE 04 - COLLISION
@@ -21,7 +21,6 @@ CGameObject::GetBoundingBox
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-
 #include "debug.h"
 #include "Game.h"
 #include "GameObject.h"
@@ -52,6 +51,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+// Kiểm tra camera khi chạm biên map và đặt vị trí camera theo Aladdin
 void CheckCameraAndWorldMap()
 {
 	// test Camera move when Mario is not on center screen
@@ -96,21 +96,20 @@ void LoadResources()
 {
 	CTextures * textures = CTextures::GetInstance();
 
-	// create texture from path and add to "textures"
+	// tạo texture lớn từ đường dẫn và add vào instance"textures"
 	textures->Add(1, L"textures\\map.png", D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(2, L"textures\\map1.png", D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_TEX_ALADDIN, L"textures\\Aladdin.png", D3DCOLOR_XRGB(255, 0, 255));	
 
 	CSprites * sprites = CSprites::GetInstance();
 
-	// get object texture and add to "sprites" with RECT
+	// lấy texture lớn từ instance"textures"
 	LPDIRECT3DTEXTURE9 texMap = textures->Get(1);
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(2);
+	// tạo sprite từ texture lớn thông qua RECT và add vào instance"sprites"
 	sprites->Add(10069, 0, 0, 2271, 1139, 0, 0, texMap);
 	sprites->Add(20069, 0, 0, 2271, 1139, 0, 0, texMap1);
-
-	/*camera = new CCamera(SCREEN_WIDTH, SCREEN_HEIGHT);*/
-
+	
 	grid = new CGrid(MAP_WIDTH, MAP_HEIGHT, 150);
 
 	map = new CMap(10069);
@@ -124,7 +123,7 @@ void LoadResources()
 	aladdin->SetPosition(115, 1000);
 	//aladdin->SetPosition(115, 1120);
 	//aladdin->SetCamera(camera);
-	//grid->AddBall(aladdin);
+	//grid->AddObjToCell(aladdin);
 	objects.push_back(aladdin);	
 
 	map1 = new CMap(20069);
@@ -148,8 +147,7 @@ void Update(DWORD dt)
 	{
 		objects[i]->Update(dt);
 	}	
-
-	// Make camera following the main aladdin
+		
 	CheckCameraAndWorldMap();
 
 	//grid->CalcColliableObjs(camera, coObjects);
@@ -158,7 +156,7 @@ void Update(DWORD dt)
 }
 
 /*
-Render a frame
+Render a frame: ở đây là vẽ ảnh hoặc animation
 */
 void Render()
 {
@@ -187,6 +185,7 @@ void Render()
 	d3ddv->Present(0, 0, 0, 0);
 }
 
+// Tạo cửa sổ game
 HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
 {
 	WNDCLASSEX wc;
@@ -280,13 +279,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	game = CGame::GetInstance();
-	game->Init(hWnd);
-	
+	game->Init(hWnd);	
 	game->InitKeyboard();
 	//game->InitMouse();
 
 	LoadResources();
 
+	// phóng đại game lên 2 lần
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();

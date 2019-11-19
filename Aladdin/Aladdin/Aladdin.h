@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Constants.h"
 #include "Camera.h"
@@ -13,21 +13,28 @@ class CAladdin : public CGameObject
 private:
 	static CAladdin * __instance;
 	CGame *keyBoard = CGame::GetInstance();
+	// t.gian đứng
 	DWORD standingTime;
+	// trạng thái cuối
 	int lastState;
+	// v.tốc vy cuối
 	float last_vy;
-
+	// các biến để chỉ cho nhảy, chém, ném 1 lần
 	bool keyUp[3];
+	// ứng với mũi tên lên, xuống, Z, X, cách, trái, phải
 	bool KeyUp, KeyDown, KeyZ, KeyX, KeySpace, KeyLeft, KeyRight;
 	bool isAppleCreated;
+	// biến đếm animation Wait_1
+	int countWait_1;
 
-	float speed[2] = { -BALL_SPEED, BALL_SPEED };
+	//float speed[2] = { -BALL_SPEED, BALL_SPEED };
 public:
 	CAladdin();	
-
+	// các animation
 	LPANIMATION currentAnimation,
 		animationWait_1,
 		animationWait_2,
+		animationWait_3,
 		animationWait_Swinging,
 		animationStand_1,
 		animationLookUp_1,
@@ -53,20 +60,21 @@ public:
 		STANDING,
 		RUNNING,
 		CUTTING,
-		DUCKING,
+		DUCKING,			// cúi xuống
 		WAITING_1,
 		WAITING_2,
+		WAITING_3,
 		WAITING_SWINGING,			
-		RUN_LONG_ENOUGH,
-		BRAKING,		
+		RUN_LONG_ENOUGH,	// chạy đủ lâu
+		BRAKING,			// thắng lại (khi chạy đủ lâu)
 		JUMPING,
-		THROWING,
-		LOOK_UP,		
-		CLIMB,
+		THROWING,			// ném
+		LOOK_UP,			// nhìn lên
+		CLIMB,				// leo trèo
 		CLIMBING,
-		SWING,
+		SWING,				// đu
 		SWINGING,
-		PUSHING,
+		PUSHING,			// đẩy (khi gặp tường mà k đi đc)
 		STUNTING,
 		HURT,
 		DIE,
@@ -80,6 +88,7 @@ public:
 	{
 		ANI_WAIT_1,
 		ANI_WAIT_2,
+		ANI_WAIT_3,
 		ANI_WAIT_SWINGING,
 		ANI_STAND_1,
 		ANI_LOOKUP_1,
@@ -114,27 +123,27 @@ public:
 		ANI_FLY,
 		ANI_HUG
 	};
-
+	// Khởi tạo obj
 	void LoadResources();
 
 	/*CCamera *camera;
 	void SetCamera(CCamera *camera);*/
 
-	//update key
+	// Update nhận các phím đc nhấn
 	void UpdateKey();
 	void HandleKeyBoard();
 
-	void Run();
-	void Brake();
-	void Duck();
-	void Cut();
-	void Throw();
-	void LookUp();
-	void Jump();
-	void Stand();
-	void Wait();
+	void Run();		// chạy
+	void Brake();	// thắng lại
+	void Duck();	// cúi xuống
+	void Cut();		// chém
+	void Throw();	// ném (táo)
+	void LookUp();	// nhìn lên
+	void Jump();	// nhảy
+	void Stand();	// đứng yên
+	void Wait();	// đợi (khi đứng yên 1 t.gian)
 
-	//handle apple
+	// Handle apple
 	vector<CGameObject*> listApples;
 	void CreateApple();
 	//void CreateApple(CGameObject*obj);
@@ -146,7 +155,7 @@ public:
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
 	void SetAnimation(int ani);
 	void SetPosition(float x, float y);
-	void SetRanDomPosition();
+	/*void SetRanDomPosition();*/
 	void CheckCollision(vector<LPGAMEOBJECT> *coObjects);
 	//void SetSpeed();
 

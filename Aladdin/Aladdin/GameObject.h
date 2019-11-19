@@ -10,6 +10,7 @@ using namespace std;
 
 /*#define ID_TEX_BBOX -100	*/	// special texture to draw object bounding box
 
+// Kiểu va chạm
 enum CollisionType
 {
 	CollGround,
@@ -28,6 +29,7 @@ enum CollisionType
 	CollUnknown
 };
 
+// Kiểu obj
 enum ObjectType
 {
 	OBJGround,
@@ -70,6 +72,7 @@ enum ObjectType
 class CGameObject;
 typedef CGameObject * LPGAMEOBJECT;
 
+// Sự kiện va chạm
 struct CCollisionEvent;
 typedef CCollisionEvent * LPCOLLISIONEVENT;
 struct CCollisionEvent
@@ -122,18 +125,17 @@ public:
 
 public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
-	D3DXVECTOR3 GetPosition() { return D3DXVECTOR3(x, y, 0); }
-
-	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }	
+	D3DXVECTOR3 GetPosition() { return D3DXVECTOR3(x, y, 0); }	
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
-
 	int GetState() { return this->state; }
-
+	// Thêm animation vào obj
 	void AddAnimation(int aniId);
 
 	void RenderBoundingBox();
 
+	// Trả về các biên của obj
 	float Left();
 	float Top();
 	float Right();	
@@ -151,10 +153,12 @@ public:
 
 	CGameObject();
 
-	//set type object from object's id
+	// Set kiểu object từ object's id
 	virtual void SetObjectFromID();
+	// Khởi tạo obj
 	virtual void LoadResources();
 	virtual void SetState(int state) { this->state = state; }
+	// Set biên obj 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);

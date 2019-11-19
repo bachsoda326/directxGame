@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Aladdin.h"
 
 class CApple : public CGameObject
@@ -15,22 +15,22 @@ public:
 
 	enum AppleStates
 	{
-		NOTMOVING,
-		FLING,
-		BURST,
-		ACTIVED,
-		SPLIT_HALF,
+		NOTMOVING,	// k chuyển động
+		FLING,		// quăng ra
+		BURST,		// bị vỡ, nát 
+		ACTIVED,	// đang xài được
+		SPLIT_HALF,	// bị cắt làm đôi
 	};
 
-	//set type collision from object's id
+	// Set type va chạm từ obj's id
 	void SetObjectFromID();
-	//init object
+	// Khởi tạo obj
 	void LoadResources();
 
 	/*CCamera *camera;
 	void SetCamera(CCamera *camera);*/
 
-	//process input
+	// Process input
 	void ProcessInput();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();
@@ -40,7 +40,7 @@ public:
 	//interserct
 	void OnInterSerct(CGameObject* obj);
 
-	//action of apple
+	// Hoạt động của táo
 	void Move();
 	void Burst();	
 	void Active();

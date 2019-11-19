@@ -26,8 +26,7 @@ void CGameObject::LoadResources()
 void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	this->dt = dt;
-	dx = vx*dt;
-	// lẽ ra *dt nhưng *dt = *4 để nhảy rơi chậm xí
+	dx = vx*dt;	
 	dy = vy*dt;
 }
 

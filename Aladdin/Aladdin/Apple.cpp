@@ -1,4 +1,4 @@
-#include "Apple.h"
+﻿#include "Apple.h"
 #include "Textures.h"
 
 CApple::CApple()
@@ -74,11 +74,11 @@ void CApple::ProcessInput()
 void CApple::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
-
+	// cập nhật vị trí của táo
 	x += dx;
 	y += dy;
 
-	//simulate fall down (gravity)
+	// trọng lực cho táo rơi
 	if (collType == CollApple)
 		vy += 0.015f;
 }
@@ -87,7 +87,7 @@ void CApple::Render()
 {
 	if (true)
 	{
-		// Vector trans to support move camera
+		// // Vector trans giúp dời ảnh theo camera
 		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - CCamera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - CCamera::GetInstance()->GetPosition().y));
 		currentAnimation->Render(x, y, xDraw, yDraw, direction, trans);
 	}

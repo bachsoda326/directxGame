@@ -183,17 +183,25 @@ void CAnimation::Render(float x, float y, float &xDraw, float &yDraw, bool direc
 		if (now - lastFrameTime > t)
 		{
 			if (firstFrame <= lastFrame)
-				currentFrame++;
-			else 
-				currentFrame--;
-
-			lastFrameTime = now;
-			
-			if (currentFrame == lastFrame + 1)
 			{
-				currentFrame = firstFrame;
-				//isActionDone = true;
+				currentFrame++;
+				if (currentFrame == lastFrame + 1)
+				{
+					currentFrame = firstFrame;
+					//isActionDone = true;
+				}
 			}
+			else
+			{
+				currentFrame--;
+				if (currentFrame == lastFrame - 1)
+				{
+					currentFrame = firstFrame;
+					//isActionDone = true;
+				}
+			}
+
+			lastFrameTime = now;			
 		}
 
 	}

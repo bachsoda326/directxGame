@@ -1,4 +1,4 @@
-#include "Map.h"
+﻿#include "Map.h"
 
 
 
@@ -25,7 +25,7 @@ void CMap::Render()
 {	
 	if (true)
 	{
-		// Vector trans to support move camera
+		// Vector trans giúp dời ảnh theo camera
 		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - CCamera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - CCamera::GetInstance()->GetPosition().y));
 		sprite->Draw(x, y, trans);
 	}

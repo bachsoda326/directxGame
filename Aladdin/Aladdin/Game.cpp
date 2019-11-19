@@ -9,6 +9,7 @@ rendering 2D images
 - hInst: Application instance handle
 - hWnd: Application window handle
 */
+
 void CGame::Init(HWND hWnd)
 {
 	LPDIRECT3D9 d3d = Direct3DCreate9(D3D_SDK_VERSION);

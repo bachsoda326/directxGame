@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <d3dx9.h>
 #include <d3d9.h>
@@ -15,6 +15,7 @@ public:
 	int GetHeight();
 
 	D3DXVECTOR3 GetPosition();
+	// Trả về biên của camera thông qua RECT
 	RECT GetBound();
 
 	static CCamera * GetInstance();

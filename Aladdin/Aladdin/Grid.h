@@ -1,11 +1,15 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include "Aladdin.h"
 #include "debug.h"
 
+/*
+Grid có chiều dài, rộng = map và gồm nhiều cell, mỗi cell chứa 1 listObj
+*/
+
 struct Cell
 {
-	std::vector<CAladdin*> listBalls;
+	std::vector<CGameObject*> listBalls;
 };
 
 class CGrid
@@ -14,16 +18,16 @@ public:
 	CGrid(int width, int height, int cellSize);
 	~CGrid();
 
-	// Add ball to listBalls of a suitable cell 
-	void AddBall(CAladdin *ball);
+	// Thêm obj vào listObjs của cell thích hợp
+	void AddObjToCell(CGameObject * obj);
 
-	// Get Cell based on cell coordinates
+	// Get Cell dựa trên vị trí của cell
 	Cell& GetCell(int x, int y);
-	// Get Cell based on window obj coordinates
-	Cell& GetCell(D3DXVECTOR3& pos);
+	// Get Cell dựa trên vị trí của obj
+	Cell& GetCell(D3DXVECTOR3& posObj);
 
-	// Calculate objects that can be collited (Calculate cells need to be updated with camera's potition)
-	void CalcColliableObjs(CCamera *camera, vector<LPGAMEOBJECT>& coObjects);
+	// Tính toán các obj có thể bị va chạm (Tính toán các cell cần đc update với vị trí của camera)
+	void CalcColliableObjs(CCamera *camera, vector<LPGAMEOBJECT>& coObjs);
 private:
 	int width, height;
 	int cellSize;

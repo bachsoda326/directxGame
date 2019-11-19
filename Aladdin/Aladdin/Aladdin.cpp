@@ -26,8 +26,9 @@ void CAladdin::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texAladdin = CTextures::GetInstance()->Get(ID_TEX_ALADDIN);
 	
-	animationWait_1 = new CAnimation("Wait_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationWait_1 = new CAnimation("Wait_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 300);
 	animationWait_2 = new CAnimation("Wait_2", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationWait_3 = new CAnimation("Wait_3", XML_ALADDIN_ANIMATION_PATH, texAladdin, 90);
 	animationWait_Swinging = new CAnimation("Wait_Swinging", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationStand_1 = new CAnimation("Stand_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationLookUp_1 = new CAnimation("LookUp_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 45);
@@ -46,7 +47,7 @@ void CAladdin::LoadResources()
 	animationThrow_Ducking = new CAnimation("Throw_Ducking", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationThrow_Jumping = new CAnimation("Throw_Jumping", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationThrow_Swinging = new CAnimation("Throw_Swinging", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
-	animationBrake_1 = new CAnimation("Brake_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 65);
+	animationBrake_1 = new CAnimation("Brake_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 60);
 
 	currentAnimation = animationJump_Standing;
 	standingTime = GetTickCount();
@@ -65,7 +66,7 @@ void CAladdin::UpdateKey()
 		keyUp[1] = true;
 	if (!keyBoard->KeyDown(DIK_C))
 		keyUp[2] = true;
-
+	// setup keyboard
 	KeyZ = keyBoard->KeyDown(DIK_Z);
 	KeyX = keyBoard->KeyDown(DIK_X);
 	KeySpace = keyBoard->KeyDown(DIK_C);
@@ -115,19 +116,37 @@ void CAladdin::HandleKeyBoard()
 		{
 		case DUCKING: case RUNNING: case RUN_LONG_ENOUGH: case LOOK_UP: case JUMPING:
 		{
-			if (KeyLeft)
-				direction = false;
-			else if (KeyRight)
+			if (KeyRight)
 				direction = true;
+			else if (KeyLeft)
+				direction = false;
 			else
 				break;
+		}
+		case CUTTING: case THROWING:
+		{
+			if (lastState == CLIMB || lastState == SWING)
+			{
+				if (KeyLeft)
+					direction = true;
+				else if (KeyRight)
+					direction = false;
+			}
+			else
+			{
+				if (KeyRight)
+					direction = true;
+				else if (KeyLeft)
+					direction = false;
+			}
+			break;
 		}
 		}		
 
 		// set vận tốc của Aladdin
 		switch (state)
 		{
-		case JUMPING: case RUNNING: case CUTTING: case THROWING:
+		case JUMPING: case RUNNING: case RUN_LONG_ENOUGH: case CUTTING: case THROWING:
 		{
 			if (KeyRight)
 				vx = ALADDIN_SPEED;
@@ -164,6 +183,7 @@ void CAladdin::HandleKeyBoard()
 		}		
 	}
 
+	// sự kiện xử lý khi thả phím
 	if (isKeyDown == false)
 	{
 		switch (state)
@@ -205,7 +225,7 @@ void CAladdin::HandleKeyBoard()
 
 			break;
 		}
-		case WAITING_1: case WAITING_2: case WAITING_SWINGING:
+		case WAITING_1: case WAITING_2: case WAITING_3: case WAITING_SWINGING:
 			Wait();
 			break;
 		default:
@@ -217,8 +237,9 @@ void CAladdin::HandleKeyBoard()
 			}
 			else
 			{
-				//reset frame when click button event
-				currentAnimation->ResetFrame();
+				// reset frame when click button event
+				if (currentAnimation == animationRun_1)
+					currentAnimation->ResetFrame();
 				Stand();
 			}			
 			break;
@@ -691,7 +712,7 @@ void CAladdin::Jump()
 }
 
 void CAladdin::Stand()
-{
+{	
 	switch (state)
 	{
 	case STANDING:
@@ -732,87 +753,87 @@ void CAladdin::Stand()
 
 void CAladdin::Wait()
 {
-	DWORD startWait = GetTickCount();
+	DWORD startWait = GetTickCount();	
 	int i = currentAnimation->GetCurrentFrame();
-	if (startWait - standingTime > 2000)
+	switch (state)
 	{
-		switch (state)
-		{
-		case STANDING:
+	case STANDING:
+	{
+		if (startWait - standingTime > 2000)
 		{
 			lastState = state;
 			SetState(WAITING_1);
 			SetAnimation(ANI_WAIT_1);
-			//animationWait_1->SetFrame(0, 3);
-			//count = -1;
-			break;
-		}
-		case SWING:
+			animationWait_1->SetFrame(0, 3);
+			standingTime = GetTickCount();
+			countWait_1 = 0;
+		}		
+		
+		break;
+	}	
+	case WAITING_1:
+	{
+		if (currentAnimation == animationWait_1 && currentAnimation->GetLastFrame() == 3 && currentAnimation->isActionFinish())
 		{
-			lastState = state;
-			SetState(WAITING_SWINGING);
-			SetAnimation(ANI_WAIT_SWINGING);
-			//ANI_WAIT_SWINGING->SetFrame(183, 179);
-			break;
+			animationWait_1->SetFrame(3, 1);
+			countWait_1++;
 		}
-		/*case WAITING_1:
+		if (currentAnimation == animationWait_1 && currentAnimation->GetLastFrame() == 1 && currentAnimation->isActionFinish())
 		{
-			srand(time(0));
-			int a[4] = { 3, 2, 4, 6 };
+			animationWait_1->SetFrame(4, 6);
+			countWait_1++;
+		}
+		if (currentAnimation == animationWait_1 && currentAnimation->GetLastFrame() == 6 && currentAnimation->isActionFinish())
+		{
+			animationWait_1->SetFrame(6, 4);
+			countWait_1++;
+		}
+		if (currentAnimation == animationWait_1 && currentAnimation->GetLastFrame() == 4 && currentAnimation->isActionFinish())
+		{
+			animationWait_1->SetFrame(1, 3);
+			countWait_1++;
+		}
+		if (countWait_1 == 6)
+		{
+			SetState(WAITING_2);
+			SetAnimation(ANI_WAIT_2);
+		}
+		
+		break;
+	}
+	case WAITING_2:
+	{
+		if (currentAnimation->isActionFinish())
+		{
+			SetState(WAITING_3);
+			SetAnimation(ANI_WAIT_3);
+		}
+		break;
+	}
+	case WAITING_3:
+	{		
+		break;
+	}
+	/*case WAITING_SWINGING:
+	{
+	if (currentAnimation->isActionFinish())
+	{
+	if (i == 4)
+	animationWait_Swinging->SetFrame(0, 4);
+	else
+	animationWait_Swinging->SetFrame(4, 0);
+	}
+	break;
+	}*/
+	case SWING:
+	{
+		lastState = state;
+		SetState(WAITING_SWINGING);
+		SetAnimation(ANI_WAIT_SWINGING);
+		//ANI_WAIT_SWINGING->SetFrame(183, 179);
+		break;
+	}
 
-			if (aladdin_image->isActionFinish())
-			{
-				if (rand() % 20 != 19)
-				{
-					count += 2;
-					if (count == 5)
-					{
-						count = -count;
-						count += 2;
-					}
-					if (count > 0)
-						aladdin_image->setFrame(a[count - 1], a[count]);
-					else
-						aladdin_image->setFrame(a[abs(count)], a[abs(count) - 1]);
-				}
-				else
-				{
-					SetState(WAITING_2);
-					Wait();
-					break;
-				}
-			}
-			break;
-		}
-		case WAITING_2:
-		{
-			if (aladdin_image->isActionFinish() && rand() % 5 != 4)
-			{
-				if (i <= 6)
-					aladdin_image->setFrame(13, 27);
-				else
-					aladdin_image->setFrame(18, 27);
-				animation_rate = 15;
-			}
-			else if (aladdin_image->isActionFinish())
-			{
-				aladdin_image->setFrame(28, 44);
-				animation_rate = 15;
-			}
-			break;
-		}
-		case WAITING_SWINGING:
-		{
-			if (currentAnimation->isActionFinish())
-			{
-				if (i == 4)
-					animationWait_Swinging->SetFrame(0, 4);
-				else
-					animationWait_Swinging->SetFrame(4, 0);
-			}
-			break;
-		}*/
-		}
 	}
 }
 
@@ -821,9 +842,11 @@ void CAladdin::CreateApple()
 	CGameObject* apple = new CApple();
 	apple->id = 6;
 	apple->SetObjectFromID();
+
 	if (lastState == SWING || lastState == SWINGING || lastState == CLIMB || lastState == CLIMBING)
 	{
 		apple->yDraw = (this->Top() + this->Bottom()) / 2;
+		// vận tốc ném lên (vy) của táo, ném ngang thì vx
 		apple ->vy = -0.07f;
 		if (!direction)
 		{
@@ -839,6 +862,7 @@ void CAladdin::CreateApple()
 	else
 	{
 		apple->yDraw = this->Top();
+		// vận tốc ném lên (vy) của táo, ném ngang thì vx
 		apple->vy = -0.1f;
 		if (direction)
 		{
@@ -938,16 +962,22 @@ void CAladdin::SetAnimation(int ani)
 		currentAnimation->ResetFrame();
 		break;
 	}
+	case ANI_WAIT_3:
+	{
+		currentAnimation = animationWait_3;
+		currentAnimation->ResetFrame();
+		break;
+	}
 	case ANI_WAIT_SWINGING:
 	{
 		currentAnimation = animationWait_Swinging;
-		currentAnimation->ResetFrame();
+		//currentAnimation->ResetFrame();
 		break;
 	}
 	case ANI_STAND_1:
 	{
 		currentAnimation = animationStand_1;
-		currentAnimation->ResetFrame();
+		//currentAnimation->ResetFrame();
 		break;
 	}
 	case ANI_LOOKUP_1:
@@ -1063,12 +1093,12 @@ void CAladdin::SetPosition(float x, float y)
 	yDraw = y - distance_y;
 }
 
-void CAladdin::SetRanDomPosition()
-{
-	float xBall = 30 + rand() % RANDOM_WIDTH - 29;
-	float yBall = 30 + rand() % RANDOM_HEIGHT - 29;
-	SetPosition(xBall, yBall);
-}
+//void CAladdin::SetRanDomPosition()
+//{
+//	float xRand = 30 + rand() % RANDOM_WIDTH - 29;
+//	float yRand = 30 + rand() % RANDOM_HEIGHT - 29;
+//	SetPosition(xRand, yRand);
+//}
 
 void CAladdin::CheckCollision(vector<LPGAMEOBJECT> *coObjects)
 {

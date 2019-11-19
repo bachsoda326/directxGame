@@ -1,17 +1,9 @@
-#pragma once
+﻿#pragma once
 #include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <dinput.h>
 #include "Constants.h"
-
-//#define DIRECTINPUT_VERSION 0x0800
-//
-//#define KEYBOARD_BUFFER_SIZE 1024
-//#define MOUSE_BUFFER_SIZE 100
-/*
-Abstract class to define keyboard event handlers
-*/
 
 class CGame
 {
@@ -22,29 +14,35 @@ class CGame
 	LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
 
 	LPDIRECT3DSURFACE9 backBuffer = NULL;
-	LPD3DXSPRITE spriteHandler = NULL;			// Sprite helper library to help us draw 2D image on the screen 
+	LPD3DXSPRITE spriteHandler = NULL;			// sprite device giúp vẽ ảnh 2D lên màn hình 
 
-	LPDIRECTINPUT8       di;				// The DirectInput object         
-	LPDIRECTINPUTDEVICE8 didv_keyboard;		// The keyboard device 
-	LPDIRECTINPUTDEVICE8 didv_mouse;		// The mouse device 
+	LPDIRECTINPUT8       di;					// The DirectInput object         
+	LPDIRECTINPUTDEVICE8 didv_keyboard;			// The keyboard device 
+	LPDIRECTINPUTDEVICE8 didv_mouse;			// The mouse device 
 
 	
-	DIMOUSESTATE mouseStates;		// DirectInput mouse state buffer
+	DIMOUSESTATE mouseStates;					// DirectInput mouse state buffer
 
-	//DIDEVICEOBJECTDATA keyEvents[KEYBOARD_BUFFER_SIZE];		// Buffered keyboard data
+	//DIDEVICEOBJECTDATA keyEvents[KEYBOARD_BUFFER_SIZE];	// Buffered keyboard data
 	DIDEVICEOBJECTDATA mouseEvents[MOUSE_BUFFER_SIZE];		// Buffered mouse data	
 
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 
 public:
+	// Khởi tạo bàn phím
 	void InitKeyboard();
+	// Khởi tạo chuột
 	void InitMouse();
+	// Khởi tạo DirectX, tạo các Direct3D devices cho việc render trong cửa sổ game, device cho việc vẽ lên màn hình
 	void Init(HWND hWnd);	
-		
+	// Gọi xử lý bàn phím	
 	void ProcessKeyboard();
+	// Gọi xử lý chuột
 	void ProcessMouse();
+	// Phím được nhấn xuống
 	int KeyDown(int key);
+	// Chuột được nhấn xuống
 	int IsMouseDown(int MouseCode);
 
 	static void SweptAABB(
