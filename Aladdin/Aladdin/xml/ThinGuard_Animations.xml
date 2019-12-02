@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Run" imagePath="Guards.png" width="498" height="1053">             
+    <sprite id="0" x="2" y="9" w="45" h="67" oX="20" oY="67" />
+    <sprite id="1" x="53" y="10" w="45" h="66" oX="23" oY="66" />
+    <sprite id="2" x="109" y="11" w="46" h="65" oX="24" oY="65" />
+    <sprite id="3" x="164" y="11" w="45" h="65" oX="20" oY="65" />
+    <sprite id="4" x="214" y="10" w="37" h="66" oX="26" oY="66" />
+    <sprite id="5" x="259" y="9" w="43" h="67" oX="27" oY="67" />
+    <sprite id="6" x="308" y="9" w="50" h="67" oX="30" oY="67" />
+    <sprite id="7" x="363" y="11" w="36" h="65" oX="18" oY="65" />
+  </Animation>
+  <Animation name="Cut_1" imagePath="Guards.png" width="498" height="1053">        
+    <sprite id="8" x="9" y="82" w="37" h="74" oX="20" oY="74" />
+    <sprite id="9" x="53" y="96" w="49" h="60" oX="18" oY="60" />
+    <sprite id="10" x="109" y="98" w="92" h="58" oX="71" oY="58" />
+    <sprite id="11" x="203" y="97" w="86" h="59" oX="66" oY="59" />
+    <sprite id="12" x="292" y="96" w="77" h="60" oX="55" oY="60" />
+    <sprite id="13" x="382" y="96" w="41" h="60" oX="24" oY="60" />
+  </Animation> 
+  <Animation name="Hurt" imagePath="Guards.png" width="498" height="1053">        
+    <sprite id="14" x="8" y="175" w="44" h="58" oX="24" oY="58" />
+    <sprite id="15" x="59" y="185" w="40" h="48" oX="21" oY="48" />
+    <sprite id="16" x="114" y="160" w="39" h="73" oX="19" oY="73" />
+    <sprite id="17" x="161" y="165" w="41" h="68" oX="20" oY="68" />
+    <sprite id="18" x="210" y="171" w="46" h="62" oX="20" oY="62" />
+    <sprite id="19" x="268" y="162" w="42" h="71" oX="28" oY="71" />
+    <sprite id="20" x="318" y="184" w="47" h="49" oX="27" oY="49" />
+    <sprite id="21" x="378" y="185" w="40" h="48" oX="21" oY="48" />
+    <sprite id="22" x="433" y="166" w="45" h="67" oX="19" oY="67" />
+  </Animation>
+</Animations>

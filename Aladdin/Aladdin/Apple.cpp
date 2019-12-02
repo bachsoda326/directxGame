@@ -1,47 +1,50 @@
 ﻿#include "Apple.h"
 #include "Textures.h"
 
-CApple::CApple()
+Apple::Apple()
 {
 	isDead = false;
 	objType = OBJApple;
-	currentAnimation = new CAnimation(100);
+	collType = CollApple;
 }
 
-void CApple::SetObjectFromID()
+Apple::Apple(float left, float top, float width, float height)
 {
-	if (id == 6)
-		collType = CollApple;
-	else
-		collType = CollItem;
+	xDraw = left;
+	yDraw = top;
+	
+	direction = true;
+	isDead = false;
+	objType = OBJApple;
 }
 
-void CApple::LoadResources()
-{
-	LPDIRECT3DTEXTURE9 texAladdin = CTextures::GetInstance()->Get(ID_TEX_ALADDIN);
+void Apple::LoadResources()
+{	
+	LPDIRECT3DTEXTURE9 texItems = Textures::GetInstance()->Get(ID_TEX_ITEM);
+	LPDIRECT3DTEXTURE9 texAladdin = Textures::GetInstance()->Get(ID_TEX_ALADDIN);
 
-	animationBurst_1 = new CAnimation("Burst_1", XML_APPLE_ANIMATION_PATH, texAladdin, 100);
-	animationSplit_Half = new CAnimation("Split_Half", XML_APPLE_ANIMATION_PATH, texAladdin, 100);
+	animationItem = new Animation("Animation_Small", XML_ITEMAPLLE_ANIMATION_PATH, texItems, 100);
+	animationBurst_1 = new Animation("Burst_1", XML_APPLE_ANIMATION_PATH, texAladdin, 100);
+	animationSplit_Half = new Animation("Split_Half", XML_APPLE_ANIMATION_PATH, texAladdin, 100);
 
 	xInit = x;
 	yInit = y;
-
-	if (collType == CollApple)
-	{
-		x = xDraw + 7;
-		y = yDraw + 6;
-		state = FLING;
-		typeSplit_Half = true;
-		currentAnimation = animationBurst_1;
-		animationBurst_1->SetFrame(0, 0);
-	}
-	else
+	
+	if (collType == CollItem)
 	{
 		x = xDraw + 5;
 		y = yDraw + 6;
 		state = NOTMOVING;
 		isActived = false;
 		direction = true;
+		currentAnimation = animationItem;
+	}
+	else
+	{
+		x = xDraw + 7;
+		y = yDraw + 6;
+		state = FLING;
+		typeSplit_Half = true;
 		currentAnimation = animationBurst_1;
 		animationBurst_1->SetFrame(0, 0);
 	}
@@ -52,7 +55,51 @@ void CApple::LoadResources()
 	ny = 0.0f;
 }
 
-void CApple::ProcessInput()
+void Apple::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	GameObject::Update(dt);
+	// cập nhật vị trí của táo
+	x += dx;
+	y += dy;
+
+	// trọng lực cho táo rơi
+	if (collType == CollApple)
+		vy += 0.015f;
+}
+
+void Apple::Render()
+{
+	if (true)
+	{
+		// // Vector trans giúp dời ảnh theo camera
+		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
+		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans);
+	}
+	else
+		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, D3DXVECTOR2(0, 0));
+}
+
+void Apple::SetAnimation(AppleAnimations ani)
+{
+	switch (ani)
+	{
+	case ANI_BURST:
+	{
+		//reset frame when press event
+		currentAnimation = animationBurst_1;
+		currentAnimation->ResetFrame();
+		break;
+	}
+	case ANI_SPLIT_HALF:
+	{
+		currentAnimation = animationSplit_Half;
+		currentAnimation->ResetFrame();
+		break;
+	}	
+	}
+}
+
+void Apple::ProcessInput()
 {
 	switch (state)
 	{
@@ -71,43 +118,41 @@ void CApple::ProcessInput()
 	}
 }
 
-void CApple::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Apple::OnCollision(GameObject * obj, float nx, float ny)
 {
-	CGameObject::Update(dt);
-	// cập nhật vị trí của táo
-	x += dx;
-	y += dy;
-
-	// trọng lực cho táo rơi
-	if (collType == CollApple)
-		vy += 0.015f;
-}
-
-void CApple::Render()
-{
-	if (true)
+	switch (obj->collType)
 	{
-		// // Vector trans giúp dời ảnh theo camera
-		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - CCamera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - CCamera::GetInstance()->GetPosition().y));
-		currentAnimation->Render(x, y, xDraw, yDraw, direction, trans);
+	case CollGround: case CollFence:
+		Collision::PreventMove(this, obj, nx, ny);
+		Burst();
+		break;
 	}
-	else
-		currentAnimation->Render(x, y, xDraw, yDraw, direction, D3DXVECTOR2(0, 0));
 }
 
-void CApple::GetBoundingBox(float & l, float & t, float & r, float & b)
+void Apple::OnInterSerct(GameObject * obj)
 {
+	if (collType == CollApple && obj->collType != CollItem)
+	{
+		if (obj->objType == OBJSword)
+		{
+			Split_Half();
+		}
+		else
+		{
+			if (!(vy < 0))
+				Burst();
+		}
+	}
+	if (collType == CollItem && obj->collType == CollAladdin)
+	{		
+		Active();
+	}
 }
 
-
-CApple::~CApple()
-{
-}
-
-void CApple::Move()
+void Apple::Move()
 {
 	if (collType == CollApple)
-		state = FLING;
+		SetState(FLING);
 	else
 	{
 		vy = 0;
@@ -115,7 +160,7 @@ void CApple::Move()
 	}
 }
 
-void CApple::Burst()
+void Apple::Burst()
 {
 	switch (state)
 	{
@@ -124,15 +169,15 @@ void CApple::Burst()
 		if (currentAnimation->isActionFinish())
 		{
 			isDead = true;
-			CAladdin::GetInstance()->DeleteApple(this);
+			Aladdin::GetInstance()->DeleteApple(this);
 		}
 		break;
 	}
 	default:
 	{
-		state = BURST;
-		currentAnimation = animationBurst_1;
-		currentAnimation->SetFrame(1, 5);
+		SetState(BURST);
+		SetAnimation(ANI_BURST);
+		animationBurst_1->SetFrame(1, 5);
 		isDie = true;
 		vx = 0;
 		vy = 0;
@@ -141,82 +186,14 @@ void CApple::Burst()
 	}
 }
 
-void CApple::Active()
+void Apple::Active()
 {
-	switch (state)
-	{
-	case ACTIVED:
-	{
-		if (currentAnimation->isActionFinish())
-			isDead = true;
-		break;
-	}
-	default:
-	{
-		/*status = ACTIVED;
-		xmlFilePath = ITEMACTIVED_XMLFILEPATH;
-		apple_image->setImage(TextureManager::GetInstance()->GetItemActivedTexture());
-		apple_image->setFrame(0, 3);
-		animation_rate = 10;
-		vy = 0;
-		vx = 0;
-		arx = (this->left() + this->right()) / 2;
-		ary = (this->top() + this->bottom()) / 2;
-		isDie = true;
-		isActive = true;
-		break;*/
-	}
-	}
 }
 
-void CApple::Split_Half()
+void Apple::Split_Half()
 {
-	/*switch (status)
-	{
-	case SPLIT_HALF:
-	{
-		if (apple_image->getIndex() == 6)
-		{
-			apple_image->setFrame(7, 10);
-			apple_image->setIndex(8);
-			Apple*obj = new Apple();
-			obj->id = 6;
-			obj->x = this->x;
-			obj->y = this->y;
-			obj->direction = this->direction;
-			if (direction)
-				obj->vx = -0.7f;
-			else
-				obj->vx = 0.7f;
-			obj->vy = -1.2f;
-			obj->setObjectFromID();
-			obj->LoadResources();
-			Aladdin::GetInstance()->createApple(obj);
-			obj->typeSplit_Half = false;
-			obj->Split_Half();
-		}
-		break;
-	}
-	default:
-	{
-		if (typeSplit_Half)
-		{
-			status = SPLIT_HALF;
-			apple_image->setFrame(6, 10);
-			animation_rate = 5;
-			if (direction)
-				vx = -1.0f;
-			else
-				vx = 1.0f;
-			vy = -1.5f;
-		}
-		else
-		{
-			status = SPLIT_HALF;
-			apple_image->setFrame(7, 8);
-			animation_rate = 5;
-		}
-		break;
-	}
-	}*/
+}
+
+Apple::~Apple()
+{
 }

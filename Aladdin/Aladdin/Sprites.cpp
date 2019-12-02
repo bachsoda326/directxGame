@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "debug.h"
 
-CSprite::CSprite(int id, float left, float top, float width, float height, float oX, float oY, LPDIRECT3DTEXTURE9 tex)
+Sprite::Sprite(int id, float left, float top, float width, float height, float oX, float oY, LPDIRECT3DTEXTURE9 tex)
 {
 	this->id = id;
 	this->left = left;
@@ -14,15 +14,37 @@ CSprite::CSprite(int id, float left, float top, float width, float height, float
 	this->texture = tex;
 }
 
-CSprites * CSprites::__instance = NULL;
+Sprites * Sprites::__instance = NULL;
 
-CSprites *CSprites::GetInstance()
+Sprites *Sprites::GetInstance()
 {
-	if (__instance == NULL) __instance = new CSprites();
+	if (__instance == NULL) __instance = new Sprites();
 	return __instance;
 }
 
-void CSprite::Draw(float x, float y, D3DXVECTOR2 transform)
+void Sprite::DrawTest(float x, float y, D3DXVECTOR2 transform, int alpha)
+{
+	D3DXVECTOR3 p(floor(x), floor(y), 0);
+	RECT r;
+	r.left = left;
+	r.top = top;
+	r.right = r.left + width;
+	r.bottom = r.top + height;
+
+	D3DXVECTOR2 inTranslation = transform;
+
+	D3DXMATRIX oldMatrix, newMatrix;
+	Game::GetInstance()->GetSpriteHandler()->GetTransform(&oldMatrix);
+	D3DXMatrixTransformation2D(&newMatrix, 0, 0, 0, 0, 0, &inTranslation);
+
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&newMatrix);
+
+	Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
+
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix);
+}
+
+void Sprite::Draw(float x, float y, D3DXVECTOR2 transform)
 {
 	// position with old camera
 	//D3DXVECTOR3 p(floor(x - cam_x), floor(y - cam_y), 0);
@@ -37,23 +59,25 @@ void CSprite::Draw(float x, float y, D3DXVECTOR2 transform)
 	D3DXVECTOR2 inTranslation = transform;
 
 	D3DXMATRIX oldMatrix, newMatrix;
-	CGame::GetInstance()->GetSpriteHandler()->GetTransform(&oldMatrix);
+	Game::GetInstance()->GetSpriteHandler()->GetTransform(&oldMatrix);
 	D3DXMatrixTransformation2D(&newMatrix, 0, 0, 0, 0, 0, &inTranslation);
 
-	CGame::GetInstance()->GetSpriteHandler()->SetTransform(&newMatrix);
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&newMatrix);
 
-	CGame::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
+	Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
 
-	CGame::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lai matrix cu~ de Sprite chi ap dung transfrom voi class nay
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lai matrix cu~ de Sprite chi ap dung transfrom voi class nay
 }
 
-void CSprite::Draw(float x, float y, float &xDraw, float &yDraw, bool direction, D3DXVECTOR2 transform, int alpha)
+void Sprite::Draw(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int alpha)
 {
 	// position with old camera
 	//D3DXVECTOR3 p(floor(x - cam_x), floor(y - cam_y), 0);
 
 	xDraw = (float)(x - oX);
 	yDraw = (float)(y - oY);
+	w = width;
+	h = height;
 
 	D3DXVECTOR3 p(floor(xDraw), floor(yDraw), 0);
 	RECT r;
@@ -65,13 +89,13 @@ void CSprite::Draw(float x, float y, float &xDraw, float &yDraw, bool direction,
 	D3DXVECTOR2 inTranslation = transform;
 
 	D3DXMATRIX oldMatrix, newMatrix;
-	CGame::GetInstance()->GetSpriteHandler()->GetTransform(&oldMatrix);
+	Game::GetInstance()->GetSpriteHandler()->GetTransform(&oldMatrix);
 
 	// lật ngược ảnh
 	if (direction == false)
 	{
 		//set correct position of x and y
-		xDraw = (float)(x - width + oX);
+		xDraw = (float)(x - w + oX);
 		yDraw = (float)(y - oY);
 
 		D3DXVECTOR2 center;
@@ -86,26 +110,26 @@ void CSprite::Draw(float x, float y, float &xDraw, float &yDraw, bool direction,
 		D3DXMatrixTransformation2D(&newMatrix, 0, 0, 0, 0, 0, &inTranslation);
 	}
 
-	CGame::GetInstance()->GetSpriteHandler()->SetTransform(&newMatrix);
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&newMatrix);
 	
-	CGame::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
+	Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
 	
-	CGame::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lai matrix cu~ de Sprite chi ap dung transfrom voi class nay
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lai matrix cu~ de Sprite chi ap dung transfrom voi class nay
 }
 
-void CSprites::Add(int id, float left, float top, float width, float height, float oX, float oY, LPDIRECT3DTEXTURE9 tex)
+void Sprites::Add(int id, float left, float top, float width, float height, float oX, float oY, LPDIRECT3DTEXTURE9 tex)
 {
-	LPSPRITE s = new CSprite(id, left, top, width, height, oX, oY, tex);
+	LPSPRITE s = new Sprite(id, left, top, width, height, oX, oY, tex);
 	sprites[id] = s;
 }
 
-LPSPRITE CSprites::Get(int id)
+LPSPRITE Sprites::Get(int id)
 {
 	return sprites[id];
 }
 
 
-CAnimation::CAnimation(char* animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture, int defaultTime)
+Animation::Animation(char* animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture, int defaultTime)
 {
 	this->defaultTime = defaultTime; 
 	lastFrameTime = -1; 
@@ -116,12 +140,12 @@ CAnimation::CAnimation(char* animationName, char* xmlPath, LPDIRECT3DTEXTURE9 te
 	LoadXML(animationName, xmlPath, texture);
 }
 
-void CAnimation::LoadXML(char * animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture)
+void Animation::LoadXML(char * animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture)
 {
 	tinyxml2::XMLDocument *xmlDocument = new tinyxml2::XMLDocument();
 	xmlDocument->LoadFile(xmlPath);
 	/*_animationXMLAladdin->LoadFile("Resources/Aladdin/Aladdin-Animations.xml");*/
-	CSprites * sprites = CSprites::GetInstance();
+	Sprites * sprites = Sprites::GetInstance();
 
 	tinyxml2::XMLNode *rootNode = xmlDocument->FirstChildElement("Animations");
 	tinyxml2::XMLNode *animationNode = rootNode->FirstChild();
@@ -158,18 +182,18 @@ void CAnimation::LoadXML(char * animationName, char* xmlPath, LPDIRECT3DTEXTURE9
 	}
 }
 
-void CAnimation::Add(int spriteId, DWORD time)
+void Animation::Add(int spriteId, DWORD time)
 {
 	int t = time;
 	if (time == 0) t = this->defaultTime;
 
-	LPSPRITE sprite = CSprites::GetInstance()->Get(spriteId);
-	LPANIMATION_FRAME frame = new CAnimationFrame(sprite, t);
+	LPSPRITE sprite = Sprites::GetInstance()->Get(spriteId);
+	LPANIMATION_FRAME frame = new AnimationFrame(sprite, t);
 	frames.push_back(frame);
 	lastFrame = frames.size() - 1;
 }
 
-void CAnimation::Render(float x, float y, float &xDraw, float &yDraw, bool direction, D3DXVECTOR2 transform, int alpha)
+void Animation::Render(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int alpha)
 {
 	DWORD now = GetTickCount();
 	if (currentFrame == -1)
@@ -206,15 +230,16 @@ void CAnimation::Render(float x, float y, float &xDraw, float &yDraw, bool direc
 
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(x, y, xDraw, yDraw, direction, transform, alpha);
+	frames[currentFrame]->GetSprite()->Draw(x, y, xDraw, yDraw, w, h, direction, transform, alpha);
 }
 
-void CAnimation::ResetFrame()
+void Animation::ResetFrame()
 {
-	currentFrame = -1;
+	//currentFrame = -1;
+	currentFrame = firstFrame;
 }
 
-void CAnimation::SetFrame(int firstFrame, int lastFrame)
+void Animation::SetFrame(int firstFrame, int lastFrame)
 {
 	this->firstFrame = firstFrame;
 	this->lastFrame = lastFrame;
@@ -223,56 +248,45 @@ void CAnimation::SetFrame(int firstFrame, int lastFrame)
 	//isActionDone = false;
 }
 
-void CAnimation::SetCurrentFrame(int i)
+void Animation::SetCurrentFrame(int i)
 {
 	currentFrame = i;
 }
 
-int CAnimation::GetCurrentFrame()
+int Animation::GetCurrentFrame()
 {
 	return currentFrame;
 }
 
-int CAnimation::GetFirstFrame()
+int Animation::GetFirstFrame()
 {
 	return firstFrame;
 }
 
-int CAnimation::GetLastFrame()
+int Animation::GetLastFrame()
 {
 	return lastFrame;
 }
 
-void CAnimation::SetCurrentSize(float & width, float & height)
-{
-	if (firstFrame <= currentFrame && currentFrame <= lastFrame)
-	{
-		CSprite *currentSprite = frames[currentFrame]->GetSprite();
-
-		width = currentSprite->GetWidth();
-		height = currentSprite->GetHeight();
-	}
-}
-
-bool CAnimation::isActionFinish()
+bool Animation::isActionFinish()
 {
 	return currentFrame == lastFrame;
 }
 
-CAnimations * CAnimations::__instance = NULL;
+Animations * Animations::__instance = NULL;
 
-CAnimations * CAnimations::GetInstance()
+Animations * Animations::GetInstance()
 {
-	if (__instance == NULL) __instance = new CAnimations();
+	if (__instance == NULL) __instance = new Animations();
 	return __instance;
 }
 
-void CAnimations::Add(int id, LPANIMATION ani)
+void Animations::Add(int id, LPANIMATION ani)
 {
 	animations[id] = ani;
 }
 
-LPANIMATION CAnimations::Get(int id)
+LPANIMATION Animations::Get(int id)
 {
 	return animations[id];
 }

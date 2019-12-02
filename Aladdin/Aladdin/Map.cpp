@@ -2,41 +2,33 @@
 
 
 
-CMap::CMap(int idMap)
+Map::Map(int idMap)
 {
-	sprite = CSprites::GetInstance()->Get(idMap);
+	sprite = Sprites::GetInstance()->Get(idMap);
 }
 
-CMap::~CMap()
+Map::~Map()
 {
 }
 
-//void CMap::SetCamera(CCamera * camera)
+//void Map::SetCamera(Camera * camera)
 //{
 //	this->camera = camera;
 //}
 
-void CMap::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void Map::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	CGameObject::Update(dt);
+	GameObject::Update(dt);
 }
 
-void CMap::Render()
+void Map::Render()
 {	
 	if (true)
 	{
 		// Vector trans giúp dời ảnh theo camera
-		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - CCamera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - CCamera::GetInstance()->GetPosition().y));
+		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
 		sprite->Draw(x, y, trans);
 	}
 	else
 		sprite->Draw(x, y, D3DXVECTOR2(0, 0));
-}
-
-void CMap::GetBoundingBox(float &l, float &t, float &r, float &b)
-{
-	l = x;
-	t = y;
-	r = x + BALL_BBOX_WIDTH;
-	b = y + BALL_BBOX_HEIGHT;
 }

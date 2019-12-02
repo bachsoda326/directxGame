@@ -118,7 +118,7 @@
     <sprite id="94" x="491" y="680" w="50" h="85" oX="25" oY="85" />
     <sprite id="95" x="560" y="719" w="59" h="44" oX="29" oY="44" />
   </Animation>
-  <Animation name="Jump_Swinging" imagePath="Aladdin.png" width="1121" height="2718">        
+  <Animation name="Jump_Climbing" imagePath="Aladdin.png" width="1121" height="2718">        
     <sprite id="196" x="10" y="1870" w="34" h="73" oX="17" oY="36" />
     <sprite id="197" x="65" y="1873" w="25" h="77" oX="12" oY="38" />
     <sprite id="198" x="100" y="1874" w="36" h="71" oX="18" oY="35" />
@@ -128,6 +128,18 @@
     <sprite id="202" x="354" y="1869" w="52" h="54" oX="26" oY="27" />
     <sprite id="203" x="422" y="1871" w="47" h="67" oX="23" oY="33" />
     <sprite id="204" x="482" y="1866" w="45" h="75" oX="22" oY="37" />
+  </Animation>
+  <Animation name="Climb_1" imagePath="Aladdin.png" width="1121" height="2718">        
+    <sprite id="159" x="11" y="1362" w="29" h="86" oX="14" oY="43" />
+    <sprite id="160" x="53" y="1361" w="28" h="89" oX="14" oY="44" />
+    <sprite id="161" x="94" y="1374" w="28" h="74" oX="14" oY="37" />
+    <sprite id="162" x="133" y="1377" w="42" h="62" oX="21" oY="31" />
+    <sprite id="163" x="186" y="1363" w="31" h="76" oX="15" oY="38" />
+    <sprite id="164" x="231" y="1358" w="29" h="86" oX="14" oY="43" />
+    <sprite id="165" x="274" y="1367" w="28" h="79" oX="14" oY="39" />
+    <sprite id="166" x="314" y="1377" w="32" h="63" oX="16" oY="31" />
+    <sprite id="167" x="356" y="1377" w="42" h="62" oX="21" oY="31" />
+    <sprite id="168" x="406" y="1362" w="28" h="81" oX="14" oY="40" />
   </Animation>
   <Animation name="Cut_Standing" imagePath="Aladdin.png" width="1121" height="2718">        
     <sprite id="51" x="5" y="337" w="45" h="51" oX="26" oY="51" />
@@ -167,7 +179,7 @@
     <sprite id="127" x="266" y="1084" w="83" h="46" oX="41" oY="46" />
     <sprite id="128" x="361" y="1087" w="47" h="55" oX="23" oY="55" />
   </Animation>
-  <Animation name="Cut_Swinging" imagePath="Aladdin.png" width="1121" height="2718">        
+  <Animation name="Cut_Climbing" imagePath="Aladdin.png" width="1121" height="2718">        
     <sprite id="189" x="15" y="1769" w="48" h="87" oX="9" oY="3" />
     <sprite id="190" x="81" y="1769" w="52" h="89" oX="10" oY="2" />
     <sprite id="191" x="146" y="1772" w="61" h="90" oX="45" oY="3" />
@@ -198,7 +210,7 @@
     <sprite id="121" x="185" y="1008" w="52" h="53" oX="26" oY="53" />
     <sprite id="122" x="253" y="1012" w="40" h="52" oX="20" oY="52" />
   </Animation>
-  <Animation name="Throw_Swinging" imagePath="Aladdin.png" width="1121" height="2718">        
+  <Animation name="Throw_Climbing" imagePath="Aladdin.png" width="1121" height="2718">        
     <sprite id="184" x="13" y="1666" w="37" h="87" oX="11" oY="2" />
     <sprite id="185" x="65" y="1666" w="41" h="87" oX="12" oY="2" />
     <sprite id="186" x="125" y="1665" w="51" h="88" oX="12" oY="2" />
@@ -215,6 +227,17 @@
     <sprite id="156" x="376" y="1308" w="52" h="44" oX="26" oY="36" />
     <sprite id="157" x="437" y="1300" w="46" h="52" oX="23" oY="44" />
     <sprite id="158" x="498" y="1294" w="51" h="52" oX="25" oY="50" />
+  </Animation>
+  <Animation name="Push" imagePath="Aladdin.png" width="1121" height="2718">        
+    <sprite id="205" x="7" y="1959" w="56" h="46" oX="56" oY="46" />
+    <sprite id="206" x="75" y="1961" w="65" h="44" oX="65" oY="44" />
+    <sprite id="207" x="157" y="1961" w="70" h="45" oX="70" oY="44" />
+    <sprite id="208" x="237" y="1962" w="77" h="44" oX="77" oY="44" />
+    <sprite id="209" x="327" y="1964" w="72" h="44" oX="72" oY="44" />
+    <sprite id="210" x="416" y="1965" w="66" h="44" oX="66" oY="44" />
+    <sprite id="211" x="495" y="1965" w="75" h="44" oX="75" oY="44" />
+    <sprite id="212" x="585" y="1966" w="81" h="44" oX="81" oY="44" />
+    <sprite id="213" x="681" y="1968" w="75" h="44" oX="75" oY="44" />
   </Animation>
 
 //Cút

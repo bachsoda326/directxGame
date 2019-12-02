@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Animation" imagePath="Peddler.png" width="943" height="482">             
+    <sprite id="0" x="10" y="427" w="75" h="44" oX="38" oY="44" />
+    <sprite id="1" x="152" y="416" w="61" h="54" oX="31" oY="54" />
+    <sprite id="2" x="233" y="412" w="104" h="58" oX="102" oY="58" />
+    <sprite id="3" x="354" y="388" w="93" h="82" oX="47" oY="82" />
+    <sprite id="4" x="465" y="398" w="82" h="71" oX="41" oY="71" />
+    <sprite id="5" x="567" y="400" w="80" h="68" oX="40" oY="68" />
+    <sprite id="6" x="660" y="400" w="80" h="68" oX="40" oY="68" />    
+</Animations>

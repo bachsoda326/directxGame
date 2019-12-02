@@ -7,20 +7,20 @@
 #include "Game.h"
 #include "textures.h"
 
-CTextures * CTextures::__instance = NULL;
+Textures * Textures::__instance = NULL;
 
-CTextures::CTextures()
+Textures::Textures()
 {
 
 }
 
-CTextures *CTextures::GetInstance()
+Textures *Textures::GetInstance()
 {
-	if (__instance == NULL) __instance = new CTextures();
+	if (__instance == NULL) __instance = new Textures();
 	return __instance;
 }
 
-void CTextures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
+void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 {
 	D3DXIMAGE_INFO info;
 	HRESULT result = D3DXGetImageInfoFromFile(filePath, &info);
@@ -30,7 +30,10 @@ void CTextures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 		return;
 	}
 
-	LPDIRECT3DDEVICE9 d3ddv = CGame::GetInstance()->GetDirect3DDevice();
+	width = info.Width;
+	height = info.Height;
+
+	LPDIRECT3DDEVICE9 d3ddv = Game::GetInstance()->GetDirect3DDevice();
 	LPDIRECT3DTEXTURE9 texture;
 
 	result = D3DXCreateTextureFromFileEx(
@@ -60,7 +63,7 @@ void CTextures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 	DebugOut(L"[INFO] Texture loaded Ok: id=%d, %s \n", id, filePath);
 }
 
-LPDIRECT3DTEXTURE9 CTextures::Get(unsigned int i)
+LPDIRECT3DTEXTURE9 Textures::Get(unsigned int i)
 {
 	return textures[i];
 }

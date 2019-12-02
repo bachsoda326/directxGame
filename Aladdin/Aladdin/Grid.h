@@ -9,17 +9,18 @@ Grid có chiều dài, rộng = map và gồm nhiều cell, mỗi cell chứa 1 
 
 struct Cell
 {
-	std::vector<CGameObject*> listBalls;
+	std::vector<GameObject*> listObj;
 };
 
-class CGrid
+class Grid
 {
 public:
-	CGrid(int width, int height, int cellSize);
-	~CGrid();
+	Grid(int width, int height, int cellSize);
+	~Grid();
 
 	// Thêm obj vào listObjs của cell thích hợp
-	void AddObjToCell(CGameObject * obj);
+	void AddObjToCell(GameObject * obj);
+	void AddObjToCell(int cellIndex, GameObject * obj);
 
 	// Get Cell dựa trên vị trí của cell
 	Cell& GetCell(int x, int y);
@@ -27,7 +28,7 @@ public:
 	Cell& GetCell(D3DXVECTOR3& posObj);
 
 	// Tính toán các obj có thể bị va chạm (Tính toán các cell cần đc update với vị trí của camera)
-	void CalcColliableObjs(CCamera *camera, vector<LPGAMEOBJECT>& coObjs);
+	void CalcColliableObjs(Camera *camera, vector<LPGAMEOBJECT>& coObjs);
 private:
 	int width, height;
 	int cellSize;

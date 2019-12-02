@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Animation" imagePath="Brick&Trap.png" width="647" height="78">             
+    <sprite id="10000" x="1" y="4" w="31" h="15" oX="0" oY="0" />  
+    <sprite id="10001" x="37" y="4" w="31" h="15" oX="0" oY="0" />
+    <sprite id="10002" x="73" y="4" w="34" h="17" oX="0" oY="0" />
+    <sprite id="10003" x="112" y="4" w="38" h="21" oX="0" oY="0" />
+    <sprite id="10004" x="155" y="4" w="40" h="24" oX="0" oY="0" />
+  </Animation>
+</Animations>

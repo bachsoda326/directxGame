@@ -5,16 +5,19 @@
 #include <vector>
 #include "Constants.h"
 #include "Sprites.h"
+#include "debug.h"
+#include "Textures.h"
+#include "Camera.h"
 
 using namespace std;
 
-/*#define ID_TEX_BBOX -100	*/	// special texture to draw object bounding box
-
-// Kiểu va chạm
+// kiểu va chạm
 enum CollisionType
 {
 	CollGround,
-	CollRope,
+	CollFence,
+	CollBrick,
+	CollChains,
 	CollCollarBeam,
 	CollStair,
 	CollCamel,
@@ -29,10 +32,11 @@ enum CollisionType
 	CollUnknown
 };
 
-// Kiểu obj
+// kiểu obj
 enum ObjectType
 {
 	OBJGround,
+	OBJFence,
 	OBJRope,
 	OBJCollarBeam,
 	OBJStair,
@@ -69,17 +73,18 @@ enum ObjectType
 	OBJGenie
 };
 
-class CGameObject;
-typedef CGameObject * LPGAMEOBJECT;
+class GameObject;
+typedef GameObject * LPGAMEOBJECT;
 
 // Sự kiện va chạm
-struct CCollisionEvent;
-typedef CCollisionEvent * LPCOLLISIONEVENT;
-struct CCollisionEvent
+struct CollisionEvent;
+typedef CollisionEvent * LPCOLLISIONEVENT;
+struct CollisionEvent
 {
 	LPGAMEOBJECT obj;
+	// t.gian, hướng va chạm ngang, hướng va chạm dọc
 	float t, nx, ny;
-	CCollisionEvent(float t, float nx, float ny, LPGAMEOBJECT obj = NULL) { this->t = t; this->nx = nx; this->ny = ny; this->obj = obj; }
+	CollisionEvent(float t, float nx, float ny, LPGAMEOBJECT obj = NULL) { this->t = t; this->nx = nx; this->ny = ny; this->obj = obj; }
 
 	static bool compare(const LPCOLLISIONEVENT &a, LPCOLLISIONEVENT &b)
 	{
@@ -87,14 +92,13 @@ struct CCollisionEvent
 	}
 };
 
-
-
-class CGameObject
+class GameObject
 {
 public:
 	int id, _id;
 	// active dùng cho các đối tượng có kiểu va chạm là Item
 	bool isDie, isDead, isActived;
+
 	// vị trí ban đầu của các đối tượng
 	float xInit, yInit;
 	// vị trí
@@ -105,65 +109,82 @@ public:
 	float xDraw, yDraw;
 	// vận tốc
 	float vx, vy;
-	float dx, dy;	// dx = vx*dt; dy = vy*dt
+	// dx = vx*dt; dy = vy*dt
+	float dx, dy;
 
 	CollisionType collType;
 	ObjectType objType;
-	/*int nx;*/
-	int nx, ny;
+	// hướng có khả năng va chạm x ngang y dọc
+	float nx, ny;
 
 	// trạng thái
 	int state;
-	// chuyển động
-	int animation;
+	LPANIMATION currentAnimation;
 	// hướng của đối tượng; phải = true, trái = false
 	bool direction;
 
 	DWORD dt;
 
-	vector<LPANIMATION> animations;
-
 public:
-	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	GameObject();
+
+	void SetPosition(float x, float y);
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
+
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	D3DXVECTOR3 GetPosition() { return D3DXVECTOR3(x, y, 0); }	
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
-	int GetState() { return this->state; }
-	// Thêm animation vào obj
-	void AddAnimation(int aniId);
+	int GetState() { return this->state; }	
 
+	// Vẽ RECT của obj
 	void RenderBoundingBox();
 
-	// Trả về các biên của obj
+	// Trả về các biên(của RECT) của obj
 	float Left();
 	float Top();
 	float Right();	
 	float Bottom();
 
-	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
-	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
-	void FilterCollision(
+	// Mở rộng vủa SweptAABB để xử lý va chạm 2 obj di chuyển
+	//LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
+	// Trường hợp đặc biệt khi va chạm(chủ yếu là khi va chạm ngang dọc vs đất, cột)
+	//void ExceptionCase(LPGAMEOBJECT coObj, float &t, float &nx, float &ny);
+	/*
+	Tính toán các obj có thể va chạm vs obj đang gọi hàm
+	coObjects: listObjs có thể va chạm
+	coEvents: list va chạm có thể xảy ra
+	*/
+	//void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
+	/*void FilterCollision(
 		vector<LPCOLLISIONEVENT> &coEvents,
 		vector<LPCOLLISIONEVENT> &coEventsResult,
 		float &min_tx,
 		float &min_ty,
 		float &nx,
-		float &ny);	
+		float &ny);*/
 
-	CGameObject();
-
-	// Set kiểu object từ object's id
-	virtual void SetObjectFromID();
 	// Khởi tạo obj
 	virtual void LoadResources();
-	virtual void SetState(int state) { this->state = state; }
-	// Set biên obj 
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
-
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	virtual void Render() = 0;
+	virtual void Render();
 
-	~CGameObject();
+	//process input
+	virtual void ProcessInput();
+	// Set kiểu object từ object's id
+	virtual void SetObjectFromID();
+	// Set trạng thái cho obj
+	virtual void SetState(int state) { this->state = state; }
+		
+	// Get biên(RECT) obj 
+	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+
+	//change and reset frame size
+	virtual void ChangeFrameSize(GameObject*obj);
+	virtual void ResetFrameSize(GameObject*obj);
+
+	virtual void OnCollision(GameObject*obj, float nx, float ny);
+	virtual void OnIntersect(GameObject*obj);
+
+	~GameObject();
 };
 

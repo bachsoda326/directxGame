@@ -1,6 +1,6 @@
 ﻿#include "Grid.h"
 
-CGrid::CGrid(int width, int height, int cellSize) : width(width), height(height), cellSize(cellSize)
+Grid::Grid(int width, int height, int cellSize) : width(width), height(height), cellSize(cellSize)
 {
 	numXCells = ceil((float)this->width / cellSize);
 	numYCells = ceil((float)this->height / cellSize);
@@ -9,17 +9,23 @@ CGrid::CGrid(int width, int height, int cellSize) : width(width), height(height)
 	listCells.resize(numXCells*numYCells);
 }
 
-CGrid::~CGrid()
+Grid::~Grid()
 {
 }
 
-void CGrid::AddObjToCell(CGameObject * obj)
+void Grid::AddObjToCell(GameObject * obj)
 {
 	Cell &cell = GetCell(obj->GetPosition());
-	cell.listBalls.push_back(obj);
+	cell.listObj.push_back(obj);
 }
 
-Cell & CGrid::GetCell(int x, int y)
+void Grid::AddObjToCell(int cellIndex, GameObject * obj)
+{
+	Cell &cell = listCells[cellIndex];
+	cell.listObj.push_back(obj);
+}
+
+Cell & Grid::GetCell(int x, int y)
 {
 	if (x < 0) x = 0;
 	if (x >= numXCells) x = numXCells;
@@ -29,7 +35,7 @@ Cell & CGrid::GetCell(int x, int y)
 	return listCells[x + y*numXCells];
 }
 
-Cell & CGrid::GetCell(D3DXVECTOR3 & posObj)
+Cell & Grid::GetCell(D3DXVECTOR3 & posObj)
 {
 	int cellX = posObj.x / cellSize;
 	int cellY = posObj.y / cellSize;
@@ -37,7 +43,7 @@ Cell & CGrid::GetCell(D3DXVECTOR3 & posObj)
 	return GetCell(cellX, cellY);
 }
 
-void CGrid::CalcColliableObjs(CCamera *camera, vector<LPGAMEOBJECT>& coObjs)
+void Grid::CalcColliableObjs(Camera *camera, vector<LPGAMEOBJECT>& coObjs)
 {
 	int xTopLeftCamera = camera->GetPosition().x - SCREEN_WIDTH / 2;
 	int yTopLeftCamera = camera->GetPosition().y - SCREEN_HEIGHT / 2;
@@ -59,9 +65,9 @@ void CGrid::CalcColliableObjs(CCamera *camera, vector<LPGAMEOBJECT>& coObjs)
 		{
 			Cell colliableCell = GetCell(x, y);
 
-			for (int i = 0; i < colliableCell.listBalls.size(); i++)
+			for (int i = 0; i < colliableCell.listObj.size(); i++)
 			{
-				coObjs.push_back(colliableCell.listBalls[i]);
+				coObjs.push_back(colliableCell.listObj[i]);
 			}
 		}
 	}

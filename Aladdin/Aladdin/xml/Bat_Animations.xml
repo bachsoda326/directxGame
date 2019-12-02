@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Stand" imagePath="Bat.png" width="344" height="171">             
+    <sprite id="0" x="9" y="18" w="7" h="16" oX="3" oY="16" />
+    <sprite id="1" x="20" y="10" w="21" h="22" oX="7" oY="20" />
+    <sprite id="2" x="48" y="13" w="19" h="23" oX="9" oY="20" />
+    <sprite id="3" x="76" y="18" w="21" h="14" oX="10" oY="13" />    
+  </Animation>
+  <Animation name="Attack" imagePath="Bat.png" width="344" height="171">        
+    <sprite id="4" x="10" y="60" w="24" h="15" oX="12" oY="15" />
+    <sprite id="5" x="39" y="52" w="13" h="23" oX="6" oY="23" />
+    <sprite id="6" x="56" y="58" w="30" h="17" oX="15" oY="17" />
+    <sprite id="7" x="89" y="67" w="32" h="16" oX="16" oY="8" />
+    <sprite id="8" x="128" y="67" w="8" h="25" oX="4" oY="8" />
+    <sprite id="9" x="143" y="67" w="20" h="16" oX="10" oY="8" />
+    <sprite id="10" x="165" y="61" w="34" h="14" oX="17" oY="14" />    
+  </Animation>
+  <Animation name="DieByApple" imagePath="Bat.png" width="344" height="171">        
+    <sprite id="11" x="10" y="119" w="13" h="13" oX="7" oY="13" />
+    <sprite id="12" x="38" y="111" w="51" h="28" oX="25" oY="14" />
+    <sprite id="13" x="93" y="113" w="22" h="23" oX="11" oY="23" />
+    <sprite id="14" x="128" y="101" w="22" h="53" oX="11" oY="36" />
+    <sprite id="15" x="160" y="106" w="29" h="49" oX="15" oY="33" />
+    <sprite id="16" x="199" y="106" w="29" h="53" oX="15" oY="33" />
+    <sprite id="17" x="233" y="109" w="33" h="45" oX="17" oY="33" /> 
+    <sprite id="18" x="275" y="106" w="23" h="51" oX="12" oY="33" />
+    <sprite id="19" x="308" y="106" w="27" h="51" oX="14" oY="33" />
+  </Animation>
+</Animations>

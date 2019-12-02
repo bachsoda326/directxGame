@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Animation" imagePath="Items.png" width="664" height="471">             
+    <sprite id="0" x="335" y="45" w="38" h="50" oX="19" oY="25" />
+    <sprite id="1" x="389" y="45" w="43" h="52" oX="21" oY="26" />
+    <sprite id="2" x="443" y="49" w="44" h="44" oX="22" oY="22" />
+    <sprite id="3" x="497" y="48" w="45" h="44" oX="22" oY="22" />   
+  </Animation>  
+</Animations>

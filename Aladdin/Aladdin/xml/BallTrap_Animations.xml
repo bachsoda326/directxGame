@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Animation" imagePath="Brick&Trap.png" width="647" height="78">             
+    <sprite id="0" x="227" y="4" w="14" h="45" oX="0" oY="0" />
+    <sprite id="1" x="246" y="4" w="15" h="47" oX="0" oY="0" />
+    <sprite id="2" x="266" y="4" w="15" h="50" oX="0" oY="0" />
+    <sprite id="3" x="286" y="4" w="15" h="52" oX="0" oY="0" />
+    <sprite id="4" x="306" y="4" w="16" h="56" oX="0" oY="0" />
+    <sprite id="5" x="327" y="4" w="16" h="60" oX="0" oY="0" />
+    <sprite id="6" x="348" y="4" w="18" h="65" oX="0" oY="0" />
+    <sprite id="7" x="371" y="4" w="21" h="67" oX="0" oY="0" />
+    <sprite id="8" x="397" y="4" w="26" h="65" oX="0" oY="0" />
+    <sprite id="9" x="428" y="4" w="28" h="63" oX="0" oY="0" />
+    <sprite id="10" x="461" y="4" w="30" h="59" oX="0" oY="0" />
+    <sprite id="11" x="496" y="4" w="31" h="57" oX="0" oY="0" />
+    <sprite id="12" x="532" y="4" w="32" h="56" oX="0" oY="0" />
+    <sprite id="13" x="569" y="4" w="33" h="53" oX="0" oY="0" />
+    <sprite id="14" x="607" y="4" w="33" h="52" oX="0" oY="0" />
+  </Animation>  
+</Animations>

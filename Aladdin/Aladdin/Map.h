@@ -4,19 +4,17 @@
 #include "Camera.h"
 #include "Game.h"
 
-class CMap : public CGameObject
+class Map : public GameObject
 {
-	CSprite *sprite;
+	Sprite *sprite;
 public:
-	CMap(int idMap);
-	~CMap();
+	Map(int idMap);
+	~Map();
 
-	/*CCamera *camera;
-	void SetCamera(CCamera *camera);*/
+	/*Camera *camera;
+	void SetCamera(Camera *camera);*/
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();
-	// Chưa xài chưa sửa
-	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
 };
 

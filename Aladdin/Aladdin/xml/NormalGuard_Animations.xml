@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Run" imagePath="Guards.png" width="498" height="1053">             
+    <sprite id="1023" x="2" y="255" w="47" h="52" oX="24" oY="52" />
+    <sprite id="1024" x="55" y="253" w="52" h="54" oX="26" oY="54" />
+    <sprite id="1025" x="111" y="252" w="56" h="55" oX="37" oY="55" />
+    <sprite id="1026" x="173" y="253" w="51" h="54" oX="37" oY="54" />
+    <sprite id="1027" x="230" y="255" w="49" h="52" oX="25" oY="52" />
+    <sprite id="1028" x="284" y="254" w="42" h="53" oX="20" oY="53" />
+    <sprite id="1029" x="334" y="251" w="44" h="56" oX="28" oY="56" />
+    <sprite id="1030" x="382" y="253" w="47" h="54" oX="34" oY="54" />
+  </Animation>
+  <Animation name="Idle" imagePath="Guards.png" width="498" height="1053">        
+    <sprite id="1031" x="5" y="317" w="44" h="53" oX="31" oY="53" />
+    <sprite id="1032" x="56" y="316" w="37" h="54" oX="23" oY="54" />
+    <sprite id="1033" x="98" y="317" w="54" h="53" oX="41" oY="53" />
+    <sprite id="1034" x="157" y="317" w="58" h="53" oX="45" oY="53" />
+    <sprite id="1035" x="221" y="317" w="49" h="53" oX="36" oY="53" />
+    <sprite id="1036" x="278" y="317" w="44" h="53" oX="32" oY="53" />
+  </Animation> 
+  <Animation name="Cut_1" imagePath="Guards.png" width="498" height="1053">        
+    <sprite id="1037" x="6" y="378" w="55" h="52" oX="46" oY="52" />
+    <sprite id="1038" x="65" y="386" w="67" h="44" oX="56" oY="44" />
+    <sprite id="1039" x="140" y="388" w="70" h="42" oX="58" oY="42" />
+    <sprite id="1040" x="216" y="387" w="75" h="43" oX="63" oY="43" />
+    <sprite id="1041" x="297" y="385" w="88" h="45" oX="76" oY="45" />
+    <sprite id="1042" x="395" y="384" w="95" h="46" oX="82" oY="46" />
+  </Animation>  
+  <Animation name="Cut_2" imagePath="Guards.png" width="498" height="1053">        
+    <sprite id="1043" x="6" y="447" w="43" h="60" oX="15" oY="60" />
+    <sprite id="1044" x="61" y="434" w="43" h="73" oX="13" oY="73" />
+    <sprite id="1045" x="116" y="441" w="52" h="66" oX="15" oY="66" />
+    <sprite id="1046" x="178" y="451" w="114" h="56" oX="82" oY="56" />
+    <sprite id="1047" x="300" y="434" w="91" h="73" oX="63" oY="73" />
+  </Animation>
+  <Animation name="Hurt" imagePath="Guards.png" width="498" height="1053">        
+    <sprite id="1048" x="6" y="538" w="54" h="48" oX="36" oY="48" />
+    <sprite id="1049" x="71" y="515" w="63" h="71" oX="30" oY="71" />
+    <sprite id="1050" x="138" y="529" w="65" h="57" oX="31" oY="57" />
+    <sprite id="1051" x="210" y="520" w="71" h="66" oX="31" oY="66" />
+    <sprite id="1052" x="290" y="522" w="74" h="64" oX="34" oY="64" />
+    <sprite id="1053" x="382" y="530" w="66" h="56" oX="34" oY="56" />
+  </Animation>
+  <Animation name="RunOnFire" imagePath="Guards.png" width="498" height="1053">        
+    <sprite id="1054" x="10" y="598" w="41" h="54" oX="17" oY="54" />
+    <sprite id="1055" x="59" y="592" w="43" h="60" oX="13" oY="60" />
+    <sprite id="1056" x="106" y="593" w="41" h="59" oX="16" oY="59" />
+    <sprite id="1057" x="154" y="594" w="38" h="58" oX="18" oY="58" />
+    <sprite id="1058" x="198" y="599" w="41" h="53" oX="18" oY="53" />
+    <sprite id="1059" x="253" y="593" w="43" h="59" oX="18" oY="59" />
+    <sprite id="1060" x="299" y="594" w="42" h="58" oX="19" oY="58" />
+    <sprite id="1061" x="345" y="594" w="43" h="58" oX="20" oY="58" />
+    <sprite id="1062" x="393" y="601" w="45" h="51" oX="20" oY="51" />
+  </Animation>
+</Animations>

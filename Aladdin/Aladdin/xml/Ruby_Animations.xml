@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Animation" imagePath="Items.png" width="664" height="471">             
+    <sprite id="0" x="340" y="111" w="17" h="16" oX="8" oY="8" />
+    <sprite id="1" x="363" y="111" w="17" h="16" oX="8" oY="8" />
+    <sprite id="2" x="386" y="111" w="17" h="16" oX="8" oY="8" />
+    <sprite id="3" x="409" y="111" w="17" h="16" oX="8" oY="8" />
+    <sprite id="4" x="432" y="110" w="17" h="16" oX="8" oY="9" />
+    <sprite id="5" x="454" y="105" w="32" h="25" oX="14" oY="14" />
+    <sprite id="6" x="492" y="108" w="23" h="20" oX="8" oY="12" />
+    <sprite id="7" x="522" y="112" w="17" h="16" oX="8" oY="8" />  
+    <sprite id="8" x="545" y="112" w="17" h="16" oX="8" oY="8" />
+    <sprite id="9" x="574" y="112" w="16" h="16" oX="8" oY="8" />
+  </Animation>
+</Animations>

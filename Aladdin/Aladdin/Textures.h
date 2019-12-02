@@ -7,18 +7,20 @@ using namespace std;
 /*
 Manage texture database
 */
-class CTextures
+class Textures
 {
-	static CTextures * __instance;
+	static Textures * __instance;
 	// kiểu như listTextures
 	unordered_map<int, LPDIRECT3DTEXTURE9> textures;
 
 public:
-	CTextures();
+	float width, height;
+
+	Textures();
 	// Add texture vào instance"textures"
 	void Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor);
 	// Get texture theo id trong instance"textures"
 	LPDIRECT3DTEXTURE9 Get(unsigned int i);
 
-	static CTextures * GetInstance();
+	static Textures * GetInstance();
 };

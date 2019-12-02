@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Animation" imagePath="EnemyDead.png" width="584" height="49">             
+    <sprite id="0" x="8" y="26" w="20" h="15" oX="10" oY="7" />
+    <sprite id="1" x="40" y="13" w="30" h="28" oX="15" oY="14" />
+    <sprite id="2" x="80" y="11" w="31" h="30" oX="15" oY="15" />
+    <sprite id="3" x="120" y="9" w="38" h="32" oX="19" oY="16" />
+    <sprite id="4" x="168" y="5" w="40" h="36" oX="20" oY="13" />
+    <sprite id="5" x="216" y="3" w="42" h="38" oX="21" oY="19" />
+    <sprite id="6" x="272" y="4" w="42" h="37" oX="21" oY="18" />
+    <sprite id="7" x="328" y="5" w="40" h="36" oX="20" oY="18" />
+  </Animation>
+  <Animation name="Smoke" imagePath="EnemyDead.png" width="584" height="49">        
+    <sprite id="8" x="376" y="13" w="32" h="28" oX="0" oY="0" />
+    <sprite id="9" x="416" y="19" w="24" h="22" oX="0" oY="0" />
+    <sprite id="10" x="448" y="26" w="20" h="15" oX="0" oY="0" />
+    <sprite id="11" x="480" y="29" w="15" h="12" oX="0" oY="0" />
+    <sprite id="12" x="504" y="34" w="8" h="7" oX="0" oY="0" />
+    <sprite id="13" x="520" y="37" w="4" h="4" oX="0" oY="0" />   
+  </Animation>
+</Animations>

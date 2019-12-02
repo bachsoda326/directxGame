@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class CSprite
+class Sprite
 {
 	int id;				// Sprite ID in the sprite database
 
@@ -20,24 +20,26 @@ class CSprite
 	// texture lớn
 	LPDIRECT3DTEXTURE9 texture;
 public:
-	CSprite(int id, float left, float top, float width, float height, float oX, float oY, LPDIRECT3DTEXTURE9 tex);
+	Sprite(int id, float left, float top, float width, float height, float oX, float oY, LPDIRECT3DTEXTURE9 tex);
 
 	int GetWidth() { return width; }
 	int GetHeight() { return height; }
+	// Vẽ xài khi vẽ ảnh test
+	void DrawTest(float x, float y, D3DXVECTOR2 transform, int alpha = 255);
 	// Vẽ xài khi vẽ ảnh
 	void Draw(float x, float y, D3DXVECTOR2 transform);
 	// Vẽ xài khi vẽ animation
-	void Draw(float x, float y, float &xDraw, float &yDraw, bool direction, D3DXVECTOR2 transform, int alpha = 255);
+	void Draw(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int alpha = 255);
 };
 
-typedef CSprite * LPSPRITE;
+typedef Sprite * LPSPRITE;
 
 /*
 Quản lý sprite database
 */
-class CSprites
+class Sprites
 {
-	static CSprites * __instance;
+	static Sprites * __instance;
 	// kiểu như listSprites
 	unordered_map<int, LPSPRITE> sprites;
 
@@ -48,27 +50,27 @@ public:
 	LPSPRITE Get(int id);
 	LPSPRITE &operator[](int id) { return sprites[id]; }
 
-	static CSprites * GetInstance();
+	static Sprites * GetInstance();
 };
 
 /*
 Sprite animation
 */
-class CAnimationFrame
+class AnimationFrame
 {
 	LPSPRITE sprite;
 	// t.gian chuyển giữa các sprite
 	DWORD time;
 
 public:
-	CAnimationFrame(LPSPRITE sprite, int time) { this->sprite = sprite; this->time = time; }
+	AnimationFrame(LPSPRITE sprite, int time) { this->sprite = sprite; this->time = time; }
 	DWORD GetTime() { return time; }
 	LPSPRITE GetSprite() { return sprite; }
 };
 
-typedef CAnimationFrame *LPANIMATION_FRAME;
+typedef AnimationFrame *LPANIMATION_FRAME;
 
-class CAnimation
+class Animation
 {
 	DWORD lastFrameTime;
 	int defaultTime;
@@ -78,8 +80,8 @@ class CAnimation
 	// listFrames; mỗi frame gồm 1 sprite và time (t.gian chuyển frame)
 	vector<LPANIMATION_FRAME> frames;
 public:		
-	CAnimation(char* animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture, int defaultTime);
-	CAnimation(int defaultTime) 
+	Animation(char* animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture, int defaultTime);
+	Animation(int defaultTime) 
 	{
 		this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1;
 		firstFrame = 0; lastFrame = 0;
@@ -89,23 +91,21 @@ public:
 	void LoadXML(char * animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture);
 	// Add sprite vào listFrames của animation
 	void Add(int spriteId, DWORD time = 0);
-	void Render(float x, float y, float &xDraw, float &yDraw, bool direction, D3DXVECTOR2 transform, int alpha = 255);
+	void Render(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int alpha = 255);
 	void ResetFrame();
 	void SetFrame(int firstFrame, int lastFrame);
 	void SetCurrentFrame(int i);
 	int GetCurrentFrame();
 	int GetFirstFrame();
 	int GetLastFrame();
-	// Set size của obj (do sự thay đổi size khi vẽ từng sprite khác nhau)
-	void SetCurrentSize(float &width, float &height);
 	bool isActionFinish();
 };
 
-typedef CAnimation *LPANIMATION;
+typedef Animation *LPANIMATION;
 
-class CAnimations
+class Animations
 {
-	static CAnimations * __instance;
+	static Animations * __instance;
 	// kiểu như listAnimations
 	unordered_map<int, LPANIMATION> animations;
 
@@ -115,5 +115,5 @@ public:
 	// Get animation theo id trong instance"animations"
 	LPANIMATION Get(int id);
 
-	static CAnimations * GetInstance();
+	static Animations * GetInstance();
 };

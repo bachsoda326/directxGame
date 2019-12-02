@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Animation" imagePath="BoomSkeleton.png" width="868" height="351">             
+    <sprite id="0" x="8" y="73" w="86" h="26" oX="43" oY="26" />
+    <sprite id="1" x="101" y="68" w="80" h="29" oX="40" oY="29" />
+    <sprite id="2" x="188" y="52" w="75" h="45" oX="37" oY="45" />
+    <sprite id="3" x="283" y="37" w="62" h="60" oX="31" oY="60" />
+    <sprite id="4" x="365" y="29" w="50" h="67" oX="25" oY="67" />
+    <sprite id="5" x="427" y="25" w="48" h="71" oX="24" oY="71" />
+    <sprite id="6" x="486" y="22" w="48" h="75" oX="24" oY="75" />
+    <sprite id="7" x="544" y="16" w="51" h="81" oX="25" oY="81" />  
+    <sprite id="8" x="601" y="16" w="51" h="81" oX="25" oY="81" />
+    <sprite id="9" x="662" y="16" w="52" h="81" oX="25" oY="81" />
+    <sprite id="10" x="726" y="16" w="68" h="81" oX="43" oY="81" />
+    <sprite id="11" x="799" y="8" w="65" h="89" oX="37" oY="89" />
+    <sprite id="12" x="13" y="122" w="50" h="82" oX="24" oY="82" />
+    <sprite id="13" x="75" y="123" w="49" h="81" oX="24" oY="81" />
+    <sprite id="14" x="132" y="121" w="61" h="84" oX="46" oY="84" />
+    <sprite id="15" x="203" y="130" w="64" h="75" oX="48" oY="75" />
+    <sprite id="16" x="279" y="121" w="74" h="85" oX="56" oY="85" />
+    <sprite id="17" x="376" y="115" w="81" h="91" oX="55" oY="91" />
+    <sprite id="18" x="479" y="126" w="95" h="77" oX="54" oY="77" />
+    <sprite id="19" x="593" y="125" w="60" h="79" oX="45" oY="79" />
+  </Animation>
+</Animations>

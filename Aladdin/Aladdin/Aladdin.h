@@ -3,36 +3,38 @@
 #include "Constants.h"
 #include "Camera.h"
 #include "Game.h"
+#include "Collision.h"
 
-//#define BALL_BBOX_WIDTH  16
-//#define BALL_BBOX_HEIGHT 16
-//#define BALL_SPEED 0.1f
-
-class CAladdin : public CGameObject
+class Aladdin : public GameObject
 {
 private:
-	static CAladdin * __instance;
-	CGame *keyBoard = CGame::GetInstance();
+	static Aladdin * __instance;
+
+	Game *keyBoard = Game::GetInstance();
+	// các biến để chỉ cho nhảy, chém, ném 1 lần
+	bool keyUp[3];
+	// ứng với mũi tên lên, xuống, Z, X, cách, trái, phải
+	bool KeyUp, KeyDown, KeyZ, KeyX, KeySpace, KeyLeft, KeyRight;
+
 	// t.gian đứng
 	DWORD standingTime;
 	// trạng thái cuối
 	int lastState;
 	// v.tốc vy cuối
-	float last_vy;
-	// các biến để chỉ cho nhảy, chém, ném 1 lần
-	bool keyUp[3];
-	// ứng với mũi tên lên, xuống, Z, X, cách, trái, phải
-	bool KeyUp, KeyDown, KeyZ, KeyX, KeySpace, KeyLeft, KeyRight;
+	float lastVy;
+
 	bool isAppleCreated;
 	// biến đếm animation Wait_1
 	int countWait_1;
+	// :test số lần nhận đc collision
+	int testCollision = 0;
 
-	//float speed[2] = { -BALL_SPEED, BALL_SPEED };
 public:
-	CAladdin();	
+	Aladdin();	
+	static Aladdin * GetInstance();
+
 	// các animation
-	LPANIMATION currentAnimation,
-		animationWait_1,
+	LPANIMATION animationWait_1,
 		animationWait_2,
 		animationWait_3,
 		animationWait_Swinging,
@@ -43,18 +45,21 @@ public:
 		animationDuck_1,
 		animationJump_Standing,
 		animationJump_Running,
-		animationJump_Swinging,
+		animationJump_Climbing,
+		animationClimb_1,
 		animationCut_Standing,
 		animationCut_LookingUp,
 		animationCut_Ducking,
 		animationCut_Jumping,
-		animationCut_Swinging,
+		animationCut_Climbing,
 		animationThrow_Standing,
 		animationThrow_Ducking,
 		animationThrow_Jumping,
-		animationThrow_Swinging,
-		animationBrake_1;
+		animationThrow_Climbing,
+		animationBrake_1,
+		animationPush;
 
+	// các trạng thái
 	enum AladdinStates
 	{
 		STANDING,
@@ -84,6 +89,7 @@ public:
 		HUG
 	};
 
+	// các trạng thái đại diện animation
 	enum AladdinAnimations
 	{
 		ANI_WAIT_1,
@@ -97,24 +103,24 @@ public:
 		ANI_DUCK_1,
 		ANI_JUMP_STANDING,
 		ANI_JUMP_RUNNING,
-		ANI_JUMP_SWINGING,
+		ANI_JUMP_CLIMBING,
 		ANI_CUT_STANDING,
 		ANI_CUT_LOOKINGUP,
 		ANI_CUT_DUCKING,
 		ANI_CUT_JUMPING,
-		ANI_CUT_SWINGING,
+		ANI_CUT_CLIMBING,
 		ANI_THROW_STANDING,
 		ANI_THROW_DUCKING,
 		ANI_THROW_JUMPING,
-		ANI_THROW_SWINGING,
-		ANI_BRAKE_1,
-		ANI_000000000000000,
+		ANI_THROW_CLIMBING,
+		ANI_BRAKE_1,		
 		ANI_RUN_LONG_ENOUGH,
-		ANI_CLIMB,
+		ANI_000000000000000,
+		ANI_CLIMB_1,
 		ANI_CLIMBING,
 		ANI_SWING,
 		ANI_SWINGING,
-		ANI_PUSHING,
+		ANI_PUSH,
 		ANI_STUNTING,
 		ANI_HURT,
 		ANI_DIE,
@@ -123,42 +129,41 @@ public:
 		ANI_FLY,
 		ANI_HUG
 	};
+
 	// Khởi tạo obj
 	void LoadResources();
+	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);	
+	void Render();
 
-	/*CCamera *camera;
-	void SetCamera(CCamera *camera);*/
+	void SetAnimation(AladdinAnimations ani);
 
 	// Update nhận các phím đc nhấn
 	void UpdateKey();
+	// Xử lý các sự kiện nhấn phím
 	void HandleKeyBoard();
 
+	void Stand();	// đứng yên
+	void Wait();	// đợi (khi đứng yên 1 t.gian)	
+	void Duck();	// cúi xuống
+	void LookUp();	// nhìn lên
 	void Run();		// chạy
 	void Brake();	// thắng lại
-	void Duck();	// cúi xuống
-	void Cut();		// chém
-	void Throw();	// ném (táo)
-	void LookUp();	// nhìn lên
+	void Push();	// đẩy khi bị chặn
 	void Jump();	// nhảy
-	void Stand();	// đứng yên
-	void Wait();	// đợi (khi đứng yên 1 t.gian)
+	void Climb();	// leo
+	void Cut();		// chém
+	void Throw();	// ném (táo)	
 
 	// Handle apple
-	vector<CGameObject*> listApples;
+	vector<GameObject*> listApples;
+	vector<GameObject*>* GetListApples();
 	void CreateApple();
-	//void CreateApple(CGameObject*obj);
-	vector<CGameObject*>* GetListApples();
-	void DeleteApple(CGameObject* apple);
-	
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	virtual void Render();
-	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
-	void SetAnimation(int ani);
-	void SetPosition(float x, float y);
-	/*void SetRanDomPosition();*/
-	void CheckCollision(vector<LPGAMEOBJECT> *coObjects);
-	//void SetSpeed();
+	//void CreateApple(GameObject*obj);	
+	void DeleteApple(GameObject* apple);
 
-	static CAladdin * GetInstance();
+	void OnCollision(GameObject *obj, float nx, float ny);
+	void OnIntersect(GameObject *obj);
+	/*Camera *camera;
+	void SetCamera(Camera *camera);*/
 };
 

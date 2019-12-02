@@ -1,38 +1,48 @@
 #include "Camera.h"
 #include "Constants.h"
 
-CCamera* CCamera::__instance = NULL;
+Camera* Camera::__instance = NULL;
 
-CCamera::CCamera()
+Camera::Camera()
 {
+	mPosition = D3DXVECTOR3(0, 0, 0);
+
 	mWidth = SCREEN_WIDTH;
 	mHeight = SCREEN_HEIGHT;
-
-	mPosition = D3DXVECTOR3(0, 0, 0);
 }
 
-
-CCamera::~CCamera()
+Camera * Camera::GetInstance()
 {
-
+	if (__instance == NULL) __instance = new Camera();
+	return __instance;
 }
 
-void CCamera::SetPosition(float x, float y)
-{
-	SetPosition(D3DXVECTOR3(x, y, 0));
-}
-
-void CCamera::SetPosition(D3DXVECTOR3 pos)
+void Camera::SetPosition(D3DXVECTOR3 pos)
 {
 	mPosition = pos;
 }
 
-D3DXVECTOR3 CCamera::GetPosition()
+void Camera::SetPosition(float x, float y)
+{
+	SetPosition(D3DXVECTOR3(x, y, 0));
+}
+
+D3DXVECTOR3 Camera::GetPosition()
 {
 	return mPosition;
 }
 
-RECT CCamera::GetBound()
+int Camera::GetWidth()
+{
+	return mWidth;
+}
+
+int Camera::GetHeight()
+{
+	return mHeight;
+}
+
+RECT Camera::GetBound()
 {
 	RECT bound;
 
@@ -44,18 +54,7 @@ RECT CCamera::GetBound()
 	return bound;
 }
 
-CCamera * CCamera::GetInstance()
+Camera::~Camera()
 {
-	if (__instance == NULL) __instance = new CCamera();
-	return __instance;
-}
 
-int CCamera::GetWidth()
-{
-	return mWidth;
-}
-
-int CCamera::GetHeight()
-{
-	return mHeight;
 }

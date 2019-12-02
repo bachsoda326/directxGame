@@ -3,27 +3,26 @@
 #include <d3dx9.h>
 #include <d3d9.h>
 
-class CCamera
+class Camera
 {
 public:	
-	CCamera();
+	Camera();
+	static Camera * GetInstance();
 
-	void SetPosition(float x, float y);
 	void SetPosition(D3DXVECTOR3 pos);
-
-	int GetWidth();
-	int GetHeight();
+	void SetPosition(float x, float y);	
 
 	D3DXVECTOR3 GetPosition();
+	int GetWidth();
+	int GetHeight();	
 	// Trả về biên của camera thông qua RECT
 	RECT GetBound();
 
-	static CCamera * GetInstance();
-
-	~CCamera();
+	~Camera();
 
 private:
-	static CCamera * __instance;
+	static Camera * __instance;
+
 	int mWidth, mHeight;
 
 	D3DXVECTOR3 mPosition;
