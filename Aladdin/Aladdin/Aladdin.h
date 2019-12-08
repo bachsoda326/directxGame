@@ -69,7 +69,10 @@ public:
 		animationThrow_Jumping,
 		animationThrow_Climbing,
 		animationBrake_1,
-		animationPush;
+		animationPush,
+		animationHurt,
+		animationDie,
+		animationRespawn;
 
 	// các trạng thái
 	enum AladdinStates
@@ -127,16 +130,16 @@ public:
 		ANI_THROW_CLIMBING,
 		ANI_BRAKE_1,		
 		ANI_RUN_LONG_ENOUGH,
+		ANI_PUSH,
+		ANI_HURT,
+		ANI_DIE,
+		ANI_RESPAWN,
 		ANI_000000000000000,
 		ANI_CLIMB_1,
 		ANI_CLIMBING,
 		ANI_SWING,
-		ANI_SWINGING,
-		ANI_PUSH,
-		ANI_STUNTING,
-		ANI_HURT,
-		ANI_DIE,
-		ANI_RESETPOSITION,
+		ANI_SWINGING,		
+		ANI_STUNTING,		
 		ANI_RUNNEXT,
 		ANI_FLY,
 		ANI_HUG

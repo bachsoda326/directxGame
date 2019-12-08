@@ -4,6 +4,7 @@
 #include "Textures.h"
 #include "Apple.h"
 #include "NormalGuard.h"
+#include "ThinGuard.h"
 #include "Ground.h"
 #include "StoneBrick.h"
 #include "Chains.h"
@@ -12,8 +13,8 @@ Aladdin * Aladdin::__instance = NULL;
 
 Aladdin::Aladdin()
 {
-	x = 0;
-	y = 0;
+	x = 1750;
+	y = 950;
 	w = 37;
 	h = 50;
 	xDraw = x - 18;
@@ -29,15 +30,15 @@ Aladdin::Aladdin()
 	isAppleCreated == false;
 	currentAnimation = new Animation(100);
 	isBlink = 0;
-	blood = 8;
+	blood = 3;
 	score = 0;
 	numApples = 10;
 	numRubies = 0;
-	numLifes = 3;	
+	numLifes = 8;	
 	isCutted = false;
-	keyUp[0] = true;
+	/*keyUp[0] = true;
 	keyUp[1] = true;
-	keyUp[2] = true;
+	keyUp[2] = true;*/
 	lastState = STANDING;
 	state = STANDING;
 	collType = CollAladdin;
@@ -78,6 +79,9 @@ void Aladdin::LoadResources()
 	animationThrow_Climbing = new Animation("Throw_Climbing", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationBrake_1 = new Animation("Brake_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 60);
 	animationPush = new Animation("Push", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationHurt = new Animation("Hurt", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationDie = new Animation("Die", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationRespawn = new Animation("Respawn", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 
 	currentAnimation = animationJump_Standing;
 	standingTime = GetTickCount();
@@ -89,30 +93,8 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	//DebugOut(L"[state] state: %d\n", state);
 	//DebugOut(L"[CP] x: %f\n", nx);
 	x += dx;
-	y += dy;
-
-	if (state == DIE || isDie)
-	{
-		Die();
-		return;
-	}
-
-	//các hành động không thể thay đổi trong khi nó xảy ra
-	switch (state)
-	{
-	case RESETPOSITION:
-		ResetPosition();
-		return;	
-	/*case RUNNEXT:
-		RunNext();
-		return;*/
-	}	
-
-	//if (vy > 0)
-	//	lastVy = vy;
-	////simulate fall down (gravity)
-	//vy += 0.018f;	
-
+	y += dy;	
+	/*vy += 0.018f;*/
 	for (int i = 0; i < listApples.size(); i++)
 	{
 		listApples[i]->Update(dt);
@@ -280,6 +262,24 @@ void Aladdin::SetAnimation(AladdinAnimations ani)
 		currentAnimation->ResetFrame();
 		break;
 	}
+	case ANI_HURT:
+	{
+		currentAnimation = animationHurt;
+		currentAnimation->ResetFrame();
+		break;
+	}
+	case ANI_RESPAWN:
+	{
+		currentAnimation = animationRespawn;
+		currentAnimation->ResetFrame();
+		break;
+	}
+	case ANI_DIE:
+	{
+		currentAnimation = animationDie;
+		currentAnimation->ResetFrame();
+		break;
+	}
 	}
 }
 
@@ -303,6 +303,36 @@ void Aladdin::UpdateKey()
 
 void Aladdin::HandleKeyBoard()
 {
+	if (state == DIE || isDie)
+	{
+		Die();
+		return;
+	}
+
+	//các hành động không thể thay đổi trong khi nó xảy ra
+	switch (state)
+	{
+	case RESETPOSITION:
+		ResetPosition();
+		return;
+		/*case RUNNEXT:
+			RunNext();
+			return;*/
+	}
+
+	//đặt khoảng thời gian nhấp nháy khi bị thương
+	if (isBlink != 0)
+	{
+		//isBlink = isBlink % 2 + 1;
+		DWORD endBlink = GetTickCount();
+		if (endBlink - startBlink > 1200)
+		{
+			isBlink = 0;
+			if (state == HURT)
+				state = lastState;
+		}
+	}
+
 	UpdateKey();
 
 	bool isKeyDown = false;
@@ -329,7 +359,7 @@ void Aladdin::HandleKeyBoard()
 		// 12:26 13/11
 		if (ny == -1.0f && vy >= 0)
 		{
-			if (!(nx != 0 && vx == 0))
+			if (!(nx != 0 && vx == 0))//nx = 0 || vx !=0
 			{
 				if (state != JUMPING && state != DUCKING && state != LOOK_UP)
 				{
@@ -441,6 +471,9 @@ void Aladdin::HandleKeyBoard()
 	{
 		switch (state)
 		{
+		case HURT:
+			Hurt();
+			break;
 		case RUN_LONG_ENOUGH: case BRAKING:
 		{
 			if (nx == 0 && vx != 0 && ny == -1.0f && vy == 0)
@@ -505,10 +538,10 @@ void Aladdin::HandleKeyBoard()
 	}
 	
 	if (this->Left() <= 10 && vx < 0 || this->Right() > 2270 && vx > 0)
-		vx = 0;
+		vx = 0;		
 
-	if (vy > 0)
-		lastVy = vy;
+	/*if (vy > 0)
+		lastVy = vy;*/
 	//simulate fall down (gravity)
 	vy += 0.018f;
 }
@@ -1339,7 +1372,7 @@ void Aladdin::Hurt()
 			//GameSound::getInstance()->play(HURT_MUSIC);
 
 			SetState(HURT);
-			//aladdin_image->setFrame(228, 233);
+			SetAnimation(ANI_HURT);
 			vx = 0;
 		}
 		isBlink = 1;
@@ -1372,7 +1405,7 @@ void Aladdin::Die()
 	default:
 	{
 		SetState(DIE);
-		//aladdin_image->setFrame(234, 261);
+		SetAnimation(ANI_DIE);
 		isDie = true;
 		direction = true;
 		numLifes--;
@@ -1400,10 +1433,10 @@ void Aladdin::ResetPosition()
 	default:
 	{
 		//GameSound::getInstance()->play(COMEIN_MUSIC);
-		if (xInit > 500)
+		/*if (xInit > 500)
 		{
 			SetState(RESETPOSITION);
-			//aladdin_image->setFrame(262, 275);			
+			SetAnimation(ANI_RESPAWN);
 			isBlink = 0;
 			xDraw = xInit;
 			yDraw = yInit;
@@ -1419,7 +1452,15 @@ void Aladdin::ResetPosition()
 			y = yDraw + 50;
 			startBlink = GetTickCount();
 			Stand();
-		}
+		}*/
+		SetState(RESETPOSITION);
+		SetAnimation(ANI_RESPAWN);
+		isBlink = 0;
+		xDraw = xInit;
+		yDraw = yInit;
+		x = xDraw + 6;
+		y = yDraw + 33;
+
 		isDie = false;
 		blood = 10;
 		break;
@@ -1536,7 +1577,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 	{
 		switch (obj->objType)
 		{		
-		case OBJBoss:
+		/*case OBJBoss:
 		{
 			if (Collision::AABBCheck(this, obj))
 			{
@@ -1544,10 +1585,10 @@ void Aladdin::OnIntersect(GameObject * obj)
 					Hurt();
 			}
 			break;
-		}
+		}*/
 		case OBJThinGuard:
 		{
-			if (obj->GetState() == NormalGuard::CUTTING_1)
+			if (obj->GetState() == ThinGuard::CUTTING_1)
 			{
 				if ((!obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (obj->direction && obj->Left() < this->Right() && obj->x > this->x))
 				{
@@ -1569,6 +1610,37 @@ void Aladdin::OnIntersect(GameObject * obj)
 			}
 			break;
 		}
+		}
+	}
+
+	if (obj->collType == CollItem && obj->isActived == false)
+	{
+		switch (obj->objType)
+		{
+		case OBJAbuItem:
+			score += 250;
+			numLifes += 1;
+			//GameSound::getInstance()->play(WOW_MUSIC);
+			break;
+		case OBJApple:
+			numApples++;
+			break;
+		case OBJGenieFace:
+			score += 250;
+			//GameSound::getInstance()->play(WOW_MUSIC);
+			break;
+		case OBJGenieJar:
+			xInit = obj->xDraw;
+			yInit = obj->yDraw;
+			break;
+		case OBJBlueHeart:
+			score += 150;
+			blood += 3;
+			break;
+		case OBJRuby:
+			score += 150;
+			numRubies++;
+			break;
 		}
 	}
 }

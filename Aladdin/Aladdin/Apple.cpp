@@ -118,7 +118,7 @@ void Apple::OnCollision(GameObject * obj, float nx, float ny)
 	{
 	case CollGround: case CollFence:
 		Collision::PreventMove(this, obj, nx, ny);
-		Burst();
+		//Burst();
 		break;
 	}
 }
@@ -131,7 +131,7 @@ void Apple::OnIntersect(GameObject * obj)
 		{
 			Split_Half();
 		}
-		else
+		else if (obj->objType != OBJStoneBrick && obj->objType != OBJBallTrap && obj->objType != OBJSharpTrap && obj->collType != CollChains)
 		{
 			if (!(vy < 0))
 				Burst();

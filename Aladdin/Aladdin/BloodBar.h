@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "Constants.h"
+#include "Aladdin.h"
 
 class BloodBar : public GameObject
 {

@@ -175,7 +175,9 @@ public:
 	virtual void ChangeFrameSize(GameObject*obj);
 	virtual void ResetFrameSize(GameObject*obj);
 
+	// 
 	virtual void OnCollision(GameObject*obj, float nx, float ny);
+	// giao nhau (Aladdin vs items, enemy, dây xích đu)
 	virtual void OnIntersect(GameObject*obj);
 
 	~GameObject();

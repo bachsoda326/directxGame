@@ -425,7 +425,7 @@ void LoadResources()
 
 	aladdin->LoadResources();
 	//aladdin->SetPosition(1170, 270);
-	aladdin->SetPosition(1600, 950);
+	aladdin->SetPosition(1700, 950);
 	//aladdin->SetCamera(camera);	
 	
 	bloodBar = new BloodBar();
@@ -481,7 +481,7 @@ void Update(DWORD dt)
 	aladdin->HandleKeyBoard();
 	
 	aladdin->Update(dt);
-	
+	bloodBar->Update(dt);
 	aladdin->nx = 0;
 	aladdin->ny = 0;
 	for (int i = 0; i < coObjects.size(); i++)

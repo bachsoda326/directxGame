@@ -2,8 +2,9 @@
 #include "GameObject.h"
 #include "Constants.h"
 #include "Aladdin.h"
+#include "Enemy.h"
 
-class NormalGuard : public GameObject
+class NormalGuard : public Enemy
 {
 private:
 	// số lượng máu của normal guard

@@ -7,7 +7,7 @@ NormalGuard::NormalGuard()
 	h = 20;
 	vx = 0;
 	vy = 0;
-
+	isDie = false;
 	isDead = false;
 	blood = 2;
 	objType = OBJNormalGuard;
@@ -20,6 +20,7 @@ NormalGuard::NormalGuard(float Left, float top, float width, float height)
 	yDraw = top;
 	x = xDraw + 24;
 	y = yDraw + 59;	
+	isDie = false;
 	isDead = false;
 	direction = true;
 	blood = 2;
@@ -229,6 +230,7 @@ void NormalGuard::Provoke()
 
 void NormalGuard::Die()
 {
+	Enemy::Die();
 }
 
 void NormalGuard::ChangeFrameSize(GameObject * obj)

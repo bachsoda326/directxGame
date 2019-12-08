@@ -7,6 +7,7 @@ ThinGuard::ThinGuard(float Left, float top, float width, float height)
 	yDraw = top;
 	x = xDraw + 20;
 	y = yDraw + 62;
+	isDie = false;
 	isDead = false;
 	direction = true;
 	blood = 2;
@@ -178,6 +179,7 @@ void ThinGuard::Hurt()
 
 void ThinGuard::Die()
 {
+	Enemy::Die();
 }
 
 void ThinGuard::ChangeFrameSize(GameObject * obj)

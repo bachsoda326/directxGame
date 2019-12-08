@@ -108,6 +108,9 @@
     <ClInclude Include="AladdinFace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -201,6 +204,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AladdinFace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

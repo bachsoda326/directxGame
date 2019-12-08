@@ -239,7 +239,71 @@
     <sprite id="212" x="585" y="1966" w="81" h="44" oX="81" oY="44" />
     <sprite id="213" x="681" y="1968" w="75" h="44" oX="75" oY="44" />
   </Animation>
-
+  <Animation name="Hurt" imagePath="Aladdin.png" width="1121" height="2718">        
+    <sprite id="228" x="9" y="2167" w="42" h="46" oX="21" oY="46" />
+    <sprite id="229" x="58" y="2161" w="55" h="52" oX="27" oY="52" />
+    <sprite id="230" x="122" y="2162" w="59" h="50" oX="29" oY="50" />
+    <sprite id="231" x="189" y="2163" w="80" h="48" oX="40" oY="48" />
+    <sprite id="232" x="282" y="2160" w="61" h="51" oX="30" oY="51" />
+    <sprite id="233" x="351" y="2161" w="59" h="49" oX="29" oY="49" />    
+  </Animation>
+  <Animation name="Die" imagePath="Aladdin.png" width="1121" height="2718">        
+    <sprite id="234" x="1" y="2234" w="80" h="48" oX="40" oY="48" />
+    <sprite id="235" x="87" y="2231" w="61" h="51" oX="30" oY="51" />
+    <sprite id="236" x="160" y="2224" w="45" h="58" oX="22" oY="58" />
+    <sprite id="237" x="213" y="2224" w="45" h="58" oX="22" oY="58" />
+    <sprite id="238" x="264" y="2231" w="39" h="50" oX="19" oY="50" />
+    <sprite id="239" x="312" y="2230" w="40" h="51" oX="20" oY="51" />
+    <sprite id="240" x="361" y="2230" w="35" h="51" oX="17" oY="51" />
+    <sprite id="241" x="407" y="2230" w="36" h="51" oX="18" oY="51" />
+    <sprite id="242" x="454" y="2232" w="39" h="49" oX="19" oY="49" />
+    <sprite id="243" x="505" y="2227" w="44" h="56" oX="22" oY="56" />
+    <sprite id="244" x="560" y="2228" w="41" h="53" oX="20" oY="53" />
+    <sprite id="245" x="614" y="2232" w="39" h="50" oX="19" oY="50" />
+    <sprite id="246" x="661" y="2232" w="40" h="51" oX="20" oY="51" />
+    <sprite id="247" x="2" y="2335" w="37" h="51" oX="18" oY="51" />
+    <sprite id="248" x="49" y="2329" w="37" h="57" oX="18" oY="57" />
+    <sprite id="249" x="97" y="2331" w="43" h="55" oX="21" oY="55" />
+    <sprite id="250" x="148" y="2333" w="61" h="53" oX="30" oY="53" />
+    <sprite id="251" x="223" y="2336" w="61" h="51" oX="30" oY="51" />
+    <sprite id="252" x="296" y="2310" w="76" h="83" oX="38" oY="83" />
+    <sprite id="253" x="383" y="2309" w="77" h="85" oX="38" oY="85" />
+    <sprite id="254" x="476" y="2309" w="75" h="85" oX="37" oY="85" />
+    <sprite id="255" x="567" y="2311" w="68" h="83" oX="34" oY="83" />
+    <sprite id="256" x="654" y="2313" w="66" h="81" oX="33" oY="81" />
+    <sprite id="257" x="734" y="2321" w="66" h="74" oX="33" oY="74" />
+    <sprite id="258" x="811" y="2323" w="66" h="74" oX="33" oY="74" />
+    <sprite id="259" x="888" y="2323" w="66" h="74" oX="33" oY="74" />
+    <sprite id="260" x="970" y="2325" w="66" h="74" oX="33" oY="74" />
+    <sprite id="261" x="1049" y="2325" w="66" h="74" oX="33" oY="74" />
+  </Animation>
+  <Animation name="Respawn" imagePath="Aladdin.png" width="1121" height="2718">        
+    <sprite id="262" x="2" y="2472" w="64" h="69" oX="28" oY="69" />
+    <sprite id="263" x="79" y="2475" w="56" h="66" oX="26" oY="66" />
+    <sprite id="264" x="143" y="2508" w="20" h="33" oX="9" oY="33" />
+    <sprite id="265" x="173" y="2503" w="23" h="38" oX="9" oY="38" />
+    <sprite id="266" x="205" y="2495" w="25" h="46" oX="9" oY="46" />
+    <sprite id="267" x="243" y="2483" w="27" h="58" oX="14" oY="58" />
+    <sprite id="268" x="278" y="2474" w="38" h="67" oX="19" oY="67" />
+    <sprite id="269" x="333" y="2460" w="37" h="81" oX="15" oY="81" />
+    <sprite id="270" x="382" y="2460" w="42" h="84" oX="21" oY="84" />
+    <sprite id="271" x="442" y="2454" w="53" h="87" oX="15" oY="87" />
+    <sprite id="272" x="510" y="2441" w="43" h="100" oX="26" oY="100" />
+    <sprite id="273" x="563" y="2426" w="50" h="115" oX="39" oY="115" />
+    <sprite id="274" x="623" y="2408" w="45" h="133" oX="33" oY="133" />
+    <sprite id="275" x="682" y="2400" w="40" h="141" oX="29" oY="141" />
+  </Animation>
+  <Animation name="PassLevel" imagePath="Aladdin.png" width="1121" height="2718">        
+    <sprite id="276" x="3" y="2565" w="44" h="62" oX="21" oY="62" />
+    <sprite id="277" x="60" y="2566" w="49" h="59" oX="23" oY="59" />
+    <sprite id="278" x="123" y="2566" w="35" h="57" oX="14" oY="57" />
+    <sprite id="279" x="166" y="2565" w="40" h="61" oX="17" oY="61" />
+    <sprite id="280" x="215" y="2567" w="36" h="60" oX="18" oY="60" />
+    <sprite id="281" x="263" y="2564" w="38" h="63" oX="19" oY="63" />
+    <sprite id="282" x="310" y="2565" w="48" h="59" oX="23" oY="59" />
+    <sprite id="283" x="372" y="2564" w="37" h="61" oX="14" oY="61" />	
+  </Animation>
+ 
 //Cút
   <Animation name="AppleFlying" imagePath="Aladdin.png" width="1121" height="2718">        
     <sprite id="" x="000" y="000" w="000" h="000" oX="000" oY="000" />
