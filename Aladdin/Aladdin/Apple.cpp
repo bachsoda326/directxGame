@@ -3,9 +3,9 @@
 
 Apple::Apple()
 {
-	isDead = false;
-	objType = OBJApple;
+	isDead = false;	
 	collType = CollApple;
+	objType = OBJApple;
 }
 
 Apple::Apple(float left, float top, float width, float height)
@@ -14,7 +14,8 @@ Apple::Apple(float left, float top, float width, float height)
 	yDraw = top;
 	
 	direction = true;
-	isDead = false;
+	isDead = false;	
+	collType = CollItem;
 	objType = OBJApple;
 }
 
@@ -22,10 +23,12 @@ void Apple::LoadResources()
 {	
 	LPDIRECT3DTEXTURE9 texItems = Textures::GetInstance()->Get(ID_TEX_ITEM);
 	LPDIRECT3DTEXTURE9 texAladdin = Textures::GetInstance()->Get(ID_TEX_ALADDIN);
-
+	LPDIRECT3DTEXTURE9 texItemActived = Textures::GetInstance()->Get(ID_TEX_ITEMACTIVED);
+		
 	animationItem = new Animation("Animation_Small", XML_ITEMAPLLE_ANIMATION_PATH, texItems, 100);
 	animationBurst_1 = new Animation("Burst_1", XML_APPLE_ANIMATION_PATH, texAladdin, 100);
 	animationSplit_Half = new Animation("Split_Half", XML_APPLE_ANIMATION_PATH, texAladdin, 100);
+	animationItemActived = new Animation("Animation", XML_ITEMACTIVED_ANIMATION_PATH, texItemActived, 100);
 
 	xInit = x;
 	yInit = y;
@@ -62,21 +65,25 @@ void Apple::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x += dx;
 	y += dy;
 
+	switch (state)
+	{
+	case SPLIT_HALF:
+		Split_Half();
+		break;
+	case BURST:
+		Burst();
+		return;
+	case ACTIVED:
+		Active();
+		break;
+	default:
+		Move();
+		break;
+	}
+
 	// trọng lực cho táo rơi
 	if (collType == CollApple)
 		vy += 0.015f;
-}
-
-void Apple::Render()
-{
-	if (true)
-	{
-		// // Vector trans giúp dời ảnh theo camera
-		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
-		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans);
-	}
-	else
-		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, D3DXVECTOR2(0, 0));
 }
 
 void Apple::SetAnimation(AppleAnimations ani)
@@ -96,25 +103,12 @@ void Apple::SetAnimation(AppleAnimations ani)
 		currentAnimation->ResetFrame();
 		break;
 	}	
-	}
-}
-
-void Apple::ProcessInput()
-{
-	switch (state)
+	case ANI_ACTIVED:
 	{
-	case SPLIT_HALF:
-		Split_Half();
+		currentAnimation = animationItemActived;
+		currentAnimation->ResetFrame();
 		break;
-	case BURST:
-		Burst();
-		return;
-	case ACTIVED:
-		Active();
-		break;
-	default:
-		Move();
-		break;
+	}
 	}
 }
 
@@ -129,7 +123,7 @@ void Apple::OnCollision(GameObject * obj, float nx, float ny)
 	}
 }
 
-void Apple::OnInterSerct(GameObject * obj)
+void Apple::OnIntersect(GameObject * obj)
 {
 	if (collType == CollApple && obj->collType != CollItem)
 	{
@@ -188,6 +182,27 @@ void Apple::Burst()
 
 void Apple::Active()
 {
+	switch (state)
+	{
+	case ACTIVED:
+	{
+		if (currentAnimation->isActionFinish())
+			isDead = true;
+		break;
+	}
+	default:
+	{
+		SetState(ACTIVED);
+		SetAnimation(ANI_ACTIVED);
+		vy = 0;
+		vx = 0;
+		x = (this->Left() + this->Right()) / 2;
+		y = (this->Top() + this->Bottom()) / 2;
+		isDie = true;
+		isActived = true;
+		break;
+	}
+	}
 }
 
 void Apple::Split_Half()

@@ -38,15 +38,10 @@ enum ObjectType
 	OBJGround,
 	OBJFence,
 	OBJRope,
-	OBJCollarBeam,
-	OBJStair,
 	OBJCamel,
-	OBJApple,
-	OBJJarThrower,
-	OBJSwordsman,
+	OBJApple,	
 	OBJRod,
 	OBJItem,
-	OBJSpittle,
 	OBJSword,
 	OBJJar,
 	OBJAbuItem,
@@ -55,22 +50,19 @@ enum ObjectType
 	OBJGenieJar,
 	OBJLamp,
 	OBJRuby,
-	OBJGuard1,
-	OBJGuard2,
-	OBJGuard3,
-	OBJTheft,
-	OBJFireCarpet,
-	OBJFire,
-	OBJLine,
-	OBJFallingGround,
+	OBJNormalGuard,
+	OBJThinGuard,
 	OBJAladdin,
 	OBJBoss,
 	OBJStar,
-	OBJAladdinFace,
-	OBJAbu,
-	OBJKnives,
-	OBJBird,
-	OBJGenie
+	OBJAladdinFace,	
+	OBJGenie,
+	OBJBallTrap,
+	OBJBat,
+	OBJBoomSkeleton,
+	OBJPeddler,
+	OBJSharpTrap,
+	OBJStoneBrick
 };
 
 class GameObject;
@@ -108,6 +100,7 @@ public:
 	// vị trí vẽ (để cân xứng giữa các frame hình của animation)
 	float xDraw, yDraw;
 	// vận tốc
+	float xLimLeft, xLimRight;
 	float vx, vy;
 	// dx = vx*dt; dy = vy*dt
 	float dx, dy;

@@ -8,6 +8,7 @@ GenieFace::GenieFace(float left, float top, float width, float height)
 	y = yDraw + 25;
 	direction = true;
 	collType = CollItem;
+	objType = OBJGenieFace;
 }
 
 void GenieFace::LoadResources()
@@ -16,19 +17,11 @@ void GenieFace::LoadResources()
 	LPDIRECT3DTEXTURE9 texEnemyExplosion = Textures::GetInstance()->Get(ID_TEX_ENEMYEXPLOSION);
 
 	animationDefault = new Animation("Animation", XML_GENIEFACE_ANIMATION_PATH, texItems, 170);
-	animationExplosion_Actived = new Animation("Explosion_Actived", XML_ENEMYEXPLOSION_ANIMATION_PATH, texEnemyExplosion, 100);
+	animationExplosion_Actived = new Animation("Explosion_Actived", XML_ENEMYEXPLOSION_ANIMATION_PATH, texEnemyExplosion, 70);
 
 	currentAnimation = animationDefault;
 	
 	Item::LoadResources();
-}
-
-void GenieFace::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
-	/*x += dx;
-	y += dy;*/
 }
 
 void GenieFace::Active()

@@ -18,9 +18,6 @@ public:
 
 	virtual void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	void Render();
-	// process input
-	void ProcessInput();
 
 	void OnCollision(GameObject *obj, float nx, float ny);
 	void OnIntersect(GameObject *obj);

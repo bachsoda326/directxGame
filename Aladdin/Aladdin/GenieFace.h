@@ -13,7 +13,6 @@ public:
 		animationExplosion_Actived;	
 
 	void LoadResources();
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);	
 
 	// action of GenieFace
 	void Active();

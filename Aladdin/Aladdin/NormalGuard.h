@@ -1,10 +1,14 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Constants.h"
 #include "Aladdin.h"
 
 class NormalGuard : public GameObject
 {
+private:
+	// số lượng máu của normal guard
+	int blood;	
+
 public:
 	NormalGuard();
 	NormalGuard(float left, float top, float width, float height);
@@ -40,9 +44,22 @@ public:
 
 	void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	void Render();
 	
 	void SetAnimation(NormalGuardAnimations ani);
+	
+	//action
+	void Cut();
+	void Run();
+	void Stand();
+	void Hurt();	
+	void Provoke();
+	void Die();
+
+	//change and reset frame size
+	void ChangeFrameSize(GameObject*obj);
+	void ResetFrameSize(GameObject*obj);
+
+	void OnIntersect(GameObject *obj);
 	
 	~NormalGuard();
 };

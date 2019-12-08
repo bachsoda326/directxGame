@@ -32,6 +32,12 @@ void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void GameObject::Render()
 {
+	if (!isDead)
+	{
+		// // Vector trans giúp dời ảnh theo camera
+		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
+		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans);
+	}
 }
 
 void GameObject::SetPosition(float x, float y)

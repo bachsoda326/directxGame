@@ -488,13 +488,14 @@ void Update(DWORD dt)
 	{
 		Collision::CheckCollision(aladdin, coObjects[i]);
 		coObjects[i]->Update(dt);
+		for (int j = 0; j < aladdin->GetListApples()->size(); j++)
+		{
+			Collision::CheckCollision(aladdin->GetListApples()->at(j), coObjects[i]);
+		}
 	}
 	for (int i = 0; i < Aladdin::GetInstance()->GetListApples()->size(); i++)
 		Aladdin::GetInstance()->GetListApples()->at(i)->ProcessInput();
-	for (int i = 0; i < aladdin->GetListApples()->size(); i++)
-	{
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), coObjects[i]);		
-	}
+	
 	Collision::CheckCollision(aladdin, baseGround);	
 	
 	//aladdin->CheckCollision(&coObjects);

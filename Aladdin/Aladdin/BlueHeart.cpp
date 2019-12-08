@@ -5,9 +5,10 @@ BlueHeart::BlueHeart(float left, float top, float width, float height)
 	xDraw = left;
 	yDraw = top;
 	x = xDraw + 9;
-	y = yDraw + 12;
+	y = yDraw - 10;
 	direction = true;
 	collType = CollItem;
+	objType = OBJBlueHeart;
 }
 
 void BlueHeart::LoadResources()
@@ -21,16 +22,9 @@ void BlueHeart::LoadResources()
 	Item::LoadResources();
 }
 
-void BlueHeart::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
-	/*x += dx;
-	y += dy;*/
-}
-
 void BlueHeart::Active()
 {
+	Item::Active();
 }
 
 void BlueHeart::NonActive()

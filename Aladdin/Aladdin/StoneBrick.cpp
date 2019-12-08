@@ -11,6 +11,7 @@ StoneBrick::StoneBrick(float left, float top, float width, float height)
 	h = height;	*/
 	direction = true;
 	collType = CollBrick;
+	objType = OBJStoneBrick;
 }
 
 void StoneBrick::LoadResources(bool check)

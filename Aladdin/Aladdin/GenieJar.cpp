@@ -9,6 +9,7 @@ GenieJar::GenieJar(float left, float top, float width, float height)
 	y = yDraw + 33;
 	direction = true;
 	collType = CollItem;
+	objType = OBJGenieJar;
 }
 
 void GenieJar::LoadResources()
@@ -21,14 +22,6 @@ void GenieJar::LoadResources()
 	animationDefault->SetFrame(0, 0);	
 
 	Item::LoadResources();
-}
-
-void GenieJar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
-	/*x += dx;
-	y += dy;*/
 }
 
 void GenieJar::Active()

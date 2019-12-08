@@ -18,15 +18,30 @@ Aladdin::Aladdin()
 	h = 50;
 	xDraw = x - 18;
 	yDraw = y - 50;
+	xInit = xDraw;
+	yInit = yDraw;
 	nx = 0;
 	ny = 0;
 	lastVy = 0;
+	isDead = false;
+	isDie = false;
 	direction = true;
 	isAppleCreated == false;
 	currentAnimation = new Animation(100);
+	isBlink = 0;
+	blood = 8;
+	score = 0;
+	numApples = 10;
+	numRubies = 0;
+	numLifes = 3;	
+	isCutted = false;
+	keyUp[0] = true;
+	keyUp[1] = true;
+	keyUp[2] = true;
 	lastState = STANDING;
 	state = STANDING;
 	collType = CollAladdin;
+	objType = OBJAladdin;
 }
 
 Aladdin * Aladdin::GetInstance()
@@ -76,18 +91,27 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	x += dx;
 	y += dy;
 
-	if (vy > 0)
-		lastVy = vy;
-	//simulate fall down (gravity)
-	vy += 0.018f;
-
-	/*if (x < 30 || x + 20 > MAP_WIDTH - 30)
-		vx = 0, vy = 0;
-	else if (y < 30 || y + 20 >= MAP_HEIGHT - 9)
+	if (state == DIE || isDie)
 	{
-		vy = 0;
-		y = MAP_HEIGHT - 9 - 20;
-	}*/
+		Die();
+		return;
+	}
+
+	//các hành động không thể thay đổi trong khi nó xảy ra
+	switch (state)
+	{
+	case RESETPOSITION:
+		ResetPosition();
+		return;	
+	/*case RUNNEXT:
+		RunNext();
+		return;*/
+	}	
+
+	//if (vy > 0)
+	//	lastVy = vy;
+	////simulate fall down (gravity)
+	//vy += 0.018f;	
 
 	for (int i = 0; i < listApples.size(); i++)
 	{
@@ -480,6 +504,13 @@ void Aladdin::HandleKeyBoard()
 		}
 	}
 	
+	if (this->Left() <= 10 && vx < 0 || this->Right() > 2270 && vx > 0)
+		vx = 0;
+
+	if (vy > 0)
+		lastVy = vy;
+	//simulate fall down (gravity)
+	vy += 0.018f;
 }
 
 void Aladdin::Stand()
@@ -1293,6 +1324,109 @@ void Aladdin::Throw()
 	}
 }
 
+void Aladdin::Hurt()
+{
+	switch (state)
+	{
+	case HURT:
+	{
+		break;
+	}
+	default:
+	{
+		if ((state == STANDING || state == WAITING_1 || state == WAITING_3))
+		{
+			//GameSound::getInstance()->play(HURT_MUSIC);
+
+			SetState(HURT);
+			//aladdin_image->setFrame(228, 233);
+			vx = 0;
+		}
+		isBlink = 1;
+		startBlink = GetTickCount();
+		blood--;
+
+		if (blood == 0)
+			Die();
+		break;
+	}
+	}
+}
+
+void Aladdin::Die()
+{
+	switch (state)
+	{
+	case DIE:
+	{
+		if (currentAnimation->isActionFinish())
+		{
+			if (numLifes == 0)
+				isDead = true;
+			else
+				ResetPosition();
+		}
+		//isBlink = 0;
+		break;
+	}
+	default:
+	{
+		SetState(DIE);
+		//aladdin_image->setFrame(234, 261);
+		isDie = true;
+		direction = true;
+		numLifes--;
+		vy = 0;
+		vx = 0;
+		isBlink = 0;
+		break;
+	}
+	}
+}
+
+void Aladdin::ResetPosition()
+{
+	switch (state)
+	{
+	case RESETPOSITION:
+	{
+		if (currentAnimation->isActionFinish())
+		{
+			y -= 20;
+			Stand();
+		}
+		break;
+	}
+	default:
+	{
+		//GameSound::getInstance()->play(COMEIN_MUSIC);
+		if (xInit > 500)
+		{
+			SetState(RESETPOSITION);
+			//aladdin_image->setFrame(262, 275);			
+			isBlink = 0;
+			xDraw = xInit;
+			yDraw = yInit;
+			x = xDraw + 6;
+			y = yDraw + 33;
+		}
+		else
+		{
+			isBlink = 1;
+			xDraw = xInit;
+			yDraw = yInit;
+			x = xDraw + 18;
+			y = yDraw + 50;
+			startBlink = GetTickCount();
+			Stand();
+		}
+		isDie = false;
+		blood = 10;
+		break;
+	}
+	}
+}
+
 vector<GameObject*>* Aladdin::GetListApples()
 {
 	return &listApples;
@@ -1366,35 +1500,7 @@ void Aladdin::OnCollision(GameObject * obj, float nx, float ny)
 		if (i == 3 || i == 4)
 			Collision::PreventMove(this, obj, nx, ny);
 		break; 
-	}
-	/*case CollStair:
-	{
-		isCollStair = true;
-		Collision::CollisionLine(this, obj, normalx, normaly);
-	}
-	break;
-	case CollLine:
-	{
-		Collision::CollisionLine(this, obj, normalx, normaly);
-		break;
-	}
-	case CollCamel:
-	{
-		Collision::CollisionLine(this, obj, normalx, normaly);
-		if (normaly == -1.0f && normalx == 0)
-			Jump();
-		break;
-	}
-	case CollRod:
-	{
-		Collision::CollisionLine(this, obj, normalx, normaly);
-		if (normaly == -1.0f && normalx == 0)
-		{
-			status = JUMPING;
-			Stunt();
-		}
-		break;
-	}*/
+	}	
 	}
 }
 
@@ -1423,6 +1529,46 @@ void Aladdin::OnIntersect(GameObject * obj)
 			if (yDraw < obj->yDraw)
 				KeyUp = false;
 			Climb();
+		}
+	}
+
+	if (obj->collType == CollEnemy)
+	{
+		switch (obj->objType)
+		{		
+		case OBJBoss:
+		{
+			if (Collision::AABBCheck(this, obj))
+			{
+				if (isBlink == 0)
+					Hurt();
+			}
+			break;
+		}
+		case OBJThinGuard:
+		{
+			if (obj->GetState() == NormalGuard::CUTTING_1)
+			{
+				if ((!obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (obj->direction && obj->Left() < this->Right() && obj->x > this->x))
+				{
+					if (isBlink == 0)
+						Hurt();
+				}
+			}
+			break;
+		}
+		case OBJNormalGuard:
+		{
+			if (obj->GetState() == NormalGuard::CUTTING_1 || obj->GetState() == NormalGuard::CUTTING_2)
+			{
+				if ((!obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (obj->direction && obj->Left() < this->Right() && obj->x > this->x))
+				{
+					if (isBlink == 0)
+						Hurt();
+				}
+			}
+			break;
+		}
 		}
 	}
 }

@@ -7,6 +7,14 @@
 
 class Aladdin : public GameObject
 {
+public:
+	int blood;
+	int score;
+	int numRubies;
+	int numLifes;
+	int numApples;
+	bool isCutted;
+
 private:
 	static Aladdin * __instance;
 
@@ -25,6 +33,10 @@ private:
 
 	bool isAppleCreated;
 	// biến đếm animation Wait_1
+	int isBlink;
+	//Lưu thời gian lúc bắt đầu nhấp nháy
+	DWORD startBlink;
+
 	int countWait_1;
 	// :test số lần nhận đc collision
 	int testCollision = 0;
@@ -153,6 +165,9 @@ public:
 	void Climb();	// leo
 	void Cut();		// chém
 	void Throw();	// ném (táo)	
+	void Hurt();
+	void Die();
+	void ResetPosition();
 
 	// Handle apple
 	vector<GameObject*> listApples;

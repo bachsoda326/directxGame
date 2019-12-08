@@ -12,7 +12,6 @@ public:
 	LPANIMATION animationDefault;
 
 	void LoadResources();
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 
 	// action of GenieJar
 	void Active();

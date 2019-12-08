@@ -29,16 +29,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	x += dx;
 	y += dy;
-}
 
-void Item::Render()
-{
-	D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
-	currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans);
-}
-
-void Item::ProcessInput()
-{
 	switch (state)
 	{
 	case ACTIVED:

@@ -26,7 +26,6 @@ public:
 
 	void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	void Render();
 
 	void SetAnimation(PeddlerAnimations ani);
 
