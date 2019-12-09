@@ -51,6 +51,10 @@ void Peddler::SetAnimation(PeddlerAnimations ani)
 	}
 }
 
+void Peddler::OnIntersect(GameObject * obj)
+{
+}
+
 Peddler::~Peddler()
 {
 }

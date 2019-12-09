@@ -28,7 +28,7 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 
 	void SetAnimation(PeddlerAnimations ani);
-
+	void OnIntersect(GameObject *obj);
 	~Peddler();
 };
 

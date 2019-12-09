@@ -13,8 +13,8 @@ Aladdin * Aladdin::__instance = NULL;
 
 Aladdin::Aladdin()
 {
-	x = 1750;
-	y = 950;
+	x = ALADDIN_POTISION_X;
+	y = ALADDIN_POTISION_Y;
 	w = 37;
 	h = 50;
 	xDraw = x - 18;
@@ -95,6 +95,48 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	x += dx;
 	y += dy;	
 	/*vy += 0.018f;*/
+
+	if (state == DIE || isDie)
+	{
+		Die();
+		return;
+	}
+
+	//các hành động không thể thay đổi trong khi nó xảy ra
+	switch (state)
+	{
+	case RESETPOSITION:
+		ResetPosition();
+		return;
+		/*case RUNNEXT:
+			RunNext();
+			return;*/
+	}
+
+	//đặt khoảng thời gian nhấp nháy khi bị thương
+	if (isBlink != 0)
+	{
+		//isBlink = isBlink % 2 + 1;
+		DWORD endBlink = GetTickCount();
+		if (endBlink - startBlink > 1200)
+		{
+			isBlink = 0;
+			if (state == HURT)
+				state = lastState;
+		}
+	}
+
+	// Xử lý bàn phím và di chuyển
+	HandleKeyBoard();
+
+	if (this->Left() <= 10 && vx < 0 || this->Right() > 2270 && vx > 0)
+		vx = 0;
+
+	/*if (vy > 0)
+		lastVy = vy;*/
+		//simulate fall down (gravity)
+	vy += 0.018f;
+
 	for (int i = 0; i < listApples.size(); i++)
 	{
 		listApples[i]->Update(dt);
@@ -303,36 +345,6 @@ void Aladdin::UpdateKey()
 
 void Aladdin::HandleKeyBoard()
 {
-	if (state == DIE || isDie)
-	{
-		Die();
-		return;
-	}
-
-	//các hành động không thể thay đổi trong khi nó xảy ra
-	switch (state)
-	{
-	case RESETPOSITION:
-		ResetPosition();
-		return;
-		/*case RUNNEXT:
-			RunNext();
-			return;*/
-	}
-
-	//đặt khoảng thời gian nhấp nháy khi bị thương
-	if (isBlink != 0)
-	{
-		//isBlink = isBlink % 2 + 1;
-		DWORD endBlink = GetTickCount();
-		if (endBlink - startBlink > 1200)
-		{
-			isBlink = 0;
-			if (state == HURT)
-				state = lastState;
-		}
-	}
-
 	UpdateKey();
 
 	bool isKeyDown = false;
@@ -535,15 +547,7 @@ void Aladdin::HandleKeyBoard()
 			break;
 		}
 		}
-	}
-	
-	if (this->Left() <= 10 && vx < 0 || this->Right() > 2270 && vx > 0)
-		vx = 0;		
-
-	/*if (vy > 0)
-		lastVy = vy;*/
-	//simulate fall down (gravity)
-	vy += 0.018f;
+	}	
 }
 
 void Aladdin::Stand()
@@ -1547,6 +1551,8 @@ void Aladdin::OnCollision(GameObject * obj, float nx, float ny)
 
 void Aladdin::OnIntersect(GameObject * obj)
 {
+	/*if (obj->objType == OBJSharpTrap)
+		Hurt();*/
 	if (obj->collType == CollChains)
 	{
 		//Khi trèo xuống hết dây thì Aladdin tự nhảy xuống

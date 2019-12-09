@@ -8,11 +8,11 @@
 class Aladdin : public GameObject
 {
 public:
-	int blood;
-	int score;
-	int numRubies;
-	int numLifes;
-	int numApples;
+	int blood;			// máu
+	int score;			// điểm
+	int numRubies;		// số ruby
+	int numLifes;		// số mạng
+	int numApples;		// số apple
 	bool isCutted;
 
 private:
