@@ -2,6 +2,7 @@
 
 Scene::Scene()
 {
+	
 }
 
 void Scene::LoadResources()
@@ -20,6 +21,8 @@ void Scene::LoadResources()
 	textures->Add(ID_TEX_ITEMACTIVED, TEX_ITEMACTIVED_PATH, D3DCOLOR_XRGB(255, 4, 253));
 	textures->Add(ID_TEX_BLOODBAR, TEX_BLOODBAR_PATH, D3DCOLOR_XRGB(255, 0, 255));
 	textures->Add(ID_TEX_BBOX, TEX_BBOX_PATH, D3DCOLOR_XRGB(255, 255, 255));
+
+	LoadFont();
 }
 
 void Scene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -63,6 +66,47 @@ void Scene::CheckCameraAndWorldMap()
 		Camera::GetInstance()->SetPosition(Camera::GetInstance()->GetPosition().x,
 			CAMERA_MAP_HEIGHT - Camera::GetInstance()->GetHeight() / 2);
 	}
+}
+
+void Scene::LoadFont()
+{
+	ZeroMemory(&desc, sizeof(D3DXFONT_DESC));
+	desc.Height = 13;
+	desc.Width = 8;
+	desc.Weight = 200;
+	desc.MipLevels = D3DX_DEFAULT;
+	desc.Italic = false;
+	desc.CharSet = 0;
+	desc.OutputPrecision = 0;
+	desc.Quality = 0;
+	desc.PitchAndFamily = 0;
+	//strcpy_s(desc.FaceName, "Times New Roman"); // name will be something like "Arial"
+	wcscpy_s(desc.FaceName, L"Arial");
+	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numApples);
+	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numRubies);
+	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numLifes);
+	desc.Height = 20;
+	desc.Width = 10;
+	desc.Weight = 400;
+	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &score);
+}
+
+void Scene::DrawFont(LPD3DXFONT font, float x, float y, float width, float height, int value)
+{
+	// set position of font 
+	RECT rect;
+	rect.top = (int)y;
+	rect.left = (int)x;
+	rect.bottom = (int)y + height;
+	rect.right = (int)x + width;
+		
+	WCHAR intStr[20];
+	_itow_s(value, intStr, 10);
+	//strcpy_s(intStr, status.c_str());
+	if (font != score)
+		font->DrawText(NULL, intStr, -1, &rect, DT_TOP | DT_LEFT, D3DCOLOR_XRGB(255, 255, 255));
+	else
+		font->DrawText(NULL, intStr, -1, &rect, DT_TOP | DT_RIGHT, D3DCOLOR_XRGB(255, 255, 255));
 }
 
 Scene::~Scene()

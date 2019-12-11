@@ -30,11 +30,11 @@ Aladdin::Aladdin()
 	isAppleCreated == false;
 	currentAnimation = new Animation(100);
 	isBlink = 0;
-	blood = 3;
+	blood = 8;
 	score = 0;
 	numApples = 10;
 	numRubies = 0;
-	numLifes = 8;	
+	numLifes = 3;	
 	isCutted = false;
 	/*keyUp[0] = true;
 	keyUp[1] = true;
@@ -354,7 +354,7 @@ void Aladdin::HandleKeyBoard()
 		Cut();
 		isKeyDown = true;		
 	}
-	if (KeyX && keyUp[1])
+	if (KeyX && keyUp[1] && numApples > 0)
 	{
 		Throw();
 		isKeyDown = true;
@@ -1371,7 +1371,7 @@ void Aladdin::Hurt()
 	}
 	default:
 	{
-		if ((state == STANDING || state == WAITING_1 || state == WAITING_3))
+		if ((state == STANDING || state == WAITING_1 || state == WAITING_2))
 		{
 			//GameSound::getInstance()->play(HURT_MUSIC);
 
@@ -1479,6 +1479,7 @@ vector<GameObject*>* Aladdin::GetListApples()
 
 void Aladdin::CreateApple()
 {
+	numApples--;
 	GameObject* apple = new Apple();	
 
 	if (lastState == SWING || lastState == SWINGING || lastState == CLIMB || lastState == CLIMBING)
@@ -1551,8 +1552,24 @@ void Aladdin::OnCollision(GameObject * obj, float nx, float ny)
 
 void Aladdin::OnIntersect(GameObject * obj)
 {
-	/*if (obj->objType == OBJSharpTrap)
-		Hurt();*/
+	if (obj->objType == OBJBallTrap)
+	{
+		int i = obj->currentAnimation->GetCurrentFrame();
+		if (i == 13 || i == 14)
+		{
+			if (isBlink == 0)
+				Hurt();
+		}
+	}
+	if (obj->objType == OBJSharpTrap)
+	{
+		int i = obj->currentAnimation->GetCurrentFrame();
+		if (i == 4 || i == 5)
+		{
+			if (isBlink == 0)
+				Hurt();
+		}
+	}
 	if (obj->collType == CollChains)
 	{
 		//Khi trèo xuống hết dây thì Aladdin tự nhảy xuống

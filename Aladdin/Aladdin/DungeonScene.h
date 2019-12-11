@@ -6,6 +6,8 @@
 #include "StoneBrick.h"
 #include "AladdinFace.h"
 #include "Ground.h"
+#include "Apple.h"
+#include "Ruby.h"
 
 class DungeonScene : public Scene
 {
@@ -15,6 +17,8 @@ public:
 	Aladdin *aladdin = Aladdin::GetInstance();
 	BloodBar *bloodBar;
 	AladdinFace *face;
+	Apple *aladdinApple;
+	Ruby *aladdinRuby;
 	Ground *baseGround;
 
 	vector<GameObject*> listStaticObjs;

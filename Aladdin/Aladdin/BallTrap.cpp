@@ -29,6 +29,18 @@ void BallTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	y += dy;*/
 }
 
+void BallTrap::Render()
+{	
+	int i = currentAnimation->GetCurrentFrame();
+	if (i == 0)
+		animationDefault->SetFrame(1, 14);
+	if (i == 14)
+		animationDefault->SetFrame(13, 0);
+
+	GameObject::Render();
+	RenderBoundingBox();
+}
+
 BallTrap::~BallTrap()
 {
 }

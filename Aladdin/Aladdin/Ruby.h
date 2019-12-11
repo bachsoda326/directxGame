@@ -7,11 +7,13 @@
 class Ruby : public Item
 {
 public:
+	Ruby();
 	Ruby(float left, float top, float width, float height);
 
 	LPANIMATION animationDefault;
 
 	void LoadResources();
+	void Render();
 
 	// action of GenieFace
 	void Active();

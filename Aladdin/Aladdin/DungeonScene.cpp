@@ -48,6 +48,16 @@ void DungeonScene::LoadResources()
 	face->SetPosition(10, 220);
 	face->LoadResources();
 
+	aladdinApple = new Apple();
+	aladdinApple->collType = CollUnknown;
+	aladdinApple->SetPosition(317, 230);
+	aladdinApple->LoadResources();
+
+	aladdinRuby = new Ruby();
+	aladdinRuby->collType = CollUnknown;
+	aladdinRuby->SetPosition(280, 230);
+	aladdinRuby->LoadResources();
+
 	baseGround = new Ground(0, 1112, 2270, 27);
 	baseGround->collType = CollGround;
 
@@ -133,7 +143,15 @@ void DungeonScene::Render()
 		frontMap->Render();
 		bloodBar->Render();
 		face->Render();
+		aladdinApple->Render();
+		aladdinRuby->Render();
+
 		spriteHandler->End();
+
+		DrawFont(score, 280, 10, 35, 25, Aladdin::GetInstance()->score);
+		DrawFont(numLifes, 35, 230, 35, 25, Aladdin::GetInstance()->numLifes);
+		DrawFont(numRubies, 285, 230, 35, 25, Aladdin::GetInstance()->numRubies);
+		DrawFont(numApples, 318, 230, 35, 25, Aladdin::GetInstance()->numApples);
 		d3ddv->EndScene();
 	}
 

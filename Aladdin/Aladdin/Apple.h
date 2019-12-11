@@ -11,7 +11,8 @@ public:
 	Apple();
 	Apple(float left, float top, float width, float height);
 
-	LPANIMATION animationItem,
+	LPANIMATION animationBig,
+		animationItem,
 		animationBurst_1,
 		animationSplit_Half,
 		animationItemActived;
@@ -35,6 +36,7 @@ public:
 	// Khởi tạo obj
 	void LoadResources();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	void Render();
 	
 	void SetAnimation(AppleAnimations ani);
 		

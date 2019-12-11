@@ -24,7 +24,8 @@ void Apple::LoadResources()
 	LPDIRECT3DTEXTURE9 texItems = Textures::GetInstance()->Get(ID_TEX_ITEM);
 	LPDIRECT3DTEXTURE9 texAladdin = Textures::GetInstance()->Get(ID_TEX_ALADDIN);
 	LPDIRECT3DTEXTURE9 texItemActived = Textures::GetInstance()->Get(ID_TEX_ITEMACTIVED);
-		
+	
+	animationBig = new Animation("Animation_Big", XML_ITEMAPLLE_ANIMATION_PATH, texItems, 100);
 	animationItem = new Animation("Animation_Small", XML_ITEMAPLLE_ANIMATION_PATH, texItems, 100);
 	animationBurst_1 = new Animation("Burst_1", XML_APPLE_ANIMATION_PATH, texAladdin, 100);
 	animationSplit_Half = new Animation("Split_Half", XML_APPLE_ANIMATION_PATH, texAladdin, 100);
@@ -42,7 +43,7 @@ void Apple::LoadResources()
 		direction = true;
 		currentAnimation = animationItem;
 	}
-	else
+	else if (collType == CollApple)
 	{
 		x = xDraw + 7;
 		y = yDraw + 6;
@@ -50,6 +51,11 @@ void Apple::LoadResources()
 		typeSplit_Half = true;
 		currentAnimation = animationBurst_1;
 		animationBurst_1->SetFrame(0, 0);
+	}
+	else
+	{		
+		state = NOTMOVING;		
+		currentAnimation = animationBig;
 	}
 
 	isDie = false;
@@ -84,6 +90,18 @@ void Apple::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// trọng lực cho táo rơi
 	if (collType == CollApple)
 		vy += 0.015f;
+}
+
+void Apple::Render()
+{
+	if (collType == CollUnknown)
+		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, D3DXVECTOR2(0, 0));
+	else if (!isDead)
+	{
+		// // Vector trans giúp dời ảnh theo camera
+		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
+		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans);
+	}
 }
 
 void Apple::SetAnimation(AppleAnimations ani)
