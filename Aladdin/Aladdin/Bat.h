@@ -2,20 +2,21 @@
 #include "GameObject.h"
 #include "Constants.h"
 #include "Aladdin.h"
+#include "Enemy.h"
 
-class Bat : public GameObject
+class Bat : public Enemy
 {
 public:
 	Bat(float left, float top, float width, float height);
 
-	LPANIMATION animationStand,		
+	LPANIMATION animationStand,
 		animationAttack,
-		animationDieByApple,
-		animationDie;
+		animationDieByApple;
 
 	enum BatStates
 	{
 		STANDING,
+		PREPARING,
 		ATTACKING,
 		DIEBYAPPLE,
 		DIE
@@ -33,6 +34,17 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 
 	void SetAnimation(BatAnimations ani);
+
+	// Action
+	void Stand();
+	void Attack();
+	void Die();
+
+	// Change and reset frame size
+	void ChangeFrameSize(GameObject*obj);
+	void ResetFrameSize(GameObject*obj);
+
+	void OnIntersect(GameObject *obj);
 
 	~Bat();
 };

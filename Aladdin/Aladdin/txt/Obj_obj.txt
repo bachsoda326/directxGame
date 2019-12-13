@@ -148,7 +148,7 @@
 147 BoomSkeleton 1722 698 48 75 
 148 BoomSkeleton 1827 539 48 75 
 149 BoomSkeleton 1635 458 48 75 
-150 Peddler 377 320 26 52 
+150 Peddler 345 320 26 52 
 151 StoneBrick 353 789 38 21 
 152 StoneBrick 304 740 38 21 
 153 StoneBrick 353 692 38 21 

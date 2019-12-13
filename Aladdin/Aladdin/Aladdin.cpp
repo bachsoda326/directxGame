@@ -5,6 +5,7 @@
 #include "Apple.h"
 #include "NormalGuard.h"
 #include "ThinGuard.h"
+#include "Bat.h"
 #include "Ground.h"
 #include "StoneBrick.h"
 #include "Chains.h"
@@ -33,7 +34,7 @@ Aladdin::Aladdin()
 	blood = 8;
 	score = 0;
 	numApples = 10;
-	numRubies = 0;
+	numRubies = 21;
 	numLifes = 3;	
 	isCutted = false;
 	/*keyUp[0] = true;
@@ -431,7 +432,7 @@ void Aladdin::HandleKeyBoard()
 		// set vận tốc của Aladdin
 		switch (state)
 		{
-		case JUMPING: case RUNNING: case RUN_LONG_ENOUGH: case CUTTING: case THROWING:
+		case JUMPING: case RUNNING: case RUN_LONG_ENOUGH:
 		{
 			if (KeyRight)
 			{
@@ -448,7 +449,27 @@ void Aladdin::HandleKeyBoard()
 					vx = -ALADDIN_SPEED;
 			}
 			break;
-		}		
+		}
+		case CUTTING: case THROWING:
+		{
+			if (lastState == CLIMB) 
+				break;
+			if (KeyRight)
+			{
+				if (currentAnimation == animationJump_Standing)
+					vx = 0.15;
+				else
+					vx = ALADDIN_SPEED;
+			}
+			else if (KeyLeft)
+			{
+				if (currentAnimation == animationJump_Standing)
+					vx = -0.15;
+				else
+					vx = -ALADDIN_SPEED;
+			}
+			break;
+		}
 		}
 	}	
 	if (KeyUp)
@@ -883,7 +904,8 @@ void Aladdin::Jump()
 	{
 		lastState = state;
 		SetState(JUMPING);
-		vy -= 0.42f;
+		/*vy -= 0.42f;*/
+		vy -= 0.4f;
 		SetAnimation(ANI_JUMP_CLIMBING);
 		
 		keyUp[2] = false;
@@ -1095,7 +1117,7 @@ void Aladdin::Cut()
 		
 		if (currentAnimation->isActionFinish())
 		{
-			/*GameSound::getInstance()->play(CUT_MUSIC);*/
+			//GameSound::getInstance()->play(CUT_MUSIC);
 
 			switch (lastState)
 			{			
@@ -1121,8 +1143,7 @@ void Aladdin::Cut()
 				break;
 			}	
 			case CLIMB:
-			{
-				OutputDebugStringW(L"CUT");
+			{				
 				y += 25;
 				Climb();
 				break;
@@ -1280,7 +1301,7 @@ void Aladdin::Throw()
 		int i = currentAnimation->GetCurrentFrame();		
 		if ((currentAnimation == animationThrow_Standing && i == 3 || currentAnimation == animationThrow_Ducking && i == 3 || currentAnimation == animationThrow_Jumping && i == 3 || currentAnimation == animationThrow_Climbing && i == 4) && isAppleCreated == false)
 		{
-			/*GameSound::getInstance()->play(THROW_MUSIC);*/
+			//GameSound::getInstance()->play(THROW_MUSIC);
 
 			CreateApple();
 			isAppleCreated = true;
@@ -1383,8 +1404,8 @@ void Aladdin::Hurt()
 		startBlink = GetTickCount();
 		blood--;
 
-		if (blood == 0)
-			Die();
+		/*if (blood == 0)
+			Die();*/
 		break;
 	}
 	}
@@ -1609,6 +1630,24 @@ void Aladdin::OnIntersect(GameObject * obj)
 			}
 			break;
 		}*/
+		case OBJBat:
+		{
+			if (obj->GetState() == Bat::ATTACKING)
+			{
+				if (((obj->Right() > this->Left() && obj->x < this->x) || (obj->Left() < this->Right() && obj->x > this->x)) && (obj->Top() < this->Bottom() && obj->Bottom() > this->Top()))
+				{
+					if (isBlink == 0)
+						Hurt();
+				}
+			}
+			break;
+		}
+		case OBJBone:
+		{
+			if (isBlink == 0)
+				Hurt();
+			break;
+		}
 		case OBJThinGuard:
 		{
 			if (obj->GetState() == ThinGuard::CUTTING_1)

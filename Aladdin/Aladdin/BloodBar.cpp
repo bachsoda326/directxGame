@@ -153,7 +153,6 @@ void BloodBar::Render()
 	int currentIndex;
 	currentIndex = currentAnimation->GetCurrentFrame();
 	currentAnimation->SetCurrentFrame(0);
-
 	//draw sprite
 	currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, D3DXVECTOR2(0, 0));
 	currentAnimation->SetCurrentFrame(currentIndex);

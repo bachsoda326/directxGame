@@ -8,6 +8,7 @@
 #include "debug.h"
 #include "Textures.h"
 #include "Camera.h"
+#include "GameSound.h"
 
 using namespace std;
 
@@ -60,7 +61,9 @@ enum ObjectType
 	OBJBallTrap,
 	OBJBat,
 	OBJBoomSkeleton,
+	OBJBone,
 	OBJPeddler,
+	OBJStall,
 	OBJSharpTrap,
 	OBJStoneBrick
 };

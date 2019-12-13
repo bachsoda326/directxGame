@@ -48,7 +48,7 @@ public:
 	
 	void SetAnimation(NormalGuardAnimations ani);
 	
-	//action
+	// Action
 	void Cut();
 	void Run();
 	void Stand();
@@ -56,7 +56,7 @@ public:
 	void Provoke();
 	void Die();
 
-	//change and reset frame size
+	// Change and reset frame size
 	void ChangeFrameSize(GameObject*obj);
 	void ResetFrameSize(GameObject*obj);
 

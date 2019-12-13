@@ -36,8 +36,8 @@ void DungeonScene::LoadResources()
 	frontMap->LoadTileMap(ID_TEX_TILESHEET_FRONTMAP, TEX_TILESHEET_FRONTMAP_PATH, TXT_TILEMAP_FRONTMAP_PATH);
 
 	aladdin->LoadResources();
-	//aladdin->SetPosition(1700, 950);
-	aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
+	aladdin->SetPosition(250, 350);
+	//aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
 	//aladdin->SetCamera::GetInstance()(Camera::GetInstance());	
 
 	bloodBar = new BloodBar();

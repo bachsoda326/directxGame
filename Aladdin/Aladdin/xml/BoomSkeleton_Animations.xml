@@ -22,4 +22,10 @@
     <sprite id="18" x="479" y="126" w="95" h="77" oX="54" oY="77" />
     <sprite id="19" x="593" y="125" w="60" h="79" oX="45" oY="79" />
   </Animation>
+  <Animation name="Bone" imagePath="BoomSkeleton.png" width="868" height="351">             
+    <sprite id="20" x="665" y="129" w="16" h="5" oX="8" oY="2" />
+    <sprite id="21" x="688" y="122" w="6" h="15" oX="3" oY="7" />
+    <sprite id="22" x="700" y="122" w="12" h="13" oX="6" oY="6" />
+    <sprite id="23" x="718" y="126" w="6" h="8" oX="3" oY="4" />    
+  </Animation>
 </Animations>

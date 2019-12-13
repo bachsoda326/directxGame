@@ -5,6 +5,7 @@
 #include <dinput.h>
 #include "Constants.h"
 #include <algorithm>
+#include "GameSound.h"
 
 class Game
 {

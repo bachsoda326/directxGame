@@ -224,7 +224,7 @@ void ThinGuard::OnIntersect(GameObject * obj)
 				else
 					direction = false;
 
-				if (this->x - 100 <= obj->x && obj->x <= this->x + 100)
+				if (this->x - 100 <= obj->x && obj->x <= this->x + 100 && this->Top() <= obj->Bottom() - 8 && this->Bottom() > obj->Top() + 8)
 					Cut();
 				/*else if (this->x - 200 <= obj->x && obj->x <= this->x + 200)
 					Run();*/

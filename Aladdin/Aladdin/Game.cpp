@@ -53,6 +53,8 @@ void Game::Init(HWND hWnd)
 	D3DXCreateSprite(d3ddv, &spriteHandler);
 
 	OutputDebugString(L"[INFO] InitGame done;\n");
+
+	GameSound::initialize(hWnd);
 }
 
 BYTE  keys[256];			// DirectInput keyboard state buffer (keyBoard input)

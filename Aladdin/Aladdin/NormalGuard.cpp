@@ -272,7 +272,7 @@ void NormalGuard::OnIntersect(GameObject * obj)
 				else
 					direction = false;
 				
-				if (this->x - 115 <= obj->x && obj->x <= this->x + 115)
+				if (this->x - 115 <= obj->x && obj->x <= this->x + 115 && this->Top() <= obj->Bottom() - 8 && this->Bottom() > obj->Top() + 8)
 					Cut();
 				else if (this->x - 150 <= obj->x && obj->x <= this->x + 150)
 					Provoke();
