@@ -17,6 +17,7 @@
 
 DungeonScene::DungeonScene()
 {
+	GameSound::getInstance()->play(GAME1_MUSIC, true);
 }
 
 void DungeonScene::LoadResources()

@@ -48,6 +48,7 @@ void StoneBrick::Render()
 
 		if (startWait - startTime > 2500)
 		{
+			GameSound::getInstance()->play(STONEBRICK_MUSIC);
 			animationDefault->SetFrame(1, 4);
 			startTime = GetTickCount();
 		}

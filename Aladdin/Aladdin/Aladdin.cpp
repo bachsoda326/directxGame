@@ -1117,7 +1117,7 @@ void Aladdin::Cut()
 		
 		if (currentAnimation->isActionFinish())
 		{
-			//GameSound::getInstance()->play(CUT_MUSIC);
+			GameSound::getInstance()->play(ALADDIN_CUT_MUSIC);
 
 			switch (lastState)
 			{			
@@ -1301,7 +1301,7 @@ void Aladdin::Throw()
 		int i = currentAnimation->GetCurrentFrame();		
 		if ((currentAnimation == animationThrow_Standing && i == 3 || currentAnimation == animationThrow_Ducking && i == 3 || currentAnimation == animationThrow_Jumping && i == 3 || currentAnimation == animationThrow_Climbing && i == 4) && isAppleCreated == false)
 		{
-			//GameSound::getInstance()->play(THROW_MUSIC);
+			GameSound::getInstance()->play(THROW_MUSIC);
 
 			CreateApple();
 			isAppleCreated = true;
@@ -1394,7 +1394,7 @@ void Aladdin::Hurt()
 	{
 		if ((state == STANDING || state == WAITING_1 || state == WAITING_2))
 		{
-			//GameSound::getInstance()->play(HURT_MUSIC);
+			GameSound::getInstance()->play(ALADDIN_HURT_MUSIC);
 
 			SetState(HURT);
 			SetAnimation(ANI_HURT);
@@ -1457,7 +1457,7 @@ void Aladdin::ResetPosition()
 	}
 	default:
 	{
-		//GameSound::getInstance()->play(COMEIN_MUSIC);
+		GameSound::getInstance()->play(COMEIN_MUSIC);
 		/*if (xInit > 500)
 		{
 			SetState(RESETPOSITION);
@@ -1678,18 +1678,13 @@ void Aladdin::OnIntersect(GameObject * obj)
 	if (obj->collType == CollItem && obj->isActived == false)
 	{
 		switch (obj->objType)
-		{
-		case OBJAbuItem:
-			score += 250;
-			numLifes += 1;
-			//GameSound::getInstance()->play(WOW_MUSIC);
-			break;
+		{		
 		case OBJApple:
 			numApples++;
 			break;
 		case OBJGenieFace:
 			score += 250;
-			//GameSound::getInstance()->play(WOW_MUSIC);
+			GameSound::getInstance()->play(WOW_MUSIC);
 			break;
 		case OBJGenieJar:
 			xInit = obj->xDraw;

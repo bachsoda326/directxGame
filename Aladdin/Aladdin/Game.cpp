@@ -43,7 +43,7 @@ void Game::Init(HWND hWnd)
 
 	if (d3ddv == NULL)
 	{
-		OutputDebugString(L"[ERROR] CreateDevice failed\n");
+		OutputDebugString("[ERROR] CreateDevice failed\n");
 		return;
 	}
 
@@ -52,7 +52,7 @@ void Game::Init(HWND hWnd)
 	// Initialize sprite helper from Direct3DX helper library
 	D3DXCreateSprite(d3ddv, &spriteHandler);
 
-	OutputDebugString(L"[INFO] InitGame done;\n");
+	OutputDebugString("[INFO] InitGame done;\n");
 
 	GameSound::initialize(hWnd);
 }

@@ -20,7 +20,7 @@ Textures *Textures::GetInstance()
 	return __instance;
 }
 
-void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
+void Textures::Add(int id, LPCSTR filePath, D3DCOLOR transparentColor)
 {
 	D3DXIMAGE_INFO info;
 	HRESULT result = D3DXGetImageInfoFromFile(filePath, &info);
@@ -54,7 +54,7 @@ void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 
 	if (result != D3D_OK)
 	{
-		OutputDebugString(L"[ERROR] CreateTextureFromFile failed\n");
+		OutputDebugString("[ERROR] CreateTextureFromFile failed\n");
 		return;
 	}
 

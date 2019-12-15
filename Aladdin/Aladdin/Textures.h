@@ -18,7 +18,7 @@ public:
 
 	Textures();
 	// Add texture vào instance"textures"
-	void Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor);
+	void Add(int id, LPCSTR filePath, D3DCOLOR transparentColor);
 	// Get texture theo id trong instance"textures"
 	LPDIRECT3DTEXTURE9 Get(unsigned int i);
 

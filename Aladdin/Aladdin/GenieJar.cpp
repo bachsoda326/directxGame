@@ -36,7 +36,7 @@ void GenieJar::Active()
 	}
 	default:
 	{
-		//GameSound::getInstance()->play(COMEOUT_MUSIC);
+		GameSound::getInstance()->play(COMEOUT_MUSIC);
 		SetState(ACTIVED);
 		animationDefault->SetFrame(1, 9);
 		vy = 0;

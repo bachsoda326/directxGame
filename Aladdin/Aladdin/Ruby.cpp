@@ -47,7 +47,29 @@ void Ruby::Render()
 
 void Ruby::Active()
 {
-	Item::Active();
+	switch (state)
+	{
+	case ACTIVED:
+	{
+		//Thực hiện animation actived xong đặt isDead = true để xóa item ra khỏi danh sách
+		if (currentAnimation->isActionFinish())
+			isDead = true;
+		break;
+	}
+	default:
+	{
+		GameSound::getInstance()->play(RUBY_MUSIC);
+		SetState(ACTIVED);
+		currentAnimation = animationItemActived;
+		vy = 0;
+		vx = 0;
+		x = (this->Left() + this->Right()) / 2;
+		y = (this->Top() + this->Bottom()) / 2;
+		isDie = true;
+		isActived = true;
+		break;
+	}
+	}	
 }
 
 void Ruby::NonActive()

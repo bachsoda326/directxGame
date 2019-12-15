@@ -81,7 +81,7 @@ void Scene::LoadFont()
 	desc.Quality = 0;
 	desc.PitchAndFamily = 0;
 	//strcpy_s(desc.FaceName, "Times New Roman"); // name will be something like "Arial"
-	wcscpy_s(desc.FaceName, L"Arial");
+	strcpy_s(desc.FaceName, "Arial");
 	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numApples);
 	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numRubies);
 	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numLifes);
@@ -100,8 +100,8 @@ void Scene::DrawFont(LPD3DXFONT font, float x, float y, float width, float heigh
 	rect.bottom = (int)y + height;
 	rect.right = (int)x + width;
 		
-	WCHAR intStr[20];
-	_itow_s(value, intStr, 10);
+	char intStr[20];
+	_itoa_s(value, intStr, 10);
 	//strcpy_s(intStr, status.c_str());
 	if (font != score)
 		font->DrawText(NULL, intStr, -1, &rect, DT_TOP | DT_LEFT, D3DCOLOR_XRGB(255, 255, 255));

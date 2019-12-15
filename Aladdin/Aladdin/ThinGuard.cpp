@@ -100,9 +100,11 @@ void ThinGuard::Cut()
 	switch (state)
 	{
 	case CUTTING_1: /*case HURT:*/
+		if (currentAnimation->isActionFinish())
+			GameSound::getInstance()->play(GUARD_CUT_MUSIC);		
 		break;
 	default:
-	{
+	{		
 		SetState(CUTTING_1);
 		SetAnimation(ANI_CUT_1);
 		vx = 0;
@@ -165,8 +167,7 @@ void ThinGuard::Hurt()
 		SetAnimation(ANI_HURT);
 		vx = 0;
 		blood--;
-		/*if (blood == 1)
-			GameSound::getInstance()->play(GUARD_HIT_MUSIC);*/
+		GameSound::getInstance()->play(THINGUARD_HURT_MUSIC);
 		if (blood == 0)
 		{
 			Die();

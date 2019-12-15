@@ -41,7 +41,10 @@ void Stall::OnIntersect(GameObject * obj)
 	{
 		if (Aladdin::GetInstance()->GetState() == Aladdin::LOOK_UP && Aladdin::GetInstance()->numRubies >= 10)
 			if (canTrade)
+			{
+				GameSound::getInstance()->play(OKSTALL_MUSIC);
 				Trade();
+			}
 	}
 }
 

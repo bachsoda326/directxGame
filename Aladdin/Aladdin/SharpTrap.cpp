@@ -15,7 +15,7 @@ void SharpTrap::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texSharpTrap = Textures::GetInstance()->Get(3);
 
-	animationDefault = new Animation("Animation", XML_SHARPTRAP_ANIMATION_PATH, texSharpTrap, 170);
+	animationDefault = new Animation("Animation", XML_SHARPTRAP_ANIMATION_PATH, texSharpTrap, 80);
 
 	currentAnimation = animationDefault;
 	//animationDefault->SetFrame(0, 0);
@@ -39,6 +39,7 @@ void SharpTrap::Render()
 
 		if (startWait - startTime > 4000)
 		{
+			GameSound::getInstance()->play(SHARPTRAP_MUSIC);
 			animationDefault->SetFrame(1, 5);
 			startTime = GetTickCount();
 		}
@@ -46,7 +47,7 @@ void SharpTrap::Render()
 	if (i == 5)
 	{
 		animationDefault->SetFrame(5, 5);
-
+		
 		if (startWait - startTime > 1500)
 		{
 			animationDefault->SetFrame(4, 0);

@@ -152,11 +152,15 @@ void Apple::OnIntersect(GameObject * obj)
 		else if (obj->objType != OBJStoneBrick && obj->objType != OBJBallTrap && obj->objType != OBJSharpTrap && obj->collType != CollChains)
 		{
 			if (!(vy < 0))
+			{
 				Burst();
-		}
+				GameSound::getInstance()->play(APPLE_POP_MUSIC);
+			}
+		}		
 	}
 	if (collType == CollItem && obj->collType == CollAladdin)
-	{		
+	{	
+		GameSound::getInstance()->play(APPLE_MUSIC);
 		Active();
 	}
 }

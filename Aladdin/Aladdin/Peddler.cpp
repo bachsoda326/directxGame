@@ -108,6 +108,7 @@ void Peddler::Create()
 	{
 		if (currentAnimation->isActionFinish())
 		{
+			GameSound::getInstance()->play(PEDDLERSTALL_MUSIC);
 			CreateStall();
 			SetState(DONE);
 			SetPosition(x + 65, y);

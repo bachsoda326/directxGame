@@ -88,6 +88,7 @@ void BoomSkeleton::Doing()
 	{
 		if (currentAnimation->isActionFinish())
 		{
+			GameSound::getInstance()->play(BOOMSKELETON_MUSIC);
 			Die();
 			CreateBone();
 			SetState(DIE);

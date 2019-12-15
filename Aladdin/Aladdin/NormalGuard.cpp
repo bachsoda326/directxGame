@@ -129,9 +129,14 @@ void NormalGuard::Cut()
 	{
 	case CUTTING_2:
 	{
+		if (currentAnimation->isActionFinish())
+		{
+			GameSound::getInstance()->play(GUARD_CUT_MUSIC);
+		}
 		srand(time(0));
 		if (currentAnimation->isActionFinish() && rand() % 3 == 1)
 		{
+			GameSound::getInstance()->play(GUARD_CUT_MUSIC);
 			SetState(CUTTING_1);
 			SetAnimation(ANI_CUT_1);
 			/*Cut();*/
@@ -142,6 +147,7 @@ void NormalGuard::Cut()
 	{
 		if (currentAnimation->isActionFinish())
 		{
+			GameSound::getInstance()->play(GUARD_CUT_MUSIC);
 			SetState(CUTTING_2);
 			SetAnimation(ANI_CUT_2);
 			vx = 0;
@@ -149,7 +155,7 @@ void NormalGuard::Cut()
 		break;
 	}
 	default:
-	{
+	{		
 		SetState(CUTTING_2);
 		SetAnimation(ANI_CUT_2);
 		vx = 0;
@@ -196,8 +202,7 @@ void NormalGuard::Hurt()
 		SetAnimation(ANI_HURT);
 		vx = 0;
 		blood--;
-		/*if (blood == 1)
-			GameSound::getInstance()->play(GUARD_HIT_MUSIC);*/
+		GameSound::getInstance()->play(NORMALGUARD_HURT_MUSIC);
 		if (blood == 0)
 		{
 			Die();

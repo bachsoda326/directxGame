@@ -9,7 +9,7 @@ TileMap::~TileMap()
 {
 }
 
-void TileMap::LoadTileMap(int id, LPCWSTR texMapPath, string txtMapPath)
+void TileMap::LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath)
 {	
 	this->id = id;
 	Textures::GetInstance()->Add(id, texMapPath, D3DCOLOR_XRGB(255, 255, 255));

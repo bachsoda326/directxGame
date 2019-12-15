@@ -1,7 +1,7 @@
 #pragma once
 
-#define WINDOW_CLASS_NAME L"AladdinWindow"
-#define MAIN_WINDOW_TITLE L"Aladdin"
+#define WINDOW_CLASS_NAME "AladdinWindow"
+#define MAIN_WINDOW_TITLE "Aladdin"
 #define MAX_FRAME_RATE 120		// FPS
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
@@ -34,20 +34,20 @@
 #define ID_TEX_TILESHEET_FRONTMAP 101
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 
-#define TEX_TILESHEET_MAP_PATH L"textures\\TileSheet_Map.png"
-#define TEX_TILESHEET_FRONTMAP_PATH L"textures\\TileSheet_FrontMap.png"
-#define TEX_ALADDIN_PATH L"textures\\Aladdin.png"
-#define TEX_ITEMS_PATH L"textures\\Items.png"
-#define TEX_PEDDLER_PATH L"textures\\Peddler.png"
-#define TEX_BRICK_TRAP_PATH L"textures\\Brick&Trap.png"
-#define TEX_GUARDS_PATH L"textures\\Guards.png"
-#define TEX_BAT_PATH L"textures\\Bat.png"
-#define TEX_BOOMSKELETON_PATH L"textures\\BoomSkeleton.png"
-#define TEX_ENEMYDEAD_PATH L"textures\\EnemyDead.png"
-#define TEX_ENEMYEXPLOSION_PATH L"textures\\EnemyExplosion.png"
-#define TEX_ITEMACTIVED_PATH L"textures\\ItemActived.png"
-#define TEX_BLOODBAR_PATH L"textures\\BloodBar.png"
-#define TEX_BBOX_PATH L"textures\\bbox.png"
+#define TEX_TILESHEET_MAP_PATH "textures\\TileSheet_Map.png"
+#define TEX_TILESHEET_FRONTMAP_PATH "textures\\TileSheet_FrontMap.png"
+#define TEX_ALADDIN_PATH "textures\\Aladdin.png"
+#define TEX_ITEMS_PATH "textures\\Items.png"
+#define TEX_PEDDLER_PATH "textures\\Peddler.png"
+#define TEX_BRICK_TRAP_PATH "textures\\Brick&Trap.png"
+#define TEX_GUARDS_PATH "textures\\Guards.png"
+#define TEX_BAT_PATH "textures\\Bat.png"
+#define TEX_BOOMSKELETON_PATH "textures\\BoomSkeleton.png"
+#define TEX_ENEMYDEAD_PATH "textures\\EnemyDead.png"
+#define TEX_ENEMYEXPLOSION_PATH "textures\\EnemyExplosion.png"
+#define TEX_ITEMACTIVED_PATH "textures\\ItemActived.png"
+#define TEX_BLOODBAR_PATH "textures\\BloodBar.png"
+#define TEX_BBOX_PATH "textures\\bbox.png"
 
 #define XML_ALADDIN_ANIMATION_PATH "xml\\Aladdin_Animations.xml"
 #define XML_APPLE_ANIMATION_PATH "xml\\Apple_Animations.xml"

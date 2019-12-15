@@ -18,7 +18,7 @@ public:
 	TileMap();
 	~TileMap();
 
-	void LoadTileMap(int id, LPCWSTR texMapPath, string txtMapPath);
+	void LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath);
 	void Render();
 
 private:		

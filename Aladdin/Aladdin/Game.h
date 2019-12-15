@@ -6,6 +6,7 @@
 #include "Constants.h"
 #include <algorithm>
 #include "GameSound.h"
+#include <string>
 
 class Game
 {

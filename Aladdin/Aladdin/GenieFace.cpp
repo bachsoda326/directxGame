@@ -17,7 +17,7 @@ void GenieFace::LoadResources()
 	LPDIRECT3DTEXTURE9 texEnemyExplosion = Textures::GetInstance()->Get(ID_TEX_ENEMYEXPLOSION);
 
 	animationDefault = new Animation("Animation", XML_GENIEFACE_ANIMATION_PATH, texItems, 170);
-	animationExplosion_Actived = new Animation("Explosion_Actived", XML_ENEMYEXPLOSION_ANIMATION_PATH, texEnemyExplosion, 50);
+	animationExplosion_Actived = new Animation("Explosion_Actived", XML_ENEMYEXPLOSION_ANIMATION_PATH, texEnemyExplosion, 40);
 
 	currentAnimation = animationDefault;
 	
