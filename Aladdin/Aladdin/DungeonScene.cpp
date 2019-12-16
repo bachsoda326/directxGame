@@ -37,7 +37,9 @@ void DungeonScene::LoadResources()
 	frontMap->LoadTileMap(ID_TEX_TILESHEET_FRONTMAP, TEX_TILESHEET_FRONTMAP_PATH, TXT_TILEMAP_FRONTMAP_PATH);
 
 	aladdin->LoadResources();
-	aladdin->SetPosition(250, 350);
+	aladdin->SetPosition(1000, 1006);
+	//aladdin->SetPosition(950, 587);	// error fence climb_jump
+	/*aladdin->SetPosition(250, 480);*/		// peddler
 	//aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
 	//aladdin->SetCamera::GetInstance()(Camera::GetInstance());	
 
@@ -61,6 +63,8 @@ void DungeonScene::LoadResources()
 
 	baseGround = new Ground(0, 1112, 2270, 27);
 	baseGround->collType = CollGround;
+	basePillar = new Ground(1489, 402, 80, 740);
+	basePillar->collType = CollFence;
 
 	for (int i = 0; i < listStoneBricks.size(); i += 2)
 	{
@@ -95,6 +99,7 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	vector<LPGAMEOBJECT> coObjs;
 	coObjs.push_back(baseGround);
+	coObjs.push_back(basePillar);
 	grid->CalcColliableObjs(Camera::GetInstance(), coObjs);
 
 	//aladdin->HandleKeyBoard();	
@@ -131,6 +136,7 @@ void DungeonScene::Render()
 	{
 		vector<LPGAMEOBJECT> coObjects;
 		coObjects.push_back(baseGround);
+		coObjects.push_back(basePillar);
 		grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);

@@ -177,7 +177,7 @@ void Collision::CheckCollision(GameObject* obj1, GameObject* obj2)
 void Collision::ExceptionalCase(GameObject* obj1, GameObject* obj2, float& nx, float& ny, float& collisionTime)
 {
 
-	if (obj2->collType == CollCollarBeam || obj2->collType == CollItem)
+	if (obj2->collType == CollItem)
 	{
 		ny = 0;
 		nx = 0;
@@ -241,14 +241,14 @@ void Collision::FilterCollision(float & t, float & nx, float & ny, float dnx, fl
 //obj obj1 là đối tượng di chuyển, obj obj2 là đối tượng tĩnh
 void Collision::PreventMove(GameObject* obj1, GameObject* obj2, float nx, float ny)
 {
-	/*if (obj1->x > obj2->Left() && obj1->x < obj2->Right())
+	if (obj1->x > obj2->Left() && obj1->x < obj2->Right())
 	{
 		if ((int)obj1->y == (int)obj2->Top() && obj1->y < obj1->Bottom() && obj1->vy > 0)
 		{
 			obj1->vy = 0;
 			return;
 		}
-		if ((int)obj1->y >= (int)obj2->Top() && (int)obj1->y <= (int)obj2->Top() + 35 && obj1->vy > 0)
+		/*if ((int)obj1->y >= (int)obj2->Top() && (int)obj1->y <= (int)obj2->Top() + 35 && obj1->vy > 0)
 		{
 			if (!(obj1->Bottom() - obj2->Top() >= 5))
 			{
@@ -256,8 +256,8 @@ void Collision::PreventMove(GameObject* obj1, GameObject* obj2, float nx, float 
 				obj1->vy = 0;
 			}
 			return;
-		}
-	}*/
+		}*/
+	}
 
 	//Xét va chạm theo phương ngang, bên trái bên phải obj1
 	if (nx != 0 && obj2->collType == CollFence)
@@ -265,13 +265,13 @@ void Collision::PreventMove(GameObject* obj1, GameObject* obj2, float nx, float 
 		//obj1 va chạm phía bên TRÁI obj2
 		if (nx == -1.0f)
 			obj1->x += obj2->Left() - obj1->Right();
-		else //obj1 va chạm phía bên PHẢI obj2, cạnh phải obj2 - cạnh trái obj1 < 0 
+		else if (nx == 1.0f) //obj1 va chạm phía bên PHẢI obj2, cạnh phải obj2 - cạnh trái obj1 < 0 
 			obj1->x += obj2->Right() - obj1->Left();
 		obj1->vx = 0;
 	}
 
 	//Xét va chạm theo phương dọc, bên trên bên dưới obj1
-	if (ny == -1.0f)
+	if (ny == -1.0f && obj2->collType != CollFence)
 	{
 		if (obj1->Bottom() - obj2->Top() <= 12)
 		{

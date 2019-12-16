@@ -136,7 +136,7 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	/*if (vy > 0)
 		lastVy = vy;*/
 		//simulate fall down (gravity)
-	vy += 0.018f;
+	vy += 0.015f;
 
 	for (int i = 0; i < listApples.size(); i++)
 	{
@@ -149,7 +149,7 @@ void Aladdin::Render()
 	/*x += dx;
 	y += dy;*/
 	D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
-	currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans);
+	currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans, isBlink);
 
 	for (int i = 0; i < listApples.size(); i++)
 	{
@@ -380,7 +380,7 @@ void Aladdin::HandleKeyBoard()
 					isKeyDown = true;
 				}
 			}
-			else
+			else if (ny == -1.0f)
 			{
 				Push();
 				isKeyDown = true;
@@ -390,28 +390,27 @@ void Aladdin::HandleKeyBoard()
 
 		// set hướng quay của Aladdin 
 		switch (state)
-		{
-		case DUCKING: case RUNNING: case RUN_LONG_ENOUGH: case LOOK_UP: case JUMPING: case STANDING:
+		{			
+		case JUMPING: case RUNNING: case RUN_LONG_ENOUGH:
+		case LOOK_UP: case DUCKING: case STANDING:
 		{
 			if (KeyRight)
 				direction = true;
 			else if (KeyLeft)
 				direction = false;
-			else
-				break;
+			break;
 		}
-		case CLIMB: case CLIMBING: case SWING:
+		case CLIMB: case CLIMBING: case FALL:
 		{
 			if (KeyLeft)
 				direction = true;
 			else if (KeyRight)
 				direction = false;
-			else
-				break;
+			break;
 		}
 		case CUTTING: case THROWING:
 		{
-			if (lastState == CLIMB || lastState == SWING)
+			if (lastState == CLIMB || lastState == FALL)
 			{
 				if (KeyLeft)
 					direction = true;
@@ -517,7 +516,7 @@ void Aladdin::HandleKeyBoard()
 			{
 				if (ny == 0)
 				{
-					SetState(SWING);
+					SetState(FALL);
 					Jump();
 				}
 				else
@@ -544,18 +543,18 @@ void Aladdin::HandleKeyBoard()
 
 			break;
 		}
-		case SWINGING: case SWING:			
+		case FALLCLIMB: case FALL:
 			break;
 		case CLIMB: case CLIMBING:			
 			break;
-		case WAITING_1: case WAITING_2: case WAITING_3: case WAITING_SWINGING:
+		case WAITING_1: case WAITING_2: case WAITING_3:
 			Wait();
 			break;
 		default:
 		{
 			if (nx == 0 && ny == 0)
 			{				
-				SetState(SWING);
+				SetState(FALL);
 				Jump();
 			}
 			else
@@ -681,27 +680,7 @@ void Aladdin::Wait()
 	case WAITING_3:
 	{
 		break;
-	}
-	/*case WAITING_SWINGING:
-	{
-	if (currentAnimation->isActionFinish())
-	{
-	if (i == 4)
-	animationWait_Swinging->SetFrame(0, 4);
-	else
-	animationWait_Swinging->SetFrame(4, 0);
-	}
-	break;
-	}*/
-	case SWING:
-	{
-		lastState = state;
-		SetState(WAITING_SWINGING);
-		SetAnimation(ANI_WAIT_SWINGING);
-		//ANI_WAIT_SWINGING->SetFrame(183, 179);
-		break;
-	}
-
+	}	
 	}
 }
 
@@ -733,7 +712,7 @@ void Aladdin::Duck()
 
 		if (ny == 0)
 		{
-			state = SWING;
+			state = FALL;
 			Jump();
 		}
 		break;
@@ -770,7 +749,7 @@ void Aladdin::LookUp()
 
 		if (ny == 0)
 		{
-			state = SWING;
+			state = FALL;
 			Jump();
 		}
 		break;
@@ -894,7 +873,7 @@ void Aladdin::Jump()
 	{
 		SetState(JUMPING);
 		SetAnimation(ANI_JUMP_RUNNING);
-		vy -= 0.42f;
+		vy -= 0.35f;
 
 		keyUp[2] = false;
 		break;
@@ -905,13 +884,13 @@ void Aladdin::Jump()
 		lastState = state;
 		SetState(JUMPING);
 		/*vy -= 0.42f;*/
-		vy -= 0.4f;
+		vy -= 0.33f;
 		SetAnimation(ANI_JUMP_CLIMBING);
 		
 		keyUp[2] = false;
 		break;
 	}
-	case SWING: case SWINGING: case WAITING_3:
+	case FALL: case WAITING_3:
 	{
 		lastState = STANDING;
 		SetState(JUMPING);
@@ -923,10 +902,22 @@ void Aladdin::Jump()
 		keyUp[2] = false;
 		break;
 	}
+	case FALLCLIMB:
+	{
+		lastState = STANDING;
+		SetState(JUMPING);
+		vy -= 0.05f;
+		y += h;		
+		SetAnimation(ANI_JUMP_STANDING);
+		animationJump_Standing->SetFrame(3, 9);
+
+		keyUp[2] = false;
+		break;
+	}
 	case CUTTING: case THROWING:
 	{
 		//
-		if (lastState == SWING || lastState == CLIMB)
+		if (lastState == FALL || lastState == CLIMB)
 		{
 			state = lastState;
 			Jump();
@@ -968,14 +959,14 @@ void Aladdin::Jump()
 			if (direction == true)
 				x = x - w / 2;
 			else
-				y = y + w / 2;
+				x = x + w / 2;
 		}
 
 		lastState = state;
 		SetState(JUMPING);
 		SetAnimation(ANI_JUMP_STANDING);
 		animationJump_Standing->SetFrame(0, 9);
-		vy -= 0.44f;						//start jump if is not "on-air"	
+		vy -= 0.39f;						//start jump if is not "on-air"	
 
 		keyUp[2] = false;
 		break;
@@ -984,19 +975,19 @@ void Aladdin::Jump()
 }
 
 void Aladdin::Climb()
-{
+{	
 	switch (state)
 	{
 	case JUMPING:
-	{
+	{		
 		if ((lastState != CLIMB && lastState != CLIMBING) || (lastState == CLIMB && vy > 0.22f) || (lastState == CLIMBING && vy > 0.22f))
 		{
 			SetState(CLIMB);
 			vx = 0;
 			vy = 0;
+			
 			SetAnimation(ANI_CLIMB_1);
-			animationClimb_1->SetFrame(0, 0);
-
+			animationClimb_1->SetFrame(0, 0);			
 		}
 		break;
 	}
@@ -1063,7 +1054,7 @@ void Aladdin::Cut()
 {
 	switch (state)
 	{	
-	case RUNNING: case RUN_LONG_ENOUGH: case SWINGING: case CLIMBING: case PUSHING:
+	case RUNNING: case RUN_LONG_ENOUGH: case CLIMBING: case PUSHING:
 		break;	
 	case LOOK_UP:
 	{
@@ -1096,7 +1087,7 @@ void Aladdin::Cut()
 
 		break;
 	}
-	case CLIMB: case SWING:
+	case CLIMB: case FALL:
 	{		
 		lastState = state;
 		SetState(CUTTING);
@@ -1222,14 +1213,14 @@ void Aladdin::Cut()
 		{
 			testCollision++;			
 			DebugOut(L"[COLL] collision: %d\n", testCollision);
-			state = SWING;
+			state = FALL;
 			Jump();
 		}*/
 		break;
 	}
 	default:
 	{
-		if (lastState == DUCKING && state != STANDING || lastState == SWING || lastState == CLIMB)
+		if (lastState == DUCKING && state != STANDING || lastState == FALL || lastState == CLIMB)
 		{
 			state = lastState;
 			Cut();
@@ -1260,7 +1251,7 @@ void Aladdin::Throw()
 {
 	switch (state)
 	{
-	case RUNNING: case RUN_LONG_ENOUGH: case SWINGING: case CLIMBING: case PUSHING:
+	case RUNNING: case RUN_LONG_ENOUGH: case CLIMBING: case PUSHING:
 		break;	
 	case DUCKING:
 	{
@@ -1283,7 +1274,7 @@ void Aladdin::Throw()
 		keyUp[1] = false;
 		break;
 	}
-	case CLIMB: case SWING:
+	case CLIMB: case FALL:
 	{
 		lastState = state;
 		SetState(THROWING);
@@ -1345,14 +1336,14 @@ void Aladdin::Throw()
 
 		/*if (ny == 0 && lastState != JUMPING)
 		{
-			state = SWING;
+			state = FALL;
 			Jump();
 		}*/
 		break;
 	}
 	default:
 	{
-		if (lastState == DUCKING && state != STANDING || lastState == CLIMB || lastState == SWING)
+		if (lastState == DUCKING && state != STANDING || lastState == CLIMB || lastState == FALL)
 		{
 			if (lastState == CLIMB)
 				y += 20;
@@ -1392,10 +1383,9 @@ void Aladdin::Hurt()
 	}
 	default:
 	{
+		GameSound::getInstance()->play(ALADDIN_HURT_MUSIC);
 		if ((state == STANDING || state == WAITING_1 || state == WAITING_2))
 		{
-			GameSound::getInstance()->play(ALADDIN_HURT_MUSIC);
-
 			SetState(HURT);
 			SetAnimation(ANI_HURT);
 			vx = 0;
@@ -1404,8 +1394,8 @@ void Aladdin::Hurt()
 		startBlink = GetTickCount();
 		blood--;
 
-		/*if (blood == 0)
-			Die();*/
+		if (blood == 0)
+			Die();
 		break;
 	}
 	}
@@ -1503,7 +1493,7 @@ void Aladdin::CreateApple()
 	numApples--;
 	GameObject* apple = new Apple();	
 
-	if (lastState == SWING || lastState == SWINGING || lastState == CLIMB || lastState == CLIMBING)
+	if (lastState == FALL || lastState == CLIMB || lastState == CLIMBING)
 	{
 		apple->yDraw = (this->Top() + this->Bottom()) / 2;
 		// vận tốc ném lên (vy) của táo, ném ngang thì vx
@@ -1597,7 +1587,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 		if (y > obj->yDraw + obj->h && KeyDown)
 		{
 			if (state == CLIMBING)
-				SetState(SWING);
+				SetState(FALLCLIMB);
 			Jump();
 			return;
 		}

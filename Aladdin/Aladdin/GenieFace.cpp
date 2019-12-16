@@ -54,7 +54,7 @@ void GenieFace::NonActive()
 	if (currentAnimation->isActionFinish())
 	{
 		DWORD endWait = GetTickCount();
-		if (endWait - startWait > 3000)
+		if (endWait - startWait > 1500)
 		{
 			animationDefault->SetFrame(0, 3);
 			startWait = GetTickCount();

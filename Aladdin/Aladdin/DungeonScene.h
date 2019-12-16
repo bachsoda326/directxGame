@@ -19,7 +19,7 @@ public:
 	AladdinFace *face;
 	Apple *aladdinApple;
 	Ruby *aladdinRuby;
-	Ground *baseGround;
+	Ground *baseGround, *basePillar;
 
 	vector<GameObject*> listStaticObjs;
 	vector<GameObject*> listEnemies;

@@ -92,7 +92,8 @@ public:
 		LOOK_UP,			// nhìn lên
 		CLIMB,				// leo trèo
 		CLIMBING,
-		SWING,				// đu
+		FALL,				// rớt
+		FALLCLIMB,			// rớt khi đu dây xích
 		SWINGING,
 		PUSHING,			// đẩy (khi gặp tường mà k đi đc)
 		STUNTING,

@@ -69,7 +69,7 @@ void Sprite::Draw(float x, float y, D3DXVECTOR2 transform)
 	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lai matrix cu~ de Sprite chi ap dung transfrom voi class nay
 }
 
-void Sprite::Draw(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int alpha)
+void Sprite::Draw(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int isBlink)
 {
 	// position with old camera
 	//D3DXVECTOR3 p(floor(x - cam_x), floor(y - cam_y), 0);
@@ -111,10 +111,11 @@ void Sprite::Draw(float x, float y, float &xDraw, float &yDraw, float &w, float 
 	}
 
 	Game::GetInstance()->GetSpriteHandler()->SetTransform(&newMatrix);
-	
-	Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
-	
-	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lai matrix cu~ de Sprite chi ap dung transfrom voi class nay
+	if (isBlink == 1)		// bị mờ do bị đánh trúng
+		Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(100, 255, 255, 255));
+	else
+		Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(255, 255, 255, 255));	
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lại matrix cũ để Sprite chỉ áp dụng transfrom vs class này
 }
 
 void Sprites::Add(int id, float left, float top, float width, float height, float oX, float oY, LPDIRECT3DTEXTURE9 tex)
@@ -193,7 +194,7 @@ void Animation::Add(int spriteId, DWORD time)
 	lastFrame = frames.size() - 1;
 }
 
-void Animation::Render(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int alpha)
+void Animation::Render(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int isBlink)
 {
 	DWORD now = GetTickCount();
 	if (currentFrame == -1)
@@ -230,7 +231,7 @@ void Animation::Render(float x, float y, float &xDraw, float &yDraw, float &w, f
 
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(x, y, xDraw, yDraw, w, h, direction, transform, alpha);
+	frames[currentFrame]->GetSprite()->Draw(x, y, xDraw, yDraw, w, h, direction, transform, isBlink);
 }
 
 void Animation::ResetFrame()

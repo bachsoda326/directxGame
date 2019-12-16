@@ -19,7 +19,7 @@ void StoneBrick::LoadResources(bool check)
 {
 	LPDIRECT3DTEXTURE9 texBrickTrap = Textures::GetInstance()->Get(ID_TEX_BRICK_TRAP);
 
-	animationDefault = new Animation("Animation", XML_STONEBRICK_ANIMATION_PATH, texBrickTrap, 130);
+	animationDefault = new Animation("Animation", XML_STONEBRICK_ANIMATION_PATH, texBrickTrap, 200);
 
 	currentAnimation = animationDefault;
 	if (check)
@@ -46,7 +46,7 @@ void StoneBrick::Render()
 	{
 		animationDefault->SetFrame(0, 0);
 
-		if (startWait - startTime > 2500)
+		if (startWait - startTime > 2200)
 		{
 			GameSound::getInstance()->play(STONEBRICK_MUSIC);
 			animationDefault->SetFrame(1, 4);
@@ -57,7 +57,7 @@ void StoneBrick::Render()
 	{
 		animationDefault->SetFrame(4, 4);
 
-		if (startWait - startTime > 2500)
+		if (startWait - startTime > 2200)
 		{
 			animationDefault->SetFrame(3, 0);
 			startTime = GetTickCount();

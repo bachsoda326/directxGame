@@ -91,7 +91,7 @@ public:
 	void LoadXML(char * animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture);
 	// Add sprite vào listFrames của animation
 	void Add(int spriteId, DWORD time = 0);
-	void Render(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int alpha = 255);
+	void Render(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int isBlink = 0);
 	void ResetFrame();
 	void SetFrame(int firstFrame, int lastFrame);
 	void SetCurrentFrame(int i);
