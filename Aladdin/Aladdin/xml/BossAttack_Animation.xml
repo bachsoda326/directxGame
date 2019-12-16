@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Star" imagePath="Boss.png" width="863" height="348">             
+    <sprite id="0" x="198" y="226" w="28" h="14" oX="14" oY="6" />  
+    <sprite id="1" x="238" y="224" w="24" h="16" oX="11" oY="10" />
+    <sprite id="2" x="270" y="225" w="26" h="15" oX="14" oY="7" />    
+  </Animation>
+  <Animation name="Star_Hit" imagePath="Boss.png" width="863" height="348">
+    <sprite id="3" x="310" y="227" w="14" h="13" oX="6" oY="8" />  
+    <sprite id="4" x="334" y="226" w="35" h="14" oX="10" oY="10" />
+    <sprite id="5" x="382" y="219" w="15" h="21" oX="7" oY="10" />
+  </Animation>
+</Animations>

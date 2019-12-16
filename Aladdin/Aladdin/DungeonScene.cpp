@@ -21,9 +21,7 @@ DungeonScene::DungeonScene()
 }
 
 void DungeonScene::LoadResources()
-{
-	Scene::LoadResources();
-
+{	
 	grid = new Grid(MAP_WIDTH, MAP_HEIGHT, 150);
 
 	LoadStaticObj("txt\\Ground_obj.txt");
@@ -35,31 +33,12 @@ void DungeonScene::LoadResources()
 	map->LoadTileMap(ID_TEX_TILESHEET_MAP, TEX_TILESHEET_MAP_PATH, TXT_TILEMAP_MAP_PATH);
 	frontMap = new TileMap();
 	frontMap->LoadTileMap(ID_TEX_TILESHEET_FRONTMAP, TEX_TILESHEET_FRONTMAP_PATH, TXT_TILEMAP_FRONTMAP_PATH);
-
-	aladdin->LoadResources();
+	
 	aladdin->SetPosition(1000, 1006);
 	//aladdin->SetPosition(950, 587);	// error fence climb_jump
 	/*aladdin->SetPosition(250, 480);*/		// peddler
 	//aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
-	//aladdin->SetCamera::GetInstance()(Camera::GetInstance());	
-
-	bloodBar = new BloodBar();
-	bloodBar->SetPosition(0, 10);
-	bloodBar->LoadResources();
-
-	face = new AladdinFace();
-	face->SetPosition(10, 220);
-	face->LoadResources();
-
-	aladdinApple = new Apple();
-	aladdinApple->collType = CollUnknown;
-	aladdinApple->SetPosition(317, 230);
-	aladdinApple->LoadResources();
-
-	aladdinRuby = new Ruby();
-	aladdinRuby->collType = CollUnknown;
-	aladdinRuby->SetPosition(280, 230);
-	aladdinRuby->LoadResources();
+	//aladdin->SetCamera::GetInstance()(Camera::GetInstance());			
 
 	baseGround = new Ground(0, 1112, 2270, 27);
 	baseGround->collType = CollGround;
@@ -93,35 +72,35 @@ void DungeonScene::LoadResources()
 	}
 }
 
-void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	Scene::Update(dt);
+void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
+{	
+	CheckCameraAndWorldMap(CAMERA_MAP_WIDTH, CAMERA_MAP_HEIGHT);
 
-	vector<LPGAMEOBJECT> coObjs;
-	coObjs.push_back(baseGround);
-	coObjs.push_back(basePillar);
-	grid->CalcColliableObjs(Camera::GetInstance(), coObjs);
+	coObjects.clear();
+	coObjects.push_back(baseGround);
+	coObjects.push_back(basePillar);
+	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
 	//aladdin->HandleKeyBoard();	
 	aladdin->Update(dt);
-	bloodBar->Update(dt);
+	Scene::Update(dt);
 
 	aladdin->nx = 0;
 	aladdin->ny = 0;
-	for (int i = 0; i < coObjs.size(); i++)
+	for (int i = 0; i < coObjects.size(); i++)
 	{
-		Collision::CheckCollision(aladdin, coObjs[i]);
-		coObjs[i]->Update(dt);
+		Collision::CheckCollision(aladdin, coObjects[i]);
+		coObjects[i]->Update(dt);
 		for (int j = 0; j < aladdin->GetListApples()->size(); j++)
 		{
-			Collision::CheckCollision(aladdin->GetListApples()->at(j), coObjs[i]);
+			Collision::CheckCollision(aladdin->GetListApples()->at(j), coObjects[i]);
 		}
 	}
 	for (int i = 0; i < Aladdin::GetInstance()->GetListApples()->size(); i++)
 		Aladdin::GetInstance()->GetListApples()->at(i)->ProcessInput();
 	Collision::CheckCollision(aladdin, baseGround);
 
-	//aladdin->CheckCollision(&coObjs);
+	//aladdin->CheckCollision(&coObjects);
 }
 
 void DungeonScene::Render()
@@ -134,7 +113,7 @@ void DungeonScene::Render()
 
 	if (d3ddv->BeginScene())
 	{
-		vector<LPGAMEOBJECT> coObjects;
+		coObjects.clear();
 		coObjects.push_back(baseGround);
 		coObjects.push_back(basePillar);
 		grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
@@ -148,17 +127,10 @@ void DungeonScene::Render()
 		}
 		aladdin->Render();
 		frontMap->Render();
-		bloodBar->Render();
-		face->Render();
-		aladdinApple->Render();
-		aladdinRuby->Render();
+		Scene::Render();
 
 		spriteHandler->End();
-
-		DrawFont(score, 280, 10, 35, 25, Aladdin::GetInstance()->score);
-		DrawFont(numLifes, 35, 230, 35, 25, Aladdin::GetInstance()->numLifes);
-		DrawFont(numRubies, 285, 230, 35, 25, Aladdin::GetInstance()->numRubies);
-		DrawFont(numApples, 318, 230, 35, 25, Aladdin::GetInstance()->numApples);
+		DrawFonts();
 		d3ddv->EndScene();
 	}
 

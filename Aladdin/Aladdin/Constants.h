@@ -9,8 +9,12 @@
 #define SCREEN_HEIGHT 250
 #define MAP_WIDTH 2272
 #define MAP_HEIGHT 1152
+#define BOSSMAP_WIDTH 960
+#define BOSSMAP_HEIGHT 416
 #define CAMERA_MAP_WIDTH 2271
 #define CAMERA_MAP_HEIGHT 1139
+#define CAMERA_BOSSMAP_WIDTH 959
+#define CAMERA_BOSSMAP_HEIGHT 403
 #define RANDOM_WIDTH 1250
 #define RANDOM_HEIGHT 930		
 
@@ -30,12 +34,15 @@
 #define ID_TEX_ENEMYEXPLOSION 8
 #define ID_TEX_ITEMACTIVED 9
 #define ID_TEX_BLOODBAR 10
+#define ID_TEX_BOSS 11
 #define ID_TEX_TILESHEET_MAP 100
 #define ID_TEX_TILESHEET_FRONTMAP 101
+#define ID_TEX_TILESHEET_BOSSMAP 102
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 
 #define TEX_TILESHEET_MAP_PATH "textures\\TileSheet_Map.png"
 #define TEX_TILESHEET_FRONTMAP_PATH "textures\\TileSheet_FrontMap.png"
+#define TEX_TILESHEET_BOSSMAP_PATH "textures\\TileSheet_BossMap.png"
 #define TEX_ALADDIN_PATH "textures\\Aladdin.png"
 #define TEX_ITEMS_PATH "textures\\Items.png"
 #define TEX_PEDDLER_PATH "textures\\Peddler.png"
@@ -47,6 +54,7 @@
 #define TEX_ENEMYEXPLOSION_PATH "textures\\EnemyExplosion.png"
 #define TEX_ITEMACTIVED_PATH "textures\\ItemActived.png"
 #define TEX_BLOODBAR_PATH "textures\\BloodBar.png"
+#define TEX_BOSS_PATH "textures\\Boss.png"
 #define TEX_BBOX_PATH "textures\\bbox.png"
 
 #define XML_ALADDIN_ANIMATION_PATH "xml\\Aladdin_Animations.xml"
@@ -70,9 +78,13 @@
 #define XML_ITEMACTIVED_ANIMATION_PATH "xml\\ItemActived_Animations.xml"
 #define XML_BLOODBAR_ANIMATION_PATH "xml\\BloodBar_Animations.xml"
 #define XML_ALADDINFACE_ANIMATION_PATH "xml\\AladdinFace_Animations.xml"
+#define XML_BOSS_ANIMATION_PATH "xml\\Boss_Animations.xml"
+#define XML_BOSSATTACK_ANIMATION_PATH "xml\\BossAttack_Animation.xml"
+#define XML_FIRE_ANIMATION_PATH "xml\\Fire_Animations.xml"
 
 #define TXT_TILEMAP_MAP_PATH "txt\\TileMap_Map.txt"
 #define TXT_TILEMAP_FRONTMAP_PATH "txt\\TileMap_FrontMap.txt"
+#define TXT_TILEMAP_BOSSMAP_PATH "txt\\TileMap_BossMap.txt"
 #define TXT_GROUND_OBJECT_PATH "txt\\GroundType_obj.txt"
 #define TXT_CHAINS_OBJECT_PATH "txt\\ChainsType_obj.txt"
 #define TXT_FENCE_OBJECT_PATH "txt\\FenceType_obj.txt"

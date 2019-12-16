@@ -31,9 +31,9 @@ Aladdin::Aladdin()
 	isAppleCreated == false;
 	currentAnimation = new Animation(100);
 	isBlink = 0;
-	blood = 8;
+	blood = 2;
 	score = 0;
-	numApples = 10;
+	numApples = 25;
 	numRubies = 21;
 	numLifes = 3;	
 	isCutted = false;
@@ -1611,7 +1611,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 	{
 		switch (obj->objType)
 		{		
-		/*case OBJBoss:
+		case OBJBoss:
 		{
 			if (Collision::AABBCheck(this, obj))
 			{
@@ -1619,14 +1619,23 @@ void Aladdin::OnIntersect(GameObject * obj)
 					Hurt();
 			}
 			break;
-		}*/
+		}
+		case OBJFire:
+		{
+			if (this->Bottom() > obj->Top() + 20)
+			{
+				if (isBlink == 0)
+					Hurt();
+			}
+			break;
+		}
 		case OBJBat:
 		{
 			if (obj->GetState() == Bat::ATTACKING)
 			{
 				if (((obj->Right() > this->Left() && obj->x < this->x) || (obj->Left() < this->Right() && obj->x > this->x)) && (obj->Top() < this->Bottom() && obj->Bottom() > this->Top()))
 				{
-					if (isBlink == 0)
+					if (isBlink == 0 && state != CUTTING)
 						Hurt();
 				}
 			}
@@ -1644,7 +1653,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 			{
 				if ((!obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (obj->direction && obj->Left() < this->Right() && obj->x > this->x))
 				{
-					if (isBlink == 0)
+					if (isBlink == 0 && state != CUTTING)
 						Hurt();
 				}
 			}
@@ -1656,7 +1665,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 			{
 				if ((!obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (obj->direction && obj->Left() < this->Right() && obj->x > this->x))
 				{
-					if (isBlink == 0)
+					if (isBlink == 0 && state != CUTTING)
 						Hurt();
 				}
 			}

@@ -65,7 +65,9 @@ enum ObjectType
 	OBJPeddler,
 	OBJStall,
 	OBJSharpTrap,
-	OBJStoneBrick
+	OBJStoneBrick,
+	OBJFireCarpet,
+	OBJFire
 };
 
 class GameObject;

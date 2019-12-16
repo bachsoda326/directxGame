@@ -23,6 +23,7 @@ GameObject::GetBoundingBox
 #include <d3dx9.h>
 #include "SceneManager.h"
 #include "DungeonScene.h"
+#include "BossScene.h"
 #include "debug.h"
 #include "Game.h"
 
@@ -167,7 +168,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard();
 	//game->InitMouse();
 
-	SceneManager::GetInstance()->ReplaceScene(new DungeonScene());
+	SceneManager::GetInstance()->ReplaceScene(new BossScene());
 
 	LoadResources();
 

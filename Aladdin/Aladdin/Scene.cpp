@@ -2,7 +2,18 @@
 
 Scene::Scene()
 {
-	
+	bloodBar = new BloodBar();
+	bloodBar->SetPosition(0, 10);
+	face = new AladdinFace();
+	face->SetPosition(10, 220);
+	aladdinApple = new Apple();
+	aladdinApple->collType = CollUnknown;
+	aladdinApple->SetPosition(317, 230);
+	aladdinRuby = new Ruby();
+	aladdinRuby->collType = CollUnknown;
+	aladdinRuby->SetPosition(280, 230);
+
+	LoadResources();
 }
 
 void Scene::LoadResources()
@@ -20,21 +31,33 @@ void Scene::LoadResources()
 	textures->Add(ID_TEX_ENEMYEXPLOSION, TEX_ENEMYEXPLOSION_PATH, D3DCOLOR_XRGB(186, 254, 202));
 	textures->Add(ID_TEX_ITEMACTIVED, TEX_ITEMACTIVED_PATH, D3DCOLOR_XRGB(255, 4, 253));
 	textures->Add(ID_TEX_BLOODBAR, TEX_BLOODBAR_PATH, D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_TEX_BOSS, TEX_BOSS_PATH, D3DCOLOR_XRGB(186, 254, 202));
 	textures->Add(ID_TEX_BBOX, TEX_BBOX_PATH, D3DCOLOR_XRGB(255, 255, 255));
 
 	LoadFont();
+	Aladdin::GetInstance()->LoadResources();
+	bloodBar->LoadResources();
+	face->LoadResources();
+	aladdinApple->LoadResources();
+	aladdinRuby->LoadResources();	
 }
 
 void Scene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CheckCameraAndWorldMap();
+	/*CheckCameraAndWorldMap();*/
+
+	bloodBar->Update(dt);	
 }
 
 void Scene::Render()
 {
+	bloodBar->Render();
+	face->Render();
+	aladdinApple->Render();
+	aladdinRuby->Render();
 }
 
-void Scene::CheckCameraAndWorldMap()
+void Scene::CheckCameraAndWorldMap(int mapWidth, int mapHeight)
 {
 	// test Camera move when Mario is not on center screen
 	//mCamera->SetPosition(mPlayer->GetPosition() + D3DXVECTOR3(100,0,0));
@@ -47,10 +70,10 @@ void Scene::CheckCameraAndWorldMap()
 		Camera::GetInstance()->SetPosition(Camera::GetInstance()->GetWidth() / 2, Camera::GetInstance()->GetPosition().y);
 	}
 
-	if (Camera::GetInstance()->GetBound().right > CAMERA_MAP_WIDTH)
+	if (Camera::GetInstance()->GetBound().right > mapWidth)
 	{
 		//luc nay cham goc ben phai cua the gioi thuc
-		Camera::GetInstance()->SetPosition(CAMERA_MAP_WIDTH - Camera::GetInstance()->GetWidth() / 2,
+		Camera::GetInstance()->SetPosition(mapWidth - Camera::GetInstance()->GetWidth() / 2,
 			Camera::GetInstance()->GetPosition().y);
 	}
 
@@ -60,11 +83,11 @@ void Scene::CheckCameraAndWorldMap()
 		Camera::GetInstance()->SetPosition(Camera::GetInstance()->GetPosition().x, Camera::GetInstance()->GetHeight() / 2);
 	}
 
-	if (Camera::GetInstance()->GetBound().bottom > CAMERA_MAP_HEIGHT)
+	if (Camera::GetInstance()->GetBound().bottom > mapHeight)
 	{
 		//luc nay cham day cua the gioi thuc
 		Camera::GetInstance()->SetPosition(Camera::GetInstance()->GetPosition().x,
-			CAMERA_MAP_HEIGHT - Camera::GetInstance()->GetHeight() / 2);
+			mapHeight - Camera::GetInstance()->GetHeight() / 2);
 	}
 }
 
@@ -107,6 +130,14 @@ void Scene::DrawFont(LPD3DXFONT font, float x, float y, float width, float heigh
 		font->DrawText(NULL, intStr, -1, &rect, DT_TOP | DT_LEFT, D3DCOLOR_XRGB(255, 255, 255));
 	else
 		font->DrawText(NULL, intStr, -1, &rect, DT_TOP | DT_RIGHT, D3DCOLOR_XRGB(255, 255, 255));
+}
+
+void Scene::DrawFonts()
+{
+	DrawFont(score, 280, 10, 35, 25, Aladdin::GetInstance()->score);
+	DrawFont(numLifes, 35, 230, 35, 25, Aladdin::GetInstance()->numLifes);
+	DrawFont(numRubies, 285, 230, 35, 25, Aladdin::GetInstance()->numRubies);
+	DrawFont(numApples, 318, 230, 35, 25, Aladdin::GetInstance()->numApples);
 }
 
 Scene::~Scene()

@@ -8,34 +8,29 @@
 #include "Ground.h"
 #include "Apple.h"
 #include "Ruby.h"
+#include "Boss.h"
 
-class DungeonScene : public Scene
+class BossScene : public Scene
 {
-public:
 	Grid *grid;
-	TileMap *map, *frontMap;
-	Aladdin *aladdin = Aladdin::GetInstance();	
-	Ground *baseGround, *basePillar;
+	TileMap *bossMap;
+	Aladdin *aladdin = Aladdin::GetInstance();
+	Boss *boss;
+	Ground *baseGround, *leftPillar, *rightPillar;
+	FireCarpet *car1, *car2, *car3, *car4;
 
 	vector<LPGAMEOBJECT> listStaticObjs;
 	vector<LPGAMEOBJECT> listEnemies;
-	vector<LPGAMEOBJECT> listItems;
-	vector<StoneBrick*> listStoneBricks;
+	vector<LPGAMEOBJECT> listItems;	
 	vector<LPGAMEOBJECT> listOtherObjs;
 	vector<LPGAMEOBJECT> coObjects;
-
 public:
-	DungeonScene();
+	BossScene();
 
 	void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
 
-	void LoadStaticObj(string path);
-	void LoadObj(string path);
-	void LoadGridStaticObj(string path);
-	void LoadGridObj(string path);
-
-	~DungeonScene();
+	~BossScene();
 };
 

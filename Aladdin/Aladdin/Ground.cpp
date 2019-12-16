@@ -31,7 +31,7 @@ void Ground::Render()
 	//else
 	//	currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, D3DXVECTOR2(0, 0));
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 Ground::~Ground()
