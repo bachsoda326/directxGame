@@ -88,6 +88,22 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		Collision::CheckCollision(boss->GetList()->at(j), leftPillar);
 		Collision::CheckCollision(boss->GetList()->at(j), rightPillar);
 	}
+	for (int a1 = 0; a1 < car1->GetListFires()->size(); a1++)
+	{
+		Collision::CheckCollision(car1->GetListFires()->at(a1), aladdin);
+	}
+	for (int a2 = 0; a2 < car2->GetListFires()->size(); a2++)
+	{
+		Collision::CheckCollision(car2->GetListFires()->at(a2), aladdin);
+	}
+	for (int a3 = 0; a3 < car3->GetListFires()->size(); a3++)
+	{
+		Collision::CheckCollision(car3->GetListFires()->at(a3), aladdin);
+	}
+	for (int a4 = 0; a4 < car4->GetListFires()->size(); a4++)
+	{
+		Collision::CheckCollision(car4->GetListFires()->at(a4), aladdin);
+	}
 }
 
 void BossScene::Render()

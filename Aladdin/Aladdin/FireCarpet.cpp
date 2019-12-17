@@ -17,8 +17,7 @@ void FireCarpet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	for (int i = 0; i < listFires.size(); i++)
 	{
-		listFires[i]->Update(dt);
-		Collision::CheckCollision(Aladdin::GetInstance(), listFires[i]);
+		listFires[i]->Update(dt);		
 	}
 }
 
@@ -53,14 +52,17 @@ vector<GameObject*>* FireCarpet::GetListFires()
 
 void FireCarpet::DeleteFire(GameObject * fire)
 {
-	for (int i = 0; i < listFires.size(); i++)
+	for (int i = 0; i < listFires.size();)
 	{
 		if (listFires[i] == fire)
 		{
 			listFires.erase(listFires.begin() + i);
 			delete fire;
 			fire = nullptr;
+			return;
 		}
+		else
+			i++;
 	}
 }
 

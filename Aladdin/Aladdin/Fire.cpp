@@ -86,6 +86,10 @@ void Fire::Move()
 	{
 		if (currentAnimation->isActionFinish() && typeFire == 1)
 			Destroy();
+		/*{
+			isDead = true;
+			delete this;
+		}*/
 		if (ny == -1.0f && typeFire == 2 && currentAnimation == animationFire && currentAnimation->GetLastFrame() == 0)
 		{
 			SetAnimation(ANI_FIRE);
