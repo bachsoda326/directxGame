@@ -219,6 +219,11 @@ void GameObject::GetBoundingBox(float & left, float & top, float & right, float 
 	bottom = yDraw + h;
 }
 
+vector<GameObject*>* GameObject::GetList()
+{
+	return NULL;
+}
+
 void GameObject::ChangeFrameSize(GameObject * obj)
 {
 }

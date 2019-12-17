@@ -4,7 +4,7 @@
 #define MAIN_WINDOW_TITLE "Aladdin"
 #define MAX_FRAME_RATE 120		// FPS
 
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
 #define SCREEN_WIDTH 340
 #define SCREEN_HEIGHT 250
 #define MAP_WIDTH 2272
@@ -35,9 +35,12 @@
 #define ID_TEX_ITEMACTIVED 9
 #define ID_TEX_BLOODBAR 10
 #define ID_TEX_BOSS 11
+#define ID_TEX_ABU 12
 #define ID_TEX_TILESHEET_MAP 100
 #define ID_TEX_TILESHEET_FRONTMAP 101
 #define ID_TEX_TILESHEET_BOSSMAP 102
+#define ID_TEX_NEXTSCENE 200
+#define ID_TEX_ENDSCENE 201
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 
 #define TEX_TILESHEET_MAP_PATH "textures\\TileSheet_Map.png"
@@ -55,6 +58,9 @@
 #define TEX_ITEMACTIVED_PATH "textures\\ItemActived.png"
 #define TEX_BLOODBAR_PATH "textures\\BloodBar.png"
 #define TEX_BOSS_PATH "textures\\Boss.png"
+#define TEX_ABU_PATH "textures\\Abu.png"
+#define TEX_NEXTSCENE_PATH "textures\\Next.png"
+#define TEX_ENDSCENE_PATH "textures\\End.png"
 #define TEX_BBOX_PATH "textures\\bbox.png"
 
 #define XML_ALADDIN_ANIMATION_PATH "xml\\Aladdin_Animations.xml"
@@ -80,6 +86,7 @@
 #define XML_ALADDINFACE_ANIMATION_PATH "xml\\AladdinFace_Animations.xml"
 #define XML_BOSS_ANIMATION_PATH "xml\\Boss_Animations.xml"
 #define XML_BOSSATTACK_ANIMATION_PATH "xml\\BossAttack_Animation.xml"
+#define XML_ABU_ANIMATION_PATH "xml\\Abu_Animations.xml"
 #define XML_FIRE_ANIMATION_PATH "xml\\Fire_Animations.xml"
 
 #define TXT_TILEMAP_MAP_PATH "txt\\TileMap_Map.txt"

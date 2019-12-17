@@ -1,4 +1,5 @@
 ﻿#include "Enemy.h"
+#include "Aladdin.h"
 
 Enemy::Enemy()
 {
@@ -11,7 +12,6 @@ void Enemy::LoadResources()
 
 	animationDie = new Animation("Animation", XML_ENEMYDEAD_ANIMATION_PATH, texEnemyDead, 50);
 }
-
 
 void Enemy::Die()
 {
@@ -27,7 +27,10 @@ void Enemy::Die()
 	{
 		//Thực hiện animation chết xong đặt isDead = true để xóa enemy ra khỏi danh sách
 		if (currentAnimation->isActionFinish())
+		{
 			isDead = true;
+			//Aladdin::GetInstance()->score += 10;
+		}
 	}
 }
 

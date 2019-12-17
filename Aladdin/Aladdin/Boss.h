@@ -19,7 +19,7 @@ private:
 public:
 	int typeBoss;
 
-	Boss();
+	Boss(float left, float top, float width, float height);
 
 	LPANIMATION animationMan,
 		animationSnake;

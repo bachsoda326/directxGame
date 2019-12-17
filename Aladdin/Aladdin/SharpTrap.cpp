@@ -37,7 +37,7 @@ void SharpTrap::Render()
 	{
 		animationDefault->SetFrame(0, 0);
 
-		if (startWait - startTime > 4000)
+		if (startWait - startTime > 6000)
 		{
 			GameSound::getInstance()->play(SHARPTRAP_MUSIC);
 			animationDefault->SetFrame(1, 5);

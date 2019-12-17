@@ -209,7 +209,10 @@ void Apple::Active()
 	case ACTIVED:
 	{
 		if (currentAnimation->isActionFinish())
+		{
 			isDead = true;
+			//Aladdin::GetInstance()->score += 5;
+		}
 		break;
 	}
 	default:

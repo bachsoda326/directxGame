@@ -11,14 +11,14 @@ private:
 	vector<GameObject*> listFires;
 
 public:
-	FireCarpet();
+	FireCarpet(float left, float top, float width, float height);
 
 	void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
 
 	void CreateFire(GameObject *obj);
-	vector<GameObject*>* GetListFires();
+	vector<GameObject*>* GetList();
 	void DeleteFire(GameObject *sword);
 
 	void OnCollision(GameObject *obj, float nx, float ny);

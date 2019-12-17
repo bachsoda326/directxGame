@@ -1,7 +1,14 @@
 #include "FireCarpet.h"
 
-FireCarpet::FireCarpet()
-{
+FireCarpet::FireCarpet(float left, float top, float width, float height)
+{	
+	xDraw = left;
+	yDraw = top;
+	x = xDraw;
+	y = yDraw;	
+	w = width;
+	h = height;
+
 	isDie = false;
 	isDead = false;
 	objType = OBJFireCarpet;
@@ -45,7 +52,7 @@ void FireCarpet::CreateFire(GameObject * obj)
 	listFires.push_back(fire);
 }
 
-vector<GameObject*>* FireCarpet::GetListFires()
+vector<GameObject*>* FireCarpet::GetList()
 {
 	return &listFires;
 }

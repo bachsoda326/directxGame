@@ -24,6 +24,8 @@ GameObject::GetBoundingBox
 #include "SceneManager.h"
 #include "DungeonScene.h"
 #include "BossScene.h"
+#include "NextScene.h"
+#include "EndScene.h"
 #include "debug.h"
 #include "Game.h"
 
@@ -168,9 +170,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard();
 	//game->InitMouse();
 
-	SceneManager::GetInstance()->ReplaceScene(new BossScene());
+	SceneManager::GetInstance()->ReplaceScene(new DungeonScene());
 
-	LoadResources();
+	//LoadResources();
 
 	// phóng đại game lên 2 lần
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);

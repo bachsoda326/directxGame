@@ -1,7 +1,12 @@
 #include "Boss.h"
 
-Boss::Boss()
-{
+Boss::Boss(float left, float top, float width, float height)
+{	
+	x = left + 22;
+	y = top + 71;
+	w = width;
+	h = height;
+
 	collType = CollEnemy;
 	objType = OBJBoss;	
 	isCreate = false;
@@ -9,8 +14,8 @@ Boss::Boss()
 	isDie = false;
 	isDead = false;
 	direction = true;
-	typeBoss = 1;
-	blood = 20;
+	typeBoss = 0;
+	blood = 11;
 	vx = 0;
 	vy = 0;
 }
@@ -24,12 +29,7 @@ void Boss::LoadResources()
 
 	SetState(STANDING);
 	currentAnimation = animationMan;
-	animationMan->SetFrame(0, 0);
-
-	x = xDraw + 22;
-	y = yDraw + 71;
-	w = 64;
-	h = 71;	
+	animationMan->SetFrame(0, 0);	
 
 	startCut = GetTickCount();
 }
@@ -38,10 +38,10 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	GameObject::Update(dt);
 
-	/*if (blood > 10)
+	if (blood > 10)
 		typeBoss = 0;
 	else
-		typeBoss = 1;*/
+		typeBoss = 1;
 
 	if (isDie)
 	{
@@ -52,7 +52,10 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	switch (state)
 	{
 	case ATTACK:
-		Attack();
+		if (Aladdin::GetInstance()->GetState() == Aladdin::RESETPOSITION || Aladdin::GetInstance()->GetState() == Aladdin::DIE)
+			Stand();
+		else
+			Attack();
 		break;
 	default:
 		Stand();
@@ -266,16 +269,7 @@ void Boss::ResetFrameSize(GameObject * obj)
 }
 
 void Boss::OnCollision(GameObject * obj, float nx, float ny)
-{
-	/*switch (obj->collType)
-	{
-	case CollGround:
-		Collision::PreventMove(this, obj, nx, ny);
-		break;
-	case CollLine:
-		Collision::CollisionLine(this, obj, nx, ny);
-		break;
-	}*/
+{	
 }
 
 void Boss::OnIntersect(GameObject * obj)

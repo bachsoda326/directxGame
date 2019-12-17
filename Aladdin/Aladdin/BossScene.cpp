@@ -1,108 +1,93 @@
-#include "BossScene.h"
+﻿#include "BossScene.h"
+#include "SceneManager.h"
+#include "EndScene.h"
+#include "NextScene.h"
 
 BossScene::BossScene()
 {
+	GameSound::getInstance()->stop(NEXT_MUSIC);
 	GameSound::getInstance()->play(GAME2_MUSIC, true);
+	LoadResources();
 }
 
 void BossScene::LoadResources()
 {
-	aladdin->SetPosition(300, 100);
+	grid = new Grid(BOSSMAP_WIDTH, BOSSMAP_HEIGHT, 150);
+
+	LoadObj("txt\\ObjBoss_obj.txt");
+	LoadGridObj("txt\\ObjBoss_grid.txt");
+
+	aladdin->SetPosition(300, 180);
 	aladdin->xInit = 300;
-	aladdin->yInit = 100;
-	boss = new Boss();
-	boss->SetPosition(465, 262);
+	aladdin->yInit = 180;
+	aladdin->SetState(Aladdin::STANDING);
+	aladdin->vx = 0;
+	
 	boss->LoadResources();
 
 	bossMap = new TileMap();
 	bossMap->LoadTileMap(ID_TEX_TILESHEET_BOSSMAP, TEX_TILESHEET_BOSSMAP_PATH, TXT_TILEMAP_BOSSMAP_PATH);
 
-	baseGround = new Ground(100, 361, 755, 56);
-	baseGround->collType = CollGround;
-
-	leftPillar = new Ground(96, 0, 37, 403);
-	leftPillar->collType = CollFence;
-	rightPillar = new Ground(834, 0, 37, 403);
-	rightPillar->collType = CollFence;
-
-	car1 = new FireCarpet();
-	car1->SetPosition(141, 300);
-	car1->w = 98;
-	car1->h = 48;
-	car1->LoadResources();
-	car2 = new FireCarpet();
-	car2->SetPosition(337, 300);
-	car2->w = 98;
-	car2->h = 48;
-	car2->LoadResources();
-	car3 = new FireCarpet();
-	car3->SetPosition(533, 300);
-	car3->w = 98;
-	car3->h = 48;
-	car3->LoadResources();
-	car4 = new FireCarpet();
-	car4->SetPosition(729, 300);
-	car4->w = 98;
-	car4->h = 48;
-	car4->LoadResources();
-
+	for (int i = 0; i < listFireCarpets.size(); i++)
+	{
+		listFireCarpets[i]->LoadResources();
+	}
 }
 
-void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 {
 	CheckCameraAndWorldMap(CAMERA_BOSSMAP_WIDTH, CAMERA_BOSSMAP_HEIGHT);
 
+	coObjects.clear();
+	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
+
 	aladdin->Update(dt);
 	boss->Update(dt);
-	car1->Update(dt);
-	car2->Update(dt);
-	car3->Update(dt);
-	car4->Update(dt);
 	Scene::Update(dt);
 
 	aladdin->nx = 0;
 	aladdin->ny = 0;
-	Collision::CheckCollision(aladdin, baseGround);
-	Collision::CheckCollision(aladdin, leftPillar);
-	Collision::CheckCollision(aladdin, rightPillar);
-	Collision::CheckCollision(aladdin, boss);
-	Collision::CheckCollision(aladdin, car1);
-	Collision::CheckCollision(aladdin, car2);
-	Collision::CheckCollision(aladdin, car3);
-	Collision::CheckCollision(aladdin, car4);
-	for (int i = 0; i < aladdin->GetListApples()->size(); i++)
+	for (int i = 0; i < coObjects.size(); i++)
 	{
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), boss);
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), baseGround);
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), leftPillar);
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), rightPillar);
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), car1);
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), car2);
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), car3);
-		Collision::CheckCollision(aladdin->GetListApples()->at(i), car4);
+		coObjects[i]->Update(dt);
+		Collision::CheckCollision(aladdin, coObjects[i]);
+		// va chạm táo Aladdin vs các vật
+		for (int j = 0; j < aladdin->GetList()->size(); j++)
+		{
+			Collision::CheckCollision(aladdin->GetList()->at(j), coObjects[i]);
+		}
+		// va chạm các thứ đc tạo bởi vật vs Aladdin
+		switch (coObjects[i]->id)
+		{
+		case 5: case 6: case 7: case 8:
+		{
+			for (int k = 0; k < coObjects[i]->GetList()->size(); k++)
+			{
+				Collision::CheckCollision(coObjects[i]->GetList()->at(k), aladdin);
+			}
+			break;
+		}
+		}		
+	}	
+	Collision::CheckCollision(aladdin, boss);	
+	for (int i = 0; i < aladdin->GetList()->size(); i++)
+	{
+		Collision::CheckCollision(aladdin->GetList()->at(i), boss);		
 	}
 	for (int j = 0; j < boss->GetList()->size(); j++)
 	{
 		Collision::CheckCollision(boss->GetList()->at(j), aladdin);
 		Collision::CheckCollision(boss->GetList()->at(j), baseGround);
-		Collision::CheckCollision(boss->GetList()->at(j), leftPillar);
-		Collision::CheckCollision(boss->GetList()->at(j), rightPillar);
-	}
-	for (int a1 = 0; a1 < car1->GetListFires()->size(); a1++)
+		for (int i = 0; i < listPillars.size(); i++)
+		{
+			Collision::CheckCollision(boss->GetList()->at(j), listPillars[i]);
+		}
+	}	
+
+	if (boss->isDead)
 	{
-		Collision::CheckCollision(car1->GetListFires()->at(a1), aladdin);
-	}
-	for (int a2 = 0; a2 < car2->GetListFires()->size(); a2++)
-	{
-		Collision::CheckCollision(car2->GetListFires()->at(a2), aladdin);
-	}
-	for (int a3 = 0; a3 < car3->GetListFires()->size(); a3++)
-	{
-		Collision::CheckCollision(car3->GetListFires()->at(a3), aladdin);
-	}
-	for (int a4 = 0; a4 < car4->GetListFires()->size(); a4++)
-	{
-		Collision::CheckCollision(car4->GetListFires()->at(a4), aladdin);
+		SceneManager::GetInstance()->ReplaceScene(new NextScene(4));
+		return;
 	}
 }
 
@@ -116,23 +101,27 @@ void BossScene::Render()
 
 	if (d3ddv->BeginScene())
 	{
-		/*coObjects.clear();
-		coObjects.push_back(baseGround);
-		coObjects.push_back(basePillar);
-		grid->CalcColliableObjs(Camera::GetInstance(), coObjects);*/
+		coObjects.clear();
+		grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		bossMap->Render();
-		/*for (int i = 0; i < coObjects.size(); i++)
+		if (aladdin->isDead)
 		{
-			coObjects[i]->Render();
-		}*/
-		boss->Render();
-		car1->Render();
-		car2->Render();
-		car3->Render();
-		car4->Render();
+			GameSound::getInstance()->stop(GAME2_MUSIC);
+			return;
+		}
+		if (!aladdin->isDie)
+		{
+			bossMap->Render();
+			boss->Render();
+			for (int i = 0; i < coObjects.size(); i++)
+			{
+				coObjects[i]->Render();
+			}
+		}
+		else
+			Abu::GetInstance()->Render();
 		aladdin->Render();		
 		Scene::Render();
 
@@ -145,6 +134,113 @@ void BossScene::Render()
 	d3ddv->Present(0, 0, 0, 0);
 }
 
+void BossScene::LoadObj(string path)
+{
+	GameObject *obj = 0;
+
+	fstream fs;
+	fs.open(path);
+
+	int numObjs = 0;
+	fs >> numObjs;
+
+	int index;
+	string name;
+	int xDraw, yDraw, width, height;
+
+	for (int i = 0; i < numObjs; i++)
+	{
+		fs >> index;
+		fs >> name;
+		fs >> xDraw;
+		fs >> yDraw;
+		fs >> width;
+		fs >> height;
+
+		if (name == "Boss")
+		{
+			boss = new Boss(xDraw, yDraw, width, height);
+			boss->id = index;
+		}
+		else if (name == "Ground")
+		{
+			baseGround = new Ground(xDraw, yDraw, width, height);
+			baseGround->id = index;
+			baseGround->collType = CollGround;
+		}
+		else if (name == "Pillar")
+		{
+			obj = new Ground(xDraw, yDraw, width, height);
+			obj->id = index;
+			obj->collType = CollFence;
+			listPillars.push_back(obj);
+		}
+		else if (name == "FireCarpet")
+		{
+			obj = new FireCarpet(xDraw, yDraw, width, height);
+			obj->id = index;
+			listFireCarpets.push_back(obj);
+		}
+	}
+
+	fs.close();
+}
+
+void BossScene::LoadGridObj(string path)
+{
+	GameObject *objGround = 0;
+
+	fstream fs;
+	fs.open(path);	
+
+	int cellIndex = 0;;
+	int objIndex = 0;
+
+	string line;					// dòng 1
+	while (getline(fs, line))
+	{
+		istringstream iss(line);	// tạo 1 string stream từ dòng 1	
+		vector<int> listId;
+		for (int n; iss >> n;)		// đọc số nguyên từ stream vào mảng a
+			listId.push_back(n);
+
+		cellIndex = listId[0];
+		for (int i = 1; i < listId.size(); i++)
+		{			
+			// biến k.tra xem đã thêm obj với objIndex đang xét chưa, true thì xét objIndex mới tiếp
+			bool isAdded = false;
+
+			objIndex = listId[i];
+			if (objIndex == 2)
+			{
+				grid->AddObjToCell(cellIndex, baseGround);
+				break;
+			}
+			for (int t = 0; t < listPillars.size(); t++)
+			{
+				if (isAdded == true) break;
+				if (listPillars[t]->id == objIndex)
+				{
+					grid->AddObjToCell(cellIndex, listPillars[t]);
+					isAdded = true;
+					break;
+				}
+			}
+			for (int t = 0; t < listFireCarpets.size(); t++)
+			{
+				if (isAdded == true) break;
+				if (listFireCarpets[t]->id == objIndex)
+				{
+					grid->AddObjToCell(cellIndex, listFireCarpets[t]);
+					isAdded = true;
+					break;
+				}
+			}
+		}
+	}
+
+	fs.close();
+}
 
 BossScene::~BossScene()
 {

@@ -117,6 +117,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Abu.h" />
     <ClInclude Include="Aladdin.h" />
     <ClInclude Include="AladdinFace.h" />
     <ClInclude Include="Apple.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="DungeonScene.h" />
+    <ClInclude Include="EndScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fire.h" />
     <ClInclude Include="FireCarpet.h" />
@@ -142,6 +144,7 @@
     <ClInclude Include="GameSound.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="NextScene.h" />
     <ClInclude Include="Ruby.h" />
     <ClInclude Include="GenieFace.h" />
     <ClInclude Include="GenieJar.h" />
@@ -164,6 +167,7 @@
     <ClInclude Include="WaveFile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Abu.cpp" />
     <ClCompile Include="Aladdin.cpp" />
     <ClCompile Include="AladdinFace.cpp" />
     <ClCompile Include="Apple.cpp" />
@@ -180,6 +184,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="DungeonScene.cpp" />
+    <ClCompile Include="EndScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="FireCarpet.cpp" />
@@ -188,6 +193,7 @@
     <ClCompile Include="GameSound.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="NextScene.cpp" />
     <ClCompile Include="Ruby.cpp" />
     <ClCompile Include="GenieFace.cpp" />
     <ClCompile Include="GenieJar.cpp" />

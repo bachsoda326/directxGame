@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation name="Fan" imagePath="Abu.png" width="412" height="120">             
+    <sprite id="0" x="3" y="32" w="68" h="29" oX="53" oY="29" />  
+    <sprite id="1" x="78" y="25" w="57" h="36" oX="44" oY="36" />
+    <sprite id="2" x="144" y="17" w="57" h="44" oX="43" oY="44" />
+    <sprite id="3" x="210" y="7" w="58" h="54" oX="45" oY="54" />
+    <sprite id="4" x="277" y="8" w="51" h="53" oX="35" oY="53" />
+    <sprite id="5" x="342" y="13" w="63" h="48" oX="48" oY="48" />  
+    
+  </Animation>
+  <Animation name="Run" imagePath="Abu.png" width="412" height="120"> 
+    <sprite id="6" x="10" y="84" w="26" h="33" oX="26" oY="33" />  
+    <sprite id="7" x="44" y="84" w="42" h="33" oX="42" oY="33" />
+    <sprite id="8" x="93" y="85" w="52" h="32" oX="52" oY="33" />
+    <sprite id="9" x="153" y="80" w="40" h="37" oX="40" oY="37" />
+    <sprite id="10" x="203" y="81" w="35" h="36" oX="35" oY="36" />
+    <sprite id="11" x="247" y="81" w="45" h="36" oX="45" oY="36" />   
+    <sprite id="12" x="304" y="83" w="50" h="34" oX="50" oY="34" />
+    <sprite id="13" x="363" y="86" w="46" h="31" oX="46" oY="31" />    
+  </Animation>
+</Animations>

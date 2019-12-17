@@ -72,7 +72,10 @@ public:
 		animationPush,
 		animationHurt,
 		animationDie,
-		animationRespawn;
+		animationRespawn,
+		animationRunNext,
+		animationEndFly,
+		animationEndHug;
 
 	// các trạng thái
 	enum AladdinStates
@@ -96,7 +99,6 @@ public:
 		FALLCLIMB,			// rớt khi đu dây xích
 		SWINGING,
 		PUSHING,			// đẩy (khi gặp tường mà k đi đc)
-		STUNTING,
 		HURT,
 		DIE,
 		RESETPOSITION,
@@ -135,15 +137,15 @@ public:
 		ANI_HURT,
 		ANI_DIE,
 		ANI_RESPAWN,
-		ANI_000000000000000,
-		ANI_CLIMB_1,
-		ANI_CLIMBING,
-		ANI_SWING,
-		ANI_SWINGING,		
-		ANI_STUNTING,		
 		ANI_RUNNEXT,
 		ANI_FLY,
-		ANI_HUG
+		ANI_HUG,
+		ANI_CLIMB_1,
+		ANI_CLIMBING,
+		ANI_000000000000000,		
+		ANI_SWING,
+		ANI_SWINGING,		
+		ANI_STUNTING
 	};
 
 	// Khởi tạo obj
@@ -171,11 +173,14 @@ public:
 	void Throw();	// ném (táo)	
 	void Hurt();
 	void Die();
+	void RunNextScene();
+	void Fly();
+	void Hug();
 	void ResetPosition();
 
 	// Handle apple
 	vector<GameObject*> listApples;
-	vector<GameObject*>* GetListApples();
+	vector<GameObject*>* GetList();
 	void CreateApple();
 	//void CreateApple(GameObject*obj);	
 	void DeleteApple(GameObject* apple);

@@ -14,10 +14,13 @@
 #include "BoomSkeleton.h"
 #include "SharpTrap.h"
 #include "BallTrap.h"
+#include "SceneManager.h"
+#include "NextScene.h"
 
 DungeonScene::DungeonScene()
 {
 	GameSound::getInstance()->play(GAME1_MUSIC, true);
+	LoadResources();
 }
 
 void DungeonScene::LoadResources()
@@ -34,7 +37,8 @@ void DungeonScene::LoadResources()
 	frontMap = new TileMap();
 	frontMap->LoadTileMap(ID_TEX_TILESHEET_FRONTMAP, TEX_TILESHEET_FRONTMAP_PATH, TXT_TILEMAP_FRONTMAP_PATH);
 	
-	aladdin->SetPosition(1000, 1006);
+	aladdin->SetPosition(2000, 200);
+	//aladdin->SetPosition(200, 1006);
 	//aladdin->SetPosition(950, 587);	// error fence climb_jump
 	/*aladdin->SetPosition(250, 480);*/		// peddler
 	//aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
@@ -81,6 +85,11 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	coObjects.push_back(basePillar);
 	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
+	/*for (int i = 0; i < coObjects.size(); i++)
+	{
+		if (coObjects[i]->isDead)
+			coObjects.erase(coObjects.begin() + i);
+	}*/
 	//aladdin->HandleKeyBoard();	
 	aladdin->Update(dt);
 	Scene::Update(dt);
@@ -91,16 +100,21 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	{
 		Collision::CheckCollision(aladdin, coObjects[i]);
 		coObjects[i]->Update(dt);
-		for (int j = 0; j < aladdin->GetListApples()->size(); j++)
+		for (int j = 0; j < aladdin->GetList()->size(); j++)
 		{
-			Collision::CheckCollision(aladdin->GetListApples()->at(j), coObjects[i]);
+			Collision::CheckCollision(aladdin->GetList()->at(j), coObjects[i]);
 		}
 	}
-	for (int i = 0; i < Aladdin::GetInstance()->GetListApples()->size(); i++)
-		Aladdin::GetInstance()->GetListApples()->at(i)->ProcessInput();
+	for (int i = 0; i < Aladdin::GetInstance()->GetList()->size(); i++)
+		Aladdin::GetInstance()->GetList()->at(i)->ProcessInput();
 	Collision::CheckCollision(aladdin, baseGround);
 
 	//aladdin->CheckCollision(&coObjects);
+	if (aladdin->x >= 2240 && aladdin->y <= 250)
+	{
+		SceneManager::GetInstance()->ReplaceScene(new NextScene(3));
+		return;
+	}
 }
 
 void DungeonScene::Render()
@@ -120,14 +134,28 @@ void DungeonScene::Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		map->Render();
-		for (int i = 0; i < coObjects.size(); i++)
+		if (aladdin->isDead)
 		{
-			coObjects[i]->Render();
+			GameSound::getInstance()->stop(GAME1_MUSIC);
+			return;
 		}
-		aladdin->Render();
-		frontMap->Render();
-		Scene::Render();
+		if (!aladdin->isDie)
+		{
+			map->Render();
+			for (int i = 0; i < coObjects.size(); i++)
+			{
+				coObjects[i]->Render();
+			}
+			aladdin->Render();
+			frontMap->Render();
+			Scene::Render();
+		}
+		else
+		{
+			Abu::GetInstance()->Render();
+			aladdin->Render();
+			Scene::Render();
+		}
 
 		spriteHandler->End();
 		DrawFonts();

@@ -9,6 +9,9 @@
 #include "Ground.h"
 #include "StoneBrick.h"
 #include "Chains.h"
+#include "SceneManager.h"
+#include "BossScene.h"
+#include "Abu.h"
 
 Aladdin * Aladdin::__instance = NULL;
 
@@ -31,7 +34,7 @@ Aladdin::Aladdin()
 	isAppleCreated == false;
 	currentAnimation = new Animation(100);
 	isBlink = 0;
-	blood = 2;
+	blood = 18;
 	score = 0;
 	numApples = 25;
 	numRubies = 21;
@@ -82,6 +85,9 @@ void Aladdin::LoadResources()
 	animationPush = new Animation("Push", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationHurt = new Animation("Hurt", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationDie = new Animation("Die", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationRunNext = new Animation("RunNext", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationEndFly = new Animation("EndFly", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationEndHug = new Animation("EndHug", XML_ALADDIN_ANIMATION_PATH, texAladdin, 250);
 	animationRespawn = new Animation("Respawn", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 
 	currentAnimation = animationJump_Standing;
@@ -91,7 +97,7 @@ void Aladdin::LoadResources()
 void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	GameObject::Update(dt);
-	//DebugOut(L"[state] state: %d\n", state);
+	DebugOut("[state] state: %d\n", state);
 	//DebugOut(L"[CP] x: %f\n", nx);
 	x += dx;
 	y += dy;	
@@ -109,9 +115,15 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	case RESETPOSITION:
 		ResetPosition();
 		return;
-		/*case RUNNEXT:
-			RunNext();
-			return;*/
+	case FLY:
+		Fly();
+		return;
+	case HUG:
+		Hug();
+		return;
+	case RUNNEXT:
+		RunNextScene();
+		return;
 	}
 
 	//đặt khoảng thời gian nhấp nháy khi bị thương
@@ -320,6 +332,24 @@ void Aladdin::SetAnimation(AladdinAnimations ani)
 	case ANI_DIE:
 	{
 		currentAnimation = animationDie;
+		currentAnimation->ResetFrame();
+		break;
+	}
+	case ANI_RUNNEXT:
+	{
+		currentAnimation = animationRunNext;
+		currentAnimation->ResetFrame();
+		break;
+	}
+	case ANI_FLY:
+	{
+		currentAnimation = animationEndFly;
+		currentAnimation->ResetFrame();
+		break;
+	}
+	case ANI_HUG:
+	{		
+		currentAnimation = animationEndHug;
 		currentAnimation->ResetFrame();
 		break;
 	}
@@ -966,7 +996,7 @@ void Aladdin::Jump()
 		SetState(JUMPING);
 		SetAnimation(ANI_JUMP_STANDING);
 		animationJump_Standing->SetFrame(0, 9);
-		vy -= 0.39f;						//start jump if is not "on-air"	
+		vy -= 0.4f;						//start jump if is not "on-air"	
 
 		keyUp[2] = false;
 		break;
@@ -1409,6 +1439,7 @@ void Aladdin::Die()
 	{
 		if (currentAnimation->isActionFinish())
 		{
+			Abu::GetInstance()->isDead = true;
 			if (numLifes == 0)
 				isDead = true;
 			else
@@ -1426,6 +1457,74 @@ void Aladdin::Die()
 		numLifes--;
 		vy = 0;
 		vx = 0;
+		isBlink = 0;
+		Abu::GetInstance()->SetPosition(x + 85, y + 20);
+		Abu::GetInstance()->isDead = false;
+		Abu::GetInstance()->beginStat = 0;
+		Abu::GetInstance()->LoadResources();
+		break;
+	}
+	}
+}
+
+void Aladdin::RunNextScene()
+{
+	switch (state)
+	{
+	case RUNNEXT:
+	{		
+		break;
+	}
+	default:
+	{
+		vx = -0.1f;
+		vy = 0;
+		SetState(RUNNEXT);
+		SetAnimation(ANI_RUNNEXT);
+		isBlink = 0;
+		break;
+	}
+	}
+}
+
+void Aladdin::Fly()
+{
+	switch (state)
+	{
+	case FLY:
+	{		
+		break;
+	}
+	default:
+	{
+		vx = 0.08f;
+		vy = -0.04f;
+		SetState(FLY);
+		SetAnimation(ANI_FLY);
+		isBlink = 0;
+		break;
+	}
+	}
+}
+
+void Aladdin::Hug()
+{
+	switch (state)
+	{
+	case HUG:
+	{
+		if (currentAnimation->GetCurrentFrame() == 9)
+		{
+			animationEndHug->SetFrame(9, 9);
+		}
+		break;
+	}
+	default:
+	{
+		vx = 0;
+		vy = 0;
+		SetState(HUG);
+		SetAnimation(ANI_HUG);
 		isBlink = 0;
 		break;
 	}
@@ -1468,9 +1567,9 @@ void Aladdin::ResetPosition()
 			startBlink = GetTickCount();
 			Stand();
 		}*/
-		SetState(RESETPOSITION);
 		SetAnimation(ANI_RESPAWN);
-		isBlink = 0;
+		SetState(RESETPOSITION);		
+		isBlink = 1;
 		xDraw = xInit;
 		yDraw = yInit;
 		x = xDraw + 6;
@@ -1483,7 +1582,7 @@ void Aladdin::ResetPosition()
 	}
 }
 
-vector<GameObject*>* Aladdin::GetListApples()
+vector<GameObject*>* Aladdin::GetList()
 {
 	return &listApples;
 }

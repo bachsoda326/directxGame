@@ -54,6 +54,7 @@ enum ObjectType
 	OBJNormalGuard,
 	OBJThinGuard,
 	OBJAladdin,
+	OBJAbu,
 	OBJBoss,
 	OBJStar,
 	OBJAladdinFace,	
@@ -175,6 +176,8 @@ public:
 		
 	// Get biên(RECT) obj 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	//get list createdObjs of Obj 
+	virtual vector<GameObject*>* GetList();
 
 	//change and reset frame size
 	virtual void ChangeFrameSize(GameObject*obj);

@@ -71,7 +71,7 @@ void Game::InitKeyboard()
 
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] DirectInput8Create failed!\n");
+		DebugOut("[ERROR] DirectInput8Create failed!\n");
 		return;
 	}
 
@@ -80,7 +80,7 @@ void Game::InitKeyboard()
 	// TO-DO: put in exception handling
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] CreateDevice failed!\n");
+		DebugOut("[ERROR] CreateDevice failed!\n");
 		return;
 	}
 
@@ -99,11 +99,11 @@ void Game::InitKeyboard()
 	hr = didv_keyboard->Acquire();
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] DINPUT8::Acquire failed!\n");
+		DebugOut("[ERROR] DINPUT8::Acquire failed!\n");
 		return;
 	}
 
-	DebugOut(L"[INFO] Keyboard has been initialized successfully\n");
+	DebugOut("[INFO] Keyboard has been initialized successfully\n");
 }
 
 void Game::ProcessKeyboard()
@@ -120,7 +120,7 @@ void Game::ProcessKeyboard()
 			HRESULT h = didv_keyboard->Acquire();
 			if (h == DI_OK)
 			{
-				DebugOut(L"[INFO] Keyboard re-acquired!\n");
+				DebugOut("[INFO] Keyboard re-acquired!\n");
 			}
 			else return;
 		}
@@ -144,7 +144,7 @@ void Game::InitMouse()
 
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] DirectInput8Create failed!\n");
+		DebugOut("[ERROR] DirectInput8Create failed!\n");
 		return;
 	}
 
@@ -153,7 +153,7 @@ void Game::InitMouse()
 	// TO-DO: put in exception handling
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] CreateDevice failed!\n");
+		DebugOut("[ERROR] CreateDevice failed!\n");
 		return;
 	}
 
@@ -192,11 +192,11 @@ void Game::InitMouse()
 	hr = didv_mouse->Acquire();
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] DINPUT8::Acquire failed!\n");
+		DebugOut("[ERROR] DINPUT8::Acquire failed!\n");
 		return;
 	}
 
-	DebugOut(L"[INFO] Mouse has been initialized successfully\n");
+	DebugOut("[INFO] Mouse has been initialized successfully\n");
 }
 
 void Game::ProcessMouse()
@@ -213,7 +213,7 @@ void Game::ProcessMouse()
 			HRESULT h = didv_mouse->Acquire();
 			if (h == DI_OK)
 			{
-				DebugOut(L"[INFO] Mouse re-acquired!\n");
+				DebugOut("[INFO] Mouse re-acquired!\n");
 			}
 			else return;
 		}

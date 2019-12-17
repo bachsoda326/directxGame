@@ -16,13 +16,10 @@ class BossScene : public Scene
 	TileMap *bossMap;
 	Aladdin *aladdin = Aladdin::GetInstance();
 	Boss *boss;
-	Ground *baseGround, *leftPillar, *rightPillar;
-	FireCarpet *car1, *car2, *car3, *car4;
+	Ground *baseGround;
 
-	vector<LPGAMEOBJECT> listStaticObjs;
-	vector<LPGAMEOBJECT> listEnemies;
-	vector<LPGAMEOBJECT> listItems;	
-	vector<LPGAMEOBJECT> listOtherObjs;
+	vector<LPGAMEOBJECT> listPillars;
+	vector<LPGAMEOBJECT> listFireCarpets;
 	vector<LPGAMEOBJECT> coObjects;
 public:
 	BossScene();
@@ -30,6 +27,9 @@ public:
 	void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
+
+	void LoadObj(string path);
+	void LoadGridObj(string path);
 
 	~BossScene();
 };

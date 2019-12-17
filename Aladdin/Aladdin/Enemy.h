@@ -9,7 +9,7 @@ public:
 	LPANIMATION animationDie;
 
 	void LoadResources();
-	//void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	//void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);	
 
 	void Die();
 

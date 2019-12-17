@@ -1,0 +1,9 @@
+8
+1 Boss 465 262 64 71
+2 Ground 100 361 755 56
+3 Pillar 96 0 37 403 
+4 Pillar 834 0 37 403 
+5 FireCarpet 141 300 98 48 
+6 FireCarpet 337 300 98 48 
+7 FireCarpet 533 300 98 48 
+8 FireCarpet 729 300 98 48 

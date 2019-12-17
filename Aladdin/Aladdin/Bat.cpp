@@ -141,6 +141,7 @@ void Bat::Die()
 		{
 			vy = 0;
 			isDead = true;
+			//Aladdin::GetInstance()->score += 50;
 		}
 		break;
 	}
