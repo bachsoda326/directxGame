@@ -123,6 +123,7 @@ void BoomSkeleton::Hurt()
 		{
 			Die();
 			SetState(DIE);
+			Aladdin::GetInstance()->score += 10;
 		}
 		break;
 	}

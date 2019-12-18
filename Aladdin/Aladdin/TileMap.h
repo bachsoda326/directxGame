@@ -23,6 +23,7 @@ public:
 
 private:		
 	std::vector<int> listTiles;
+	std::vector<LPSPRITE> listSprites;
 	int numXTiles, numYTiles;
 	int id;
 };

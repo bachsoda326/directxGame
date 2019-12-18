@@ -28,8 +28,7 @@ void Enemy::Die()
 		//Thực hiện animation chết xong đặt isDead = true để xóa enemy ra khỏi danh sách
 		if (currentAnimation->isActionFinish())
 		{
-			isDead = true;
-			//Aladdin::GetInstance()->score += 10;
+			isDead = true;			
 		}
 	}
 }

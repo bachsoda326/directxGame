@@ -38,7 +38,7 @@ void Apple::LoadResources()
 	{
 		x = xDraw + 5;
 		y = yDraw + 6;
-		state = NOTMOVING;
+		SetState(NOTMOVING);
 		isActived = false;
 		direction = true;
 		currentAnimation = animationItem;
@@ -47,7 +47,7 @@ void Apple::LoadResources()
 	{
 		x = xDraw + 7;
 		y = yDraw + 6;
-		state = FLING;
+		SetState(FLING);
 		typeSplit_Half = true;
 		currentAnimation = animationBurst_1;
 		animationBurst_1->SetFrame(0, 0);
@@ -66,6 +66,9 @@ void Apple::LoadResources()
 
 void Apple::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isDead)
+		return;
+
 	GameObject::Update(dt);
 	// cập nhật vị trí của táo
 	x += dx;
@@ -232,6 +235,15 @@ void Apple::Active()
 
 void Apple::Split_Half()
 {
+}
+
+void Apple::ResetProper()
+{
+	SetState(NOTMOVING);
+	isDie = false;
+	isDead = false;
+	isActived = false;
+	currentAnimation = animationItem;
 }
 
 Apple::~Apple()

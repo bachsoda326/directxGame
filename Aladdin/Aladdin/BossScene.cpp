@@ -32,18 +32,70 @@ void BossScene::LoadResources()
 	{
 		listFireCarpets[i]->LoadResources();
 	}
+	for (int i = 0; i < listLeftApples.size(); i++)
+	{
+		listLeftApples[i]->LoadResources();
+		listLeftApples[i]->isDie = true;
+		listLeftApples[i]->isDead = true;
+	}
+	for (int i = 0; i < listRightApples.size(); i++)
+	{
+		listRightApples[i]->LoadResources();
+		listRightApples[i]->isDie = true;
+		listRightApples[i]->isDead = true;
+	}
 }
 
 void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 {
 	CheckCameraAndWorldMap(CAMERA_BOSSMAP_WIDTH, CAMERA_BOSSMAP_HEIGHT);
-
+	
 	coObjects.clear();
-	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
+	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);		
 
 	aladdin->Update(dt);
 	boss->Update(dt);
 	Scene::Update(dt);
+
+	if (aladdin->numApples == 0)
+	{		
+		canCreateApple = true;
+		for (int i = 0; i < listLeftApples.size(); i++)
+		{
+			if (!listLeftApples[i]->isDead)
+			{
+				canCreateApple = false;
+				break;
+			}			
+		}
+		for (int i = 0; i < listRightApples.size(); i++)
+		{
+			if (!listRightApples[i]->isDead)
+			{
+				canCreateApple = false;
+				break;
+			}			
+		}
+	}
+
+	if (canCreateApple && aladdin->numApples == 0)
+	{
+		canCreateApple = false;
+		if (!boss->direction)
+		{
+			for (int i = 0; i < listLeftApples.size(); i++)			
+			{				
+				listLeftApples[i]->ResetProper();
+			}
+		}
+		else
+		{
+			for (int i = 0; i < listRightApples.size(); i++)			
+			{				
+				listRightApples[i]->ResetProper();
+			}
+		}
+	}
 
 	aladdin->nx = 0;
 	aladdin->ny = 0;
@@ -88,7 +140,7 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	{
 		SceneManager::GetInstance()->ReplaceScene(new NextScene(4));
 		return;
-	}
+	}	
 }
 
 void BossScene::Render()
@@ -118,7 +170,7 @@ void BossScene::Render()
 			for (int i = 0; i < coObjects.size(); i++)
 			{
 				coObjects[i]->Render();
-			}
+			}			
 		}
 		else
 			Abu::GetInstance()->Render();
@@ -159,6 +211,7 @@ void BossScene::LoadObj(string path)
 
 		if (name == "Boss")
 		{
+			delete boss;
 			boss = new Boss(xDraw, yDraw, width, height);
 			boss->id = index;
 		}
@@ -180,6 +233,20 @@ void BossScene::LoadObj(string path)
 			obj = new FireCarpet(xDraw, yDraw, width, height);
 			obj->id = index;
 			listFireCarpets.push_back(obj);
+		}
+		else if (name == "LeftApple")
+		{
+			obj = new Apple(xDraw, yDraw, width, height);
+			obj->id = index;
+			obj->collType = CollItem;
+			listLeftApples.push_back(obj);
+		}
+		else if (name == "RightApple")
+		{
+			obj = new Apple(xDraw, yDraw, width, height);
+			obj->id = index;
+			obj->collType = CollItem;
+			listRightApples.push_back(obj);
 		}
 	}
 
@@ -236,6 +303,26 @@ void BossScene::LoadGridObj(string path)
 					break;
 				}
 			}
+			for (int t = 0; t < listLeftApples.size(); t++)
+			{
+				if (isAdded == true) break;
+				if (listLeftApples[t]->id == objIndex)
+				{
+					grid->AddObjToCell(cellIndex, listLeftApples[t]);
+					isAdded = true;
+					break;
+				}
+			}
+			for (int t = 0; t < listRightApples.size(); t++)
+			{
+				if (isAdded == true) break;
+				if (listRightApples[t]->id == objIndex)
+				{
+					grid->AddObjToCell(cellIndex, listRightApples[t]);
+					isAdded = true;
+					break;
+				}
+			}			
 		}
 	}
 

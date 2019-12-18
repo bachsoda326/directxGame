@@ -37,8 +37,8 @@ void DungeonScene::LoadResources()
 	frontMap = new TileMap();
 	frontMap->LoadTileMap(ID_TEX_TILESHEET_FRONTMAP, TEX_TILESHEET_FRONTMAP_PATH, TXT_TILEMAP_FRONTMAP_PATH);
 	
-	aladdin->SetPosition(2000, 200);
-	//aladdin->SetPosition(200, 1006);
+	//aladdin->SetPosition(2000, 200);
+	aladdin->SetPosition(150, 1050);
 	//aladdin->SetPosition(950, 587);	// error fence climb_jump
 	/*aladdin->SetPosition(250, 480);*/		// peddler
 	//aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
@@ -49,6 +49,11 @@ void DungeonScene::LoadResources()
 	basePillar = new Ground(1489, 402, 80, 740);
 	basePillar->collType = CollFence;
 
+	for (int i = 0; i < listObjs.size(); i ++)
+	{
+		listObjs[i]->LoadResources();
+		//grid->AddObjToCell(listStoneBricks[i]);
+	}
 	for (int i = 0; i < listStoneBricks.size(); i += 2)
 	{
 		listStoneBricks[i]->LoadResources(true);
@@ -58,38 +63,43 @@ void DungeonScene::LoadResources()
 	{
 		listStoneBricks[i]->LoadResources(false);
 		//grid->AddObjToCell(listStoneBricks[i]);
-	}
-	for (int i = 0; i < listItems.size(); i++)
-	{
-		listItems[i]->LoadResources();
-		//grid->AddObjToCell(listItems[i]);
-	}
-	for (int i = 0; i < listEnemies.size(); i++)
-	{
-		listEnemies[i]->LoadResources();
-		//grid->AddObjToCell(listEnemies[i]);
-	}
-	for (int i = 0; i < listOtherObjs.size(); i++)
-	{
-		listOtherObjs[i]->LoadResources();
-		//grid->AddObjToCell(listOtherObjs[i]);
-	}
+	}	
 }
 
 void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 {	
 	CheckCameraAndWorldMap(CAMERA_MAP_WIDTH, CAMERA_MAP_HEIGHT);
-
+	//DebugOut("[SIZE]: %d\n", coObjects.size());
 	coObjects.clear();
 	coObjects.push_back(baseGround);
 	coObjects.push_back(basePillar);
 	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
-	/*for (int i = 0; i < coObjects.size(); i++)
+	for (int i = 0; i < coObjects.size(); i++)
 	{
 		if (coObjects[i]->isDead)
+		{			
+			for (int t = 0; t < listObjs.size(); t++)
+			{				
+				if (listObjs[t] == coObjects[i])
+				{
+					int cellIndex = listObjs[t]->cellIndex;
+					for (int k = 0; k < grid->listCells[cellIndex].listObj.size(); k++)
+					{
+						if (grid->listCells[cellIndex].listObj[k] == listObjs[t])
+						{
+							grid->listCells[cellIndex].listObj.erase(grid->listCells[cellIndex].listObj.begin() + k);
+							break;
+						}
+					}
+					listObjs.erase(listObjs.begin() + t);
+					break;
+				}
+			}
+			
 			coObjects.erase(coObjects.begin() + i);
-	}*/
+		}
+	}
 	//aladdin->HandleKeyBoard();	
 	aladdin->Update(dt);
 	Scene::Update(dt);
@@ -241,90 +251,78 @@ void DungeonScene::LoadObj(string path)
 		{
 			obj = new Apple(xDraw, yDraw, width, height);
 			obj->id = index;
-			obj->collType = CollItem;
-			listItems.push_back(obj);
+			obj->collType = CollItem;			
 		}
 		else if (name == "Peddler")
 		{
 			obj = new Peddler(xDraw, yDraw, width, height);
-			obj->id = index;
-			listItems.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "Ruby")
 		{
 			obj = new Ruby(xDraw, yDraw, width, height);
-			obj->id = index;
-			listItems.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "BlueHeart")
 		{
 			obj = new BlueHeart(xDraw, yDraw, width, height);
-			obj->id = index;
-			listItems.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "GenieFace")
 		{
 			obj = new GenieFace(xDraw, yDraw, width, height);
-			obj->id = index;
-			listItems.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "GenieJar")
 		{
 			obj = new GenieJar(xDraw, yDraw, width, height);
-			obj->id = index;
-			listItems.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "Bat")
 		{
 			obj = new Bat(xDraw, yDraw, width, height);
-			obj->id = index;
-			listEnemies.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "NormalGuard")
 		{
 			obj = new NormalGuard(xDraw, yDraw, width, height);
-			obj->id = index;
-			listEnemies.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "ThinGuard")
 		{
 			obj = new ThinGuard(xDraw, yDraw, width, height);
-			obj->id = index;
-			listEnemies.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "BoomSkeleton")
 		{
 			obj = new BoomSkeleton(xDraw, yDraw, width, height);
-			obj->id = index;
-			listEnemies.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "StoneBrick")
 		{
 			stoneBrick = new StoneBrick(xDraw, yDraw, width, height);
 			stoneBrick->id = index;
 			listStoneBricks.push_back(stoneBrick);
+			continue;
 		}
 		else if (name == "SharpTrap")
 		{
 			obj = new SharpTrap(xDraw, yDraw, width, height);
-			obj->id = index;
-			listOtherObjs.push_back(obj);
+			obj->id = index;			
 		}
 		else if (name == "BallTrap")
 		{
 			obj = new BallTrap(xDraw, yDraw, width, height);
-			obj->id = index;
-			listOtherObjs.push_back(obj);
+			obj->id = index;			
 		}
+		listObjs.push_back(obj);
 	}
 
 	fs.close();
 }
 
 void DungeonScene::LoadGridStaticObj(string path)
-{
-	GameObject *objGround = 0;
-
+{	
 	fstream fs;
 	fs.open(path);
 
@@ -362,9 +360,7 @@ void DungeonScene::LoadGridStaticObj(string path)
 }
 
 void DungeonScene::LoadGridObj(string path)
-{
-	GameObject *objGround = 0;
-
+{	
 	fstream fs;
 	fs.open(path);
 
@@ -388,27 +384,7 @@ void DungeonScene::LoadGridObj(string path)
 			// biến k.tra xem đã thêm obj với objIndex đang xét chưa, true thì xét objIndex mới tiếp
 			bool isAdded = false;
 
-			objIndex = listId[i];
-			for (int t = 0; t < listItems.size(); t++)
-			{
-				if (isAdded == true) break;
-				if (listItems[t]->id == objIndex)
-				{
-					grid->AddObjToCell(cellIndex, listItems[t]);
-					isAdded = true;
-					break;
-				}
-			}
-			for (int t = 0; t < listEnemies.size(); t++)
-			{
-				if (isAdded == true) break;
-				if (listEnemies[t]->id == objIndex)
-				{
-					grid->AddObjToCell(cellIndex, listEnemies[t]);
-					isAdded = true;
-					break;
-				}
-			}
+			objIndex = listId[i];					
 			for (int t = 0; t < listStoneBricks.size(); t++)
 			{
 				if (isAdded == true) break;
@@ -419,12 +395,13 @@ void DungeonScene::LoadGridObj(string path)
 					break;
 				}
 			}
-			for (int t = 0; t < listOtherObjs.size(); t++)
+			for (int t = 0; t < listObjs.size(); t++)
 			{
 				if (isAdded == true) break;
-				if (listOtherObjs[t]->id == objIndex)
+				if (listObjs[t]->id == objIndex)
 				{
-					grid->AddObjToCell(cellIndex, listOtherObjs[t]);
+					grid->AddObjToCell(cellIndex, listObjs[t]);
+					listObjs[t]->cellIndex = cellIndex;
 					isAdded = true;
 					break;
 				}

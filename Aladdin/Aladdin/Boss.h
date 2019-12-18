@@ -9,6 +9,8 @@ class Star;
 class Boss : public Enemy
 {
 private:
+	static Boss * __instance;
+
 	vector<GameObject*>list;	
 
 	DWORD startCut;
@@ -19,7 +21,9 @@ private:
 public:
 	int typeBoss;
 
+	Boss();
 	Boss(float left, float top, float width, float height);
+	static Boss * GetInstance();
 
 	LPANIMATION animationMan,
 		animationSnake;

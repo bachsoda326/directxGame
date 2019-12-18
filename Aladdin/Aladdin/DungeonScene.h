@@ -17,11 +17,9 @@ public:
 	Aladdin *aladdin = Aladdin::GetInstance();	
 	Ground *baseGround, *basePillar;
 
-	vector<LPGAMEOBJECT> listStaticObjs;
-	vector<LPGAMEOBJECT> listEnemies;
-	vector<LPGAMEOBJECT> listItems;
-	vector<StoneBrick*> listStoneBricks;
-	vector<LPGAMEOBJECT> listOtherObjs;
+	vector<LPGAMEOBJECT> listObjs;
+	vector<LPGAMEOBJECT> listStaticObjs;	
+	vector<StoneBrick*> listStoneBricks;	
 	vector<LPGAMEOBJECT> coObjects;
 
 public:

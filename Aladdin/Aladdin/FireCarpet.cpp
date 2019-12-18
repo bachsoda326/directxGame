@@ -79,7 +79,7 @@ void FireCarpet::OnCollision(GameObject * obj, float nx, float ny)
 
 void FireCarpet::OnIntersect(GameObject * obj)
 {
-	if (obj->collType == CollAladdin && obj->y == this->Top())
+	if (Boss::GetInstance()->typeBoss != 0 && obj->collType == CollAladdin && obj->y == this->Top())
 	{
 		if (obj->x > this->Left() && obj->x < this->Right())
 		{

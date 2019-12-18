@@ -172,6 +172,7 @@ void ThinGuard::Hurt()
 		{
 			Die();
 			SetState(DIE);
+			Aladdin::GetInstance()->score += 5;
 		}
 		break;
 	}

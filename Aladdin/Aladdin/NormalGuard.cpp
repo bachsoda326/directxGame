@@ -207,6 +207,7 @@ void NormalGuard::Hurt()
 		{
 			Die();
 			SetState(DIE);
+			Aladdin::GetInstance()->score += 10;
 		}
 		break;
 	}

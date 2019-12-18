@@ -26,10 +26,7 @@ void TileMap::LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath)
 	{
 		fs >> listTiles[i];		
 	}
-}
 
-void TileMap::Render()
-{
 	LPDIRECT3DTEXTURE9 texture = Textures::GetInstance()->Get(id);
 	D3DSURFACE_DESC desc;
 	texture->GetLevelDesc(0, &desc);
@@ -40,21 +37,30 @@ void TileMap::Render()
 	int tileIndex;
 	int xIndex, yIndex, left, top;
 	int xDrawIndex, yDrawIndex, xDraw, yDraw;
-		
+
 	for (int i = 0; i < listTiles.size(); i++)
 	{
 		tileIndex = listTiles[i];
 		yIndex = tileIndex / numColumns;
-		xIndex = tileIndex - yIndex*numColumns;
+		xIndex = tileIndex - yIndex * numColumns;
 		left = xIndex * 32;
 		top = yIndex * 32;
 		sprite = new Sprite(i, left, top, 32, 32, 0, 0, texture);
+		listSprites.push_back(sprite);
+	}
+}
 
+void TileMap::Render()
+{	
+	int xDrawIndex, yDrawIndex, xDraw, yDraw;
+		
+	for (int i = 0; i < listSprites.size(); i++)
+	{		
 		yDrawIndex = i / numXTiles;
 		xDrawIndex = i - yDrawIndex*numXTiles;
 		xDraw = xDrawIndex * 32;
 		yDraw = yDrawIndex * 32;
 		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
-		sprite->Draw(xDraw, yDraw, trans);
+		listSprites[i]->Draw(xDraw, yDraw, trans);
 	}
 }

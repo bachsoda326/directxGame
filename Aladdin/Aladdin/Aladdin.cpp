@@ -34,10 +34,10 @@ Aladdin::Aladdin()
 	isAppleCreated == false;
 	currentAnimation = new Animation(100);
 	isBlink = 0;
-	blood = 18;
+	blood = 8;
 	score = 0;
-	numApples = 25;
-	numRubies = 21;
+	numApples = 10;
+	numRubies = 11;
 	numLifes = 3;	
 	isCutted = false;
 	/*keyUp[0] = true;
@@ -97,7 +97,7 @@ void Aladdin::LoadResources()
 void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	GameObject::Update(dt);
-	DebugOut("[state] state: %d\n", state);
+	//DebugOut("[state] state: %d\n", state);
 	//DebugOut(L"[CP] x: %f\n", nx);
 	x += dx;
 	y += dy;	
@@ -796,7 +796,7 @@ void Aladdin::Run()
 		int i = currentAnimation->GetCurrentFrame();
 		if (i == 1)
 			animationRun_1->SetFrame(2, 12);
-		if (i == 7)
+		if (currentAnimation == animationRun_1 && i == 7)
 			SetState(RUN_LONG_ENOUGH);
 		break;
 	}
@@ -807,7 +807,7 @@ void Aladdin::Run()
 		SetState(RUNNING);
 		SetAnimation(ANI_RUN_1);
 		animationRun_1->SetFrame(2, 12);
-		currentAnimation->SetCurrentFrame(7);
+		//currentAnimation->SetCurrentFrame(7);
 		break;
 	}
 	default:
@@ -1665,7 +1665,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 	if (obj->objType == OBJBallTrap)
 	{
 		int i = obj->currentAnimation->GetCurrentFrame();
-		if (i == 13 || i == 14)
+		if (i == 12 || i == 13 || i == 14)
 		{
 			if (isBlink == 0)
 				Hurt();
@@ -1674,7 +1674,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 	if (obj->objType == OBJSharpTrap)
 	{
 		int i = obj->currentAnimation->GetCurrentFrame();
-		if (i == 4 || i == 5)
+		if (i == 3 || i == 4 || i == 5)
 		{
 			if (isBlink == 0)
 				Hurt();

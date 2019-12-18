@@ -141,7 +141,6 @@ void Bat::Die()
 		{
 			vy = 0;
 			isDead = true;
-			//Aladdin::GetInstance()->score += 50;
 		}
 		break;
 	}
@@ -189,6 +188,7 @@ void Bat::OnIntersect(GameObject * obj)
 	{
 		SetState(DIEBYAPPLE);
 		Die();
+		Aladdin::GetInstance()->score += 20;
 		return;
 	}
 	if (obj->collType == CollAladdin)
@@ -196,7 +196,10 @@ void Bat::OnIntersect(GameObject * obj)
 		if (Aladdin::GetInstance()->GetState() == Aladdin::CUTTING)
 		{
 			if (((obj->Right() > this->Left() && obj->x < this->x) || (obj->Left() < this->Right() && obj->x > this->x)) && (obj->Top() < this->Bottom() && obj->Bottom() > this->Top()))
+			{
 				Die();
+				Aladdin::GetInstance()->score += 10;
+			}
 			return;
 		}
 		

@@ -29,7 +29,7 @@ public:
 
 	// Tính toán các obj có thể bị va chạm (Tính toán các cell cần đc update với vị trí của camera)
 	void CalcColliableObjs(Camera *camera, vector<LPGAMEOBJECT>& coObjs);
-private:
+public:
 	int width, height;
 	int cellSize;
 	std::vector<Cell> listCells;

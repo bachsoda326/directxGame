@@ -93,7 +93,7 @@ struct CollisionEvent
 class GameObject
 {
 public:
-	int id, _id;
+	int id, cellIndex;
 	// active dùng cho các đối tượng có kiểu va chạm là Item
 	bool isDie, isDead, isActived;
 
@@ -178,6 +178,7 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	//get list createdObjs of Obj 
 	virtual vector<GameObject*>* GetList();
+	virtual void ResetProper();
 
 	//change and reset frame size
 	virtual void ChangeFrameSize(GameObject*obj);

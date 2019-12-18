@@ -224,6 +224,10 @@ vector<GameObject*>* GameObject::GetList()
 	return NULL;
 }
 
+void GameObject::ResetProper()
+{
+}
+
 void GameObject::ChangeFrameSize(GameObject * obj)
 {
 }

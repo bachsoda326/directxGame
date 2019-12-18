@@ -1,5 +1,11 @@
 #include "Boss.h"
 
+Boss * Boss::__instance = NULL;
+
+Boss::Boss()
+{
+}
+
 Boss::Boss(float left, float top, float width, float height)
 {	
 	x = left + 22;
@@ -15,9 +21,15 @@ Boss::Boss(float left, float top, float width, float height)
 	isDead = false;
 	direction = true;
 	typeBoss = 0;
-	blood = 11;
+	blood = 18;
 	vx = 0;
 	vy = 0;
+}
+
+Boss * Boss::GetInstance()
+{
+	if (__instance == NULL) __instance = new Boss();
+	return __instance;
 }
 
 void Boss::LoadResources()

@@ -49,6 +49,7 @@ public:
 	void Burst();
 	void Active();
 	void Split_Half();
+	void ResetProper();
 
 	~Apple();
 };
