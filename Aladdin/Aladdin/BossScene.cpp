@@ -12,14 +12,14 @@ BossScene::BossScene()
 
 void BossScene::LoadResources()
 {
-	grid = new Grid(BOSSMAP_WIDTH, BOSSMAP_HEIGHT, 150);
+	grid = new Grid(BOSSMAP_WIDTH, BOSSMAP_HEIGHT, CELL_SIZE);
 
 	LoadObj("txt\\ObjBoss_obj.txt");
 	LoadGridObj("txt\\ObjBoss_grid.txt");
 
-	aladdin->SetPosition(300, 180);
-	aladdin->xInit = 300;
-	aladdin->yInit = 180;
+	aladdin->SetPosition(ALADDIN_POTISION_BOSSMAP_X, ALADDIN_POTISION_BOSSMAP_Y);
+	aladdin->xInit = ALADDIN_POTISION_BOSSMAP_X_INIT;
+	aladdin->yInit = ALADDIN_POTISION_BOSSMAP_Y_INIT;
 	aladdin->SetState(Aladdin::STANDING);
 	aladdin->vx = 0;
 	
@@ -217,9 +217,11 @@ void BossScene::LoadObj(string path)
 		fs >> height;
 
 		if (name == "Boss")
-		{
-			delete boss;
-			boss = new Boss(xDraw, yDraw, width, height);
+		{			
+			boss->x = xDraw + 22;
+			boss->y = yDraw + 71;
+			boss->w = width;
+			boss->h = height;
 			boss->id = index;
 		}
 		else if (name == "Ground")

@@ -27,7 +27,7 @@ public:
 	LPANIMATION animationBurn,		// animation lửa đốt
 		animationFire;				// animation lửa Boss phun
 
-	// 0: lửa Boss phun | 1: lửa đốt của thảm lửa
+	// 1: lửa đốt của thảm lửa | 2: lửa Boss phun
 	int typeFire;
 
 public:

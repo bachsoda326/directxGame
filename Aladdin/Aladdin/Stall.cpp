@@ -28,8 +28,8 @@ void Stall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Stall::Trade()
 {
-	Aladdin::GetInstance()->numRubies -= 10;
-	Aladdin::GetInstance()->numLifes += 5;
+	Aladdin::GetInstance()->numRubies -= RUBY_EXCHANGE;
+	Aladdin::GetInstance()->numLifes += LIFE_EXCHANGE;
 	canTrade = false;
 
 	animationDefault->SetFrame(4, 0);

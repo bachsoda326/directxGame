@@ -20,11 +20,11 @@ void NextScene::LoadResources()
 
 	Camera::GetInstance()->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	aladdin->direction = true;
-	aladdin->SetPosition(350, 220);
+	aladdin->SetPosition(ALADDIN_POTISION_NEXTSCENE_X, ALADDIN_POTISION_NEXTSCENE_Y);
 	// Aladdin chạy qua màn
 	aladdin->RunNextScene();
 
-	abu->SetPosition(300, 220);
+	abu->SetPosition(ABU_POTISION_NEXTSCENE_X, ABU_POTISION_NEXTSCENE_Y);
 	// Khỉ Abu chạy
 	abu->beginStat = 0;
 	abu->LoadResources();
@@ -35,7 +35,7 @@ void NextScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	aladdin->Update(dt);
 	abu->Update(dt);
 	// k.tra khi chạy xong thì chuyển màn
-	if (aladdin->x + 50 <= 0)
+	if (aladdin->x + 50 <= NEXTSCENE_PASS_X)
 	{
 		if (sceneId == 3)
 			SceneManager::GetInstance()->ReplaceScene(new BossScene());

@@ -11,6 +11,7 @@ Bat::Bat(float left, float top, float width, float height)
 	y = yDraw + 16;
 	isDead = false;
 	direction = true;
+	blood = BAT_BLOOD;
 	collType = CollEnemy;
 	objType = OBJBat;
 }
@@ -45,7 +46,10 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{	
 	case ATTACKING: case PREPARING:
 		Attack();
-		break;		
+		break;	
+	case HURT:
+		Hurt();
+		break;
 	default:
 		Stand();
 		break;
@@ -128,6 +132,31 @@ void Bat::Attack()
 	}
 }
 
+void Bat::Hurt()
+{	
+	switch (state)
+	{	
+	case HURT:
+	{		
+		break;
+	}
+	default:
+	{		
+		SetState(HURT);		
+		blood -= ALADDIN_DAMAGE_BAT;
+		if (blood <= 0)
+		{
+			if (lastState == DIEBYAPPLE)
+				SetState(DIEBYAPPLE);
+			Die();
+			// cộng điểm
+			Aladdin::GetInstance()->score += ALADDIN_SCORE_BAT;
+		}
+		break;
+	}
+	}
+}
+
 void Bat::Die()
 {
 	switch (state)
@@ -184,22 +213,16 @@ void Bat::OnIntersect(GameObject * obj)
 {
 	if (obj->collType == CollApple)
 	{
-		SetState(DIEBYAPPLE);
-		Die();
-		// cộng điểm
-		Aladdin::GetInstance()->score += 20;
-		return;
+		lastState = DIEBYAPPLE;
+		Hurt();
 	}
+
 	if (obj->collType == CollAladdin)
 	{
 		if (Aladdin::GetInstance()->GetState() == Aladdin::CUTTING)
 		{
 			if (((obj->Right() > this->Left() && obj->x < this->x) || (obj->Left() < this->Right() && obj->x > this->x)) && (obj->Top() < this->Bottom() && obj->Bottom() > this->Top()))
-			{
-				Die();
-				// cộng điểm
-				Aladdin::GetInstance()->score += 10;
-			}
+				Hurt();
 			return;
 		}
 		

@@ -14,7 +14,7 @@ void EndScene::LoadResources()
 	endMap = new Sprite(ID_TEX_ENDSCENE, 0, 0, 340, 250, 0, 0, texture);
 
 	Camera::GetInstance()->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-	aladdin->SetPosition(0, 180);
+	aladdin->SetPosition(ALADDIN_POTISION_ENDSCENE_X, ALADDIN_POTISION_ENDSCENE_Y);
 	// Aladdin lúc đầu bay từ trái qua
 	aladdin->Fly();
 }
@@ -23,9 +23,9 @@ void EndScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	aladdin->Update(dt);
 	// khi bay hết thì chuyển qua ôm
-	if (aladdin->x >= 350)
+	if (aladdin->x >= ENDSCENE_PASS_FLY_X)
 	{
-		aladdin->SetPosition(310, 250);
+		aladdin->SetPosition(ALADDIN_POTISION_ENDSCENE_HUG_X, ALADDIN_POTISION_ENDSCENE_HUG_Y);
 		aladdin->Hug();
 	}
 }

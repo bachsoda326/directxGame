@@ -26,7 +26,7 @@ void Bone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x += dx;
 	y += dy;
 	// v.tốc rơi
-	vy += 0.01f;
+	vy += SKELETON_BONE_SPEED_FALL;
 }
 
 Bone::~Bone()

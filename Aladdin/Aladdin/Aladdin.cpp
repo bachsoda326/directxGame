@@ -1369,7 +1369,7 @@ void Aladdin::Die()
 		vy = 0;
 		vx = 0;
 		isBlink = 0;
-		Abu::GetInstance()->SetPosition(x + 85, y + 20);
+		Abu::GetInstance()->SetPosition(x + ABU_POTISION_ALADDINDIE_X, y + ABU_POTISION_ALADDINDIE_Y);
 		Abu::GetInstance()->isDead = false;
 		// Khỉ Abu quạt
 		Abu::GetInstance()->beginStat = 1;

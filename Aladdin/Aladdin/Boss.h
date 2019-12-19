@@ -40,8 +40,7 @@ public:
 	int typeBoss;
 
 public:
-	Boss();
-	Boss(float left, float top, float width, float height);
+	Boss();	
 	static Boss * GetInstance();
 
 	void LoadResources();

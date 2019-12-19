@@ -171,7 +171,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//game->InitMouse();
 
 	// tạo vòng khởi đầu
-	SceneManager::GetInstance()->ReplaceScene(new DungeonScene());
+	SceneManager::GetInstance()->ReplaceScene(new DungeonScene);
 
 	//LoadResources();
 

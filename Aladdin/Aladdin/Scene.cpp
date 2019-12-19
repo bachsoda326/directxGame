@@ -3,15 +3,15 @@
 Scene::Scene()
 {
 	bloodBar = new BloodBar();
-	bloodBar->SetPosition(0, 10);
+	bloodBar->SetPosition(BLOODBAR_POSITION_X, BLOODBAR_POSITION_Y);
 	face = new AladdinFace();
-	face->SetPosition(10, 220);
+	face->SetPosition(LIFE_POSITION_X, LIFE_POSITION_Y);
 	aladdinApple = new Apple();
 	aladdinApple->collType = CollUnknown;
-	aladdinApple->SetPosition(317, 230);
+	aladdinApple->SetPosition(APPLE_POSITION_X, APPLE_POSITION_Y);
 	aladdinRuby = new Ruby();
 	aladdinRuby->collType = CollUnknown;
-	aladdinRuby->SetPosition(280, 230);
+	aladdinRuby->SetPosition(RUBY_POSITION_X, RUBY_POSITION_Y);
 
 	LoadResources();
 }
@@ -137,10 +137,10 @@ void Scene::DrawFont(LPD3DXFONT font, float x, float y, float width, float heigh
 
 void Scene::DrawFonts()
 {
-	DrawFont(score, 280, 10, 35, 25, Aladdin::GetInstance()->score);
-	DrawFont(numLifes, 35, 230, 35, 25, Aladdin::GetInstance()->numLifes);
-	DrawFont(numRubies, 285, 230, 35, 25, Aladdin::GetInstance()->numRubies);
-	DrawFont(numApples, 318, 230, 35, 25, Aladdin::GetInstance()->numApples);
+	DrawFont(score, NUMSCORE_POSITION_X, NUMSCORE_POSITION_Y, 35, 25, Aladdin::GetInstance()->score);
+	DrawFont(numLifes, NUMLIFE_POSITION_X, NUMLIFE_POSITION_Y, 35, 25, Aladdin::GetInstance()->numLifes);
+	DrawFont(numRubies, NUMRUBY_POSITION_X, NUMRUBY_POSITION_Y, 35, 25, Aladdin::GetInstance()->numRubies);
+	DrawFont(numApples, NUMAPPLE_POSITION_X, NUMAPPLE_POSITION_Y, 35, 25, Aladdin::GetInstance()->numApples);
 }
 
 Scene::~Scene()

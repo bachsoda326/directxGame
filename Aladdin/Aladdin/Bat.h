@@ -6,12 +6,18 @@
 
 class Bat : public Enemy
 {
+private:
+	// số lượng máu của dơi
+	int blood;
+	// trạng thái cuối
+	int lastState;
 public:
 	enum BatStates
 	{
 		STANDING,						// đứng
 		PREPARING,						// chuẩn bị tấn công
 		ATTACKING,						// tấn công
+		HURT,							// bị đánh
 		DIEBYAPPLE,						// chết bởi táo
 		DIE								// chết
 	};
@@ -35,6 +41,7 @@ public:
 	// Action của dơi
 	void Stand();						// đứng
 	void Attack();						// tấn công
+	void Hurt();						// bị đánh
 	void Die();							// chết
 
 	void SetAnimation(BatAnimations ani);	

@@ -9,7 +9,7 @@ BoomSkeleton::BoomSkeleton(float left, float top, float width, float height)
 	x = xDraw + 26;
 	y = yDraw + 78;
 	isDead = false;
-	blood = 1;
+	blood = SKELETON_BLOOD;
 	direction = true;
 	isBlink = 0;
 	collType = CollEnemy;
@@ -96,7 +96,8 @@ void BoomSkeleton::Doing()
 	}
 	default:
 		SetState(DOING);
-		animationDefault->SetFrame(1, 19);
+		int i = currentAnimation->GetCurrentFrame();
+		animationDefault->SetFrame(i, 19);
 		break;
 	}	
 }
@@ -115,16 +116,16 @@ void BoomSkeleton::Hurt()
 	{
 		SetState(HURT);		
 		vx = 0;
-		blood--;
+		blood -= ALADDIN_DAMAGE_BOOMSKELETON;
 		/*if (blood == 1)
 			GameSound::getInstance()->play(GUARD_HIT_MUSIC);*/
-		if (blood == 0)
+		if (blood <= 0)
 		{
 			startTime = GetTickCount();
 			Die();
 			SetState(DIE);
 			// cộng điểm
-			Aladdin::GetInstance()->score += 10;
+			Aladdin::GetInstance()->score += ALADDIN_SCORE_BOOMSKELETON;
 		}
 		break;
 	}
@@ -232,12 +233,8 @@ void BoomSkeleton::ResetFrameSize(GameObject * obj)
 void BoomSkeleton::OnIntersect(GameObject * obj)
 {
 	if (obj->collType == CollApple)
-	{
-		SetState(DIE);
-		startTime = GetTickCount();
-		Die();
-		return;
-	}
+		Hurt();
+
 	if (obj->collType == CollAladdin)
 	{
 		if (Aladdin::GetInstance()->GetState() == Aladdin::CUTTING)

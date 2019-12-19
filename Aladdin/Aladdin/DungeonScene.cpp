@@ -25,7 +25,7 @@ DungeonScene::DungeonScene()
 
 void DungeonScene::LoadResources()
 {	
-	grid = new Grid(MAP_WIDTH, MAP_HEIGHT, 150);
+	grid = new Grid(MAP_WIDTH, MAP_HEIGHT, CELL_SIZE);
 
 	LoadStaticObj("txt\\Ground_obj.txt");
 	LoadObj("txt\\Obj_obj.txt");
@@ -38,6 +38,7 @@ void DungeonScene::LoadResources()
 	frontMap->LoadTileMap(ID_TEX_TILESHEET_FRONTMAP, TEX_TILESHEET_FRONTMAP_PATH, TXT_TILEMAP_FRONTMAP_PATH);
 		
 	aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
+	//aladdin->SetPosition(1039, 790);
 	//aladdin->SetPosition(2000, 200);
 	//aladdin->SetPosition(950, 587);		// error fence climb_jump
 	/*aladdin->SetPosition(250, 480);*/		// peddler		
@@ -118,7 +119,7 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	Collision::CheckCollision(aladdin, baseGround);
 	
 	// k.tra Aladdin ở vị trí chuyển màn
-	if (aladdin->x >= 2240 && aladdin->y <= 250)
+	if (aladdin->x >= MAP_PASS_X && aladdin->y <= MAP_PASS_Y)
 	{
 		SceneManager::GetInstance()->ReplaceScene(new NextScene(3));
 		return;

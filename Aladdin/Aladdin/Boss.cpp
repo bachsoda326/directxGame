@@ -4,24 +4,15 @@ Boss * Boss::__instance = NULL;
 
 Boss::Boss()
 {
-}
-
-Boss::Boss(float left, float top, float width, float height)
-{	
-	x = left + 22;
-	y = top + 71;
-	w = width;
-	h = height;
-
 	collType = CollEnemy;
-	objType = OBJBoss;	
+	objType = OBJBoss;
 	isCreate = false;
 	isHurt = false;
 	isDie = false;
 	isDead = false;
 	direction = true;
 	typeBoss = 0;
-	blood = 18;
+	blood = BOSS_TOTAL_BLOOD;
 	vx = 0;
 	vy = 0;
 }
@@ -47,9 +38,9 @@ void Boss::LoadResources()
 }
 
 void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{	
+{
 	// khi máu <= 10 thì người sẽ chuyển thành rắn
-	if (blood > 10)
+	if (blood > BOSS_SNAKE_BLOOD)
 		typeBoss = 0;
 	else
 		typeBoss = 1;
@@ -214,16 +205,16 @@ void Boss::CreateFire()
 	Fire* obj = new Fire();
 	obj->GetBoss(this);
 	obj->yDraw = (this->Bottom() + this->Top()) / 2 - 3;
-	obj->vy = 1.0f;
+	//obj->vy = 1.0f;
 	if (direction)
 	{
 		obj->xDraw = this->Right();
-		obj->vx = 1.0f;
+		//obj->vx = 1.0f;
 	}
 	else
 	{
 		obj->xDraw = this->Left();
-		obj->vx = -1.0f;
+		//obj->vx = -1.0f;
 	}
 	obj->direction = this->direction;
 	obj->typeFire = 2;
@@ -293,10 +284,10 @@ void Boss::OnIntersect(GameObject * obj)
 		{
 			if ((obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (!obj->direction && obj->Left() < this->Right() && obj->x > this->x))
 			{
-				blood--;
+				blood -= ALADDIN_DAMAGE_BOSS;
 				GameSound::getInstance()->play(JAFAR_HURT_MUSIC);
 			}
-			if (blood == 0)
+			if (blood <= 0)
 			{
 				Die();
 				SetState(DIE);
@@ -326,9 +317,9 @@ void Boss::OnIntersect(GameObject * obj)
 	}
 	if (obj->collType == CollApple)
 	{
-		blood--;
+		blood -= ALADDIN_DAMAGE_BOSS;
 		GameSound::getInstance()->play(JAFAR_HURT_MUSIC);
-		if (blood == 0)
+		if (blood <= 0)
 		{
 			Die();
 			SetState(DIE);

@@ -48,7 +48,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// v.tốc rơi (khi là lửa Boss phun)
 	if (typeFire == 2)
-		vy += 0.1f;
+		vy += FIRE_SPEED_FALL;
 }
 
 void Fire::SetAnimation(FireAnimations ani)
@@ -91,9 +91,9 @@ void Fire::Move()
 			SetAnimation(ANI_FIRE);
 			animationFire->SetFrame(0, 7);
 			if (direction)
-				vx = 0.2f;
+				vx = FIRE_SPEED_RUN;
 			else
-				vx = -0.2f;
+				vx = -FIRE_SPEED_RUN;
 			vy = 0;
 		}
 		break;

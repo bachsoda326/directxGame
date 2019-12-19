@@ -31,12 +31,12 @@ void Abu::LoadResources()
 
 	if (beginStat == 0)
 	{
-		SetState(RUN);
+		SetState(FAN);
 		Run();
 	}
 	else
 	{
-		SetState(FAN);
+		SetState(RUN);
 		Fan();
 	}
 }

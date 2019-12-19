@@ -10,7 +10,7 @@ ThinGuard::ThinGuard(float Left, float top, float width, float height)
 	isDie = false;
 	isDead = false;
 	direction = true;
-	blood = 2;
+	blood = THINGUARD_BLOOD;
 	collType = CollEnemy;
 	objType = OBJThinGuard;
 }
@@ -158,14 +158,14 @@ void ThinGuard::Hurt()
 		SetState(HURT);
 		SetAnimation(ANI_HURT);
 		vx = 0;
-		blood--;
+		blood -= ALADDIN_DAMAGE_THINGUARD;
 		GameSound::getInstance()->play(THINGUARD_HURT_MUSIC);
-		if (blood == 0)
+		if (blood <= 0)
 		{
 			Die();
 			SetState(DIE);
 			// cộng điểm
-			Aladdin::GetInstance()->score += 5;
+			Aladdin::GetInstance()->score += ALADDIN_SCORE_THINGUARD;
 		}
 		break;
 	}

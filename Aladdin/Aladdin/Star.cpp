@@ -102,6 +102,7 @@ void Star::Fly()
 	case FLING:
 	{
 		float max;
+		// v.tốc của sao khi Boss ném tính toán dựa trên vị trí của Aladdin
 		vx = ((Aladdin::GetInstance()->Left() + Aladdin::GetInstance()->Right()) / 2 - this->x);
 		vy = ((Aladdin::GetInstance()->Top() + Aladdin::GetInstance()->Bottom()) / 2 - this->y);
 		max = (abs(vx) > abs(vy)) ? abs(vx) : abs(vy);
