@@ -51,6 +51,7 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	UpdateCamera(CAMERA_BOSSMAP_WIDTH, CAMERA_BOSSMAP_HEIGHT);
 	
 	coObjects.clear();
+	coObjects.push_back(baseGround);
 	// tính toán những obj nằm trong vùng camera rồi đưa vào list coObjects
 	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);		
 
@@ -105,6 +106,7 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	for (int i = 0; i < coObjects.size(); i++)
 	{
 		coObjects[i]->Update(dt);
+		// va chạm Aladdin vs các obj
 		Collision::CheckCollision(aladdin, coObjects[i]);
 		// va chạm táo Aladdin vs các obj
 		for (int j = 0; j < aladdin->GetList()->size(); j++)
@@ -130,7 +132,7 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	{
 		Collision::CheckCollision(aladdin->GetList()->at(i), boss);		
 	}
-	// va chạm sao hoặc lửa của Boss vs aladdin, nền đất, cột
+	// va chạm sao hoặc lửa của Boss vs Aladdin, nền đất, cột
 	for (int j = 0; j < boss->GetList()->size(); j++)
 	{
 		Collision::CheckCollision(boss->GetList()->at(j), aladdin);
@@ -159,7 +161,7 @@ void BossScene::Render()
 
 	if (d3ddv->BeginScene())
 	{
-		coObjects.clear();
+		coObjects.clear();		
 		// tính toán những obj nằm trong vùng camera rồi đưa vào list coObjects
 		grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
@@ -286,12 +288,7 @@ void BossScene::LoadGridObj(string path)
 			// biến k.tra xem đã thêm obj với objIndex đang xét chưa, true thì xét objIndex mới tiếp
 			bool isAdded = false;
 
-			objIndex = listId[i];
-			if (objIndex == 2)
-			{
-				grid->AddObjToCell(cellIndex, baseGround);
-				break;
-			}
+			objIndex = listId[i];			
 			for (int t = 0; t < listPillars.size(); t++)
 			{
 				if (isAdded == true) break;

@@ -94,6 +94,7 @@ void Bat::Stand()
 		SetAnimation(ANI_STAND);
 		animationStand->SetFrame(0, 0);
 		vx = 0;
+		vy = 0;
 		break;
 	}
 	}
@@ -228,7 +229,7 @@ void Bat::OnIntersect(GameObject * obj)
 		
 		if (this->xInit - 120 <= obj->x && obj->x <= this->xInit + 120 && this->yInit + h + 95 >= obj->Top())
 			Attack();
-		else if (state == ATTACKING && (this->xInit - 200 >= obj->x || obj->x >= this->xInit + 200))
+		else if (state == ATTACKING && (this->xInit - 300 >= obj->x || obj->x >= this->xInit + 300))
 		{
 			Stand();
 			x = xInit + 3;

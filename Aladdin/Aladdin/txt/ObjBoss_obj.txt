@@ -3,10 +3,10 @@
 2 Ground 100 361 755 56
 3 Pillar 96 0 37 403 
 4 Pillar 834 0 37 403 
-5 FireCarpet 141 300 98 48 
+5 FireCarpet 116 300 123 48 
 6 FireCarpet 337 300 98 48 
 7 FireCarpet 533 300 98 48 
-8 FireCarpet 729 300 98 48 
+8 FireCarpet 754 300 123 48 
 9 LeftApple 360 280 18 18 
 10 LeftApple 360 260 18 18 
 11 LeftApple 349 270 18 18 

@@ -68,7 +68,18 @@ void Grid::CalcColliableObjs(Camera *camera, vector<LPGAMEOBJECT>& coObjs)
 
 			for (int i = 0; i < colliableCell.listObj.size(); i++)
 			{
-				coObjs.push_back(colliableCell.listObj[i]);
+				if (coObjs.size() == 0)
+					coObjs.push_back(colliableCell.listObj[i]);
+				else
+				{
+					for (int j = 0; j < coObjs.size(); j++)
+					{
+						if (colliableCell.listObj[i] == coObjs[j])
+							break;
+						else if (j == coObjs.size() - 1)
+							coObjs.push_back(colliableCell.listObj[i]);
+					}
+				}
 			}
 		}
 	}

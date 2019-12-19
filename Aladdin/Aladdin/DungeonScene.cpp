@@ -93,8 +93,7 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 					listObjs.erase(listObjs.begin() + t);
 					break;
 				}
-			}
-			
+			}			
 			coObjects.erase(coObjects.begin() + i);
 		}
 	}
@@ -108,15 +107,14 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	for (int i = 0; i < coObjects.size(); i++)
 	{
 		coObjects[i]->Update(dt);
-
+		// va chạm Aladdin vs các obj
 		Collision::CheckCollision(aladdin, coObjects[i]);
-		// xét collision táo của Aladdin vs coObjects[i]
+		// va chạm táo của Aladdin vs các obj
 		for (int j = 0; j < aladdin->GetList()->size(); j++)
 		{
 			Collision::CheckCollision(aladdin->GetList()->at(j), coObjects[i]);
 		}
-	}	
-	Collision::CheckCollision(aladdin, baseGround);
+	}
 	
 	// k.tra Aladdin ở vị trí chuyển màn
 	if (aladdin->x >= MAP_PASS_X && aladdin->y <= MAP_PASS_Y)
@@ -136,9 +134,7 @@ void DungeonScene::Render()
 
 	if (d3ddv->BeginScene())
 	{
-		coObjects.clear();
-		coObjects.push_back(baseGround);
-		coObjects.push_back(basePillar);
+		coObjects.clear();		
 		// tính toán những obj nằm trong vùng camera rồi đưa vào list coObjects
 		grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
