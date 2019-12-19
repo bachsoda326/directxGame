@@ -23,26 +23,21 @@ Aladdin::Aladdin()
 	h = 50;
 	xDraw = x - 18;
 	yDraw = y - 50;
-	xInit = xDraw;
-	yInit = yDraw;
+	xInit = ALADDIN_POTISION_X_INIT;
+	yInit = ALADDIN_POTISION_Y_INIT;
 	nx = 0;
 	ny = 0;
-	lastVy = 0;
 	isDead = false;
 	isDie = false;
 	direction = true;
-	isAppleCreated == false;
+	isAppleCreated = false;
 	currentAnimation = new Animation(100);
 	isBlink = 0;
-	blood = 8;
-	score = 0;
-	numApples = 10;
-	numRubies = 11;
-	numLifes = 3;	
-	isCutted = false;
-	/*keyUp[0] = true;
-	keyUp[1] = true;
-	keyUp[2] = true;*/
+	blood = ALADDIN_BLOOD;
+	score = ALADDIN_SCORE;
+	numApples = ALADDIN_APPLE;
+	numRubies = ALADDIN_RUBY;
+	numLifes = ALADDIN_LIFE;
 	lastState = STANDING;
 	state = STANDING;
 	collType = CollAladdin;
@@ -58,7 +53,7 @@ Aladdin * Aladdin::GetInstance()
 void Aladdin::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texAladdin = Textures::GetInstance()->Get(ID_TEX_ALADDIN);
-	
+	// khởi tạo các animation
 	animationWait_1 = new Animation("Wait_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 300);
 	animationWait_2 = new Animation("Wait_2", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationWait_3 = new Animation("Wait_3", XML_ALADDIN_ANIMATION_PATH, texAladdin, 90);
@@ -89,27 +84,29 @@ void Aladdin::LoadResources()
 	animationEndFly = new Animation("EndFly", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationEndHug = new Animation("EndHug", XML_ALADDIN_ANIMATION_PATH, texAladdin, 250);
 	animationRespawn = new Animation("Respawn", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
-
+	// animation ban đầu
 	currentAnimation = animationJump_Standing;
 	standingTime = GetTickCount();
 }
 
 void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	GameObject::Update(dt);
 	//DebugOut("[state] state: %d\n", state);
 	//DebugOut(L"[CP] x: %f\n", nx);
+
+	// update v.trí di chuyển vs v.tốc hiện tại
+	GameObject::Update(dt);	
 	x += dx;
 	y += dy;	
 	/*vy += 0.018f;*/
 
+	// khi c.bị chết thì chết
 	if (state == DIE || isDie)
 	{
 		Die();
 		return;
 	}
-
-	//các hành động không thể thay đổi trong khi nó xảy ra
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case RESETPOSITION:
@@ -126,12 +123,12 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 
-	//đặt khoảng thời gian nhấp nháy khi bị thương
+	// đặt khoảng thời gian k thể bị thương
 	if (isBlink != 0)
 	{
-		//isBlink = isBlink % 2 + 1;
+		// sau t giây thì có thể bị thương
 		DWORD endBlink = GetTickCount();
-		if (endBlink - startBlink > 1200)
+		if (endBlink - startBlink > ALADDIN_TIME_BLINK)
 		{
 			isBlink = 0;
 			if (state == HURT)
@@ -139,16 +136,13 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}
 
-	// Xử lý bàn phím và di chuyển
+	// xử lý bàn phím và di chuyển
 	HandleKeyBoard();
-
-	if (this->Left() <= 10 && vx < 0 || this->Right() > 2270 && vx > 0)
-		vx = 0;
-
-	/*if (vy > 0)
-		lastVy = vy;*/
-		//simulate fall down (gravity)
-	vy += 0.015f;
+	// k cho Aladdin đi ra khỏi 2 biên map
+	if (this->Left() <= MAP_EDGE_LEFT && vx < 0 || this->Right() > MAP_EDGE_RIGHT && vx > 0)
+		vx = 0;	
+	// v.tốc rơi
+	vy += ALADDIN_SPEED_FALL;
 
 	for (int i = 0; i < listApples.size(); i++)
 	{
@@ -157,9 +151,7 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 }
 
 void Aladdin::Render()
-{
-	/*x += dx;
-	y += dy;*/
+{	
 	D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
 	currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans, isBlink);
 
@@ -364,10 +356,10 @@ void Aladdin::UpdateKey()
 		keyUp[1] = true;
 	if (!keyBoard->KeyDown(DIK_C))
 		keyUp[2] = true;
-	// setup keyboard
+	// set các phím
 	KeyZ = keyBoard->KeyDown(DIK_Z);
 	KeyX = keyBoard->KeyDown(DIK_X);
-	KeySpace = keyBoard->KeyDown(DIK_C);
+	KeyC = keyBoard->KeyDown(DIK_C);
 	KeyLeft = keyBoard->KeyDown(DIK_LEFT);
 	KeyRight = keyBoard->KeyDown(DIK_RIGHT);
 	KeyUp = keyBoard->KeyDown(DIK_UP);
@@ -377,32 +369,32 @@ void Aladdin::UpdateKey()
 void Aladdin::HandleKeyBoard()
 {
 	UpdateKey();
-
 	bool isKeyDown = false;
-
+	// nhấn Z chém
 	if (KeyZ && keyUp[0])
 	{		
 		Cut();
 		isKeyDown = true;		
 	}
+	// nhấn X ném táo
 	if (KeyX && keyUp[1] && numApples > 0)
 	{
 		Throw();
 		isKeyDown = true;
 	}
-	if (KeySpace && keyUp[2])
+	// nhấn C nhảy
+	if (KeyC && keyUp[2])
 	{
 		Jump();
 		isKeyDown = true;
 
 	}
-	
+	// mũi tên trái phải chạy
 	if (KeyLeft || KeyRight)
-	{
-		// 12:26 13/11
-		if (ny == -1.0f && vy >= 0)
+	{		
+		if (ny == -1.0f && vy >= 0)		// khi trên mặt đất
 		{
-			if (!(nx != 0 && vx == 0))//nx = 0 || vx !=0
+			if (!(nx != 0 && vx == 0))	// khi k va chạm đứng lại theo chiều ngang
 			{
 				if (state != JUMPING && state != DUCKING && state != LOOK_UP)
 				{
@@ -466,16 +458,16 @@ void Aladdin::HandleKeyBoard()
 			if (KeyRight)
 			{
 				if (currentAnimation == animationJump_Standing)
-					vx = 0.15;
+					vx = ALADDIN_SPEED_WHENJUMP;
 				else
-					vx = ALADDIN_SPEED;
+					vx = ALADDIN_SPEED_RUN;
 			}
 			else if (KeyLeft)
 			{
 				if (currentAnimation == animationJump_Standing)
-					vx = -0.15;
+					vx = -ALADDIN_SPEED_WHENJUMP;
 				else
-					vx = -ALADDIN_SPEED;
+					vx = -ALADDIN_SPEED_RUN;
 			}
 			break;
 		}
@@ -486,21 +478,22 @@ void Aladdin::HandleKeyBoard()
 			if (KeyRight)
 			{
 				if (currentAnimation == animationJump_Standing)
-					vx = 0.15;
+					vx = ALADDIN_SPEED_WHENJUMP;
 				else
-					vx = ALADDIN_SPEED;
+					vx = ALADDIN_SPEED_RUN;
 			}
 			else if (KeyLeft)
 			{
 				if (currentAnimation == animationJump_Standing)
-					vx = -0.15;
+					vx = -ALADDIN_SPEED_WHENJUMP;
 				else
-					vx = -ALADDIN_SPEED;
+					vx = -ALADDIN_SPEED_RUN;
 			}
 			break;
 		}
 		}
 	}	
+	// mũi tên lên nhìn lên
 	if (KeyUp)
 	{
 		switch (state)
@@ -514,6 +507,7 @@ void Aladdin::HandleKeyBoard()
 		}
 		}		
 	}
+	// mũi tên xuống cúi xuống
 	if (KeyDown)
 	{
 		switch (state)
@@ -538,21 +532,20 @@ void Aladdin::HandleKeyBoard()
 			break;
 		case RUN_LONG_ENOUGH: case BRAKING:
 		{
-			if (nx == 0 && vx != 0 && ny == -1.0f && vy == 0)
+			if (nx == 0 && vx != 0 && ny == -1.0f && vy == 0)		// khi chạy mà k có va chạm theo phương ngang
 			{
 				Brake();
 			}
 			else
 			{
-				if (ny == 0)
+				if (ny == 0)		// khi k va chạm theo chiều dọc
 				{
 					SetState(FALL);
 					Jump();
 				}
 				else
 					Stand();
-			}
-			
+			}			
 			break;
 		}
 		case JUMPING:
@@ -564,13 +557,11 @@ void Aladdin::HandleKeyBoard()
 		case CUTTING:
 		{
 			Cut();
-
 			break;
 		}
 		case THROWING:
 		{
 			Throw();
-
 			break;
 		}
 		case FALLCLIMB: case FALL:
@@ -582,14 +573,14 @@ void Aladdin::HandleKeyBoard()
 			break;
 		default:
 		{
-			if (nx == 0 && ny == 0)
+			if (nx == 0 && ny == 0)		// khi k ca chạm theo chiều ngang và dọc
 			{				
 				SetState(FALL);
 				Jump();
 			}
 			else
 			{
-				// reset frame when click button event
+				// reset frame animation chạy
 				if (currentAnimation == animationRun_1)
 					currentAnimation->ResetFrame();
 				Stand();
@@ -621,14 +612,7 @@ void Aladdin::Stand()
 		break;
 	}
 	default:
-	{
-		/*if (state == JUMPING && lastVy >= 0.2f)
-		{
-		state = STANDING;
-		vx = 0;
-		SetAnimation(ANI_LAND_1);
-		break;
-		}*/
+	{		
 		if (state == PUSHING)
 		{
 			if (direction == true)
@@ -656,6 +640,7 @@ void Aladdin::Wait()
 	{
 	case STANDING:
 	{
+		// sau t giây sẽ chuyển animation sang Wait_1
 		if (startWait - standingTime > 2000)
 		{
 			lastState = state;
@@ -717,17 +702,7 @@ void Aladdin::Wait()
 void Aladdin::Duck()
 {
 	switch (state)
-	{
-	case STANDING: case RUNNING: case RUN_LONG_ENOUGH:
-	case WAITING_1: case WAITING_2:
-	{
-		SetState(DUCKING);
-		SetAnimation(ANI_DUCK_1);
-		vx = 0;
-		animationDuck_1->SetFrame(0, 3);
-
-		break;
-	}
+	{	
 	case DUCKING: case CUTTING: case THROWING:
 	{
 		lastState = DUCKING;
@@ -736,7 +711,6 @@ void Aladdin::Duck()
 		vx = 0;
 
 		int i = currentAnimation->GetCurrentFrame();
-
 		if (i == 3)
 			animationDuck_1->SetFrame(3, 3);
 
@@ -747,24 +721,22 @@ void Aladdin::Duck()
 		}
 		break;
 	}
+	case STANDING: case RUNNING: case RUN_LONG_ENOUGH:
+	case WAITING_1: case WAITING_2:
+	{
+		SetState(DUCKING);
+		SetAnimation(ANI_DUCK_1);		
+		animationDuck_1->SetFrame(0, 3);
+		vx = 0;
+		break;
+	}
 	}
 }
 
 void Aladdin::LookUp()
 {
 	switch (state)
-	{
-	case STANDING: case RUNNING: case RUN_LONG_ENOUGH:
-	case WAITING_1: case WAITING_2:
-	{
-		lastState = STANDING;
-		SetState(LOOK_UP);
-		SetAnimation(ANI_LOOKUP_1);
-		vx = 0;
-		animationLookUp_1->SetFrame(0, 2);
-
-		break;
-	}
+	{	
 	case LOOK_UP: case CUTTING:
 	{
 		lastState = LOOK_UP;
@@ -773,7 +745,6 @@ void Aladdin::LookUp()
 		vx = 0;
 
 		int i = currentAnimation->GetCurrentFrame();
-
 		if (i == 2)
 			animationLookUp_1->SetFrame(2, 2);
 
@@ -782,6 +753,16 @@ void Aladdin::LookUp()
 			state = FALL;
 			Jump();
 		}
+		break;
+	}
+	case STANDING: case RUNNING: case RUN_LONG_ENOUGH:
+	case WAITING_1: case WAITING_2:
+	{
+		lastState = STANDING;
+		SetState(LOOK_UP);
+		SetAnimation(ANI_LOOKUP_1);		
+		animationLookUp_1->SetFrame(0, 2);
+		vx = 0;
 		break;
 	}
 	}
@@ -815,7 +796,6 @@ void Aladdin::Run()
 		SetState(RUNNING);
 		SetAnimation(ANI_RUN_1);
 		animationRun_1->SetFrame(0, 12);
-
 		break;
 	}
 	}
@@ -830,15 +810,14 @@ void Aladdin::Brake()
 		SetState(BRAKING);
 		SetAnimation(ANI_BRAKE_1);
 		if (vx > 0)
-			vx = 0.05f;
+			vx = ALADDIN_SPEED_BRAKE;
 		else
-			vx = -0.05f;
+			vx = -ALADDIN_SPEED_BRAKE;
 		break;
 	}
 	default:
-	{
-		//int i = currentAnimation->GetCurrentFrame();
-		if (/*i == 150 && */currentAnimation->isActionFinish() == true)
+	{		
+		if (currentAnimation->isActionFinish())
 			Stand();
 		break;
 	}
@@ -846,14 +825,11 @@ void Aladdin::Brake()
 }
 
 void Aladdin::Push()
-{
-	/*Stand();*/
-
+{	
 	switch (state)
 	{
 	case PUSHING:
-	{
-		int i = currentAnimation->GetCurrentFrame();
+	{		
 		if (direction == true)
 		{
 			if (KeyLeft)
@@ -861,7 +837,7 @@ void Aladdin::Push()
 				Stand();
 				break;
 			}
-			vx = ALADDIN_SPEED;
+			vx = ALADDIN_SPEED_RUN;
 		}
 		else
 		{
@@ -870,7 +846,7 @@ void Aladdin::Push()
 				Stand();
 				break;
 			}
-			vx = -ALADDIN_SPEED;
+			vx = -ALADDIN_SPEED_RUN;
 		}
 		if (currentAnimation->GetFirstFrame() == 0)
 			animationPush->SetFrame(1, 8);
@@ -882,12 +858,12 @@ void Aladdin::Push()
 		if (direction == true)
 		{
 			x = xDraw + w;
-			vx = ALADDIN_SPEED;
+			vx = ALADDIN_SPEED_RUN;
 		}
 		else
 		{
 			x = xDraw;
-			vx = -ALADDIN_SPEED;
+			vx = -ALADDIN_SPEED_RUN;
 		}
 		SetAnimation(ANI_PUSH);
 		break;
@@ -903,7 +879,7 @@ void Aladdin::Jump()
 	{
 		SetState(JUMPING);
 		SetAnimation(ANI_JUMP_RUNNING);
-		vy -= 0.35f;
+		vy -= ALADDIN_SPEED_JUMPRUN;
 
 		keyUp[2] = false;
 		break;
@@ -912,22 +888,21 @@ void Aladdin::Jump()
 	case CLIMB: case CLIMBING:
 	{
 		lastState = state;
-		SetState(JUMPING);
-		/*vy -= 0.42f;*/
-		vy -= 0.33f;
+		SetState(JUMPING);				
 		SetAnimation(ANI_JUMP_CLIMBING);
-		
+		vy -= ALADDIN_SPEED_JUMPCLIMB;
+
 		keyUp[2] = false;
 		break;
 	}
 	case FALL: case WAITING_3:
 	{
 		lastState = STANDING;
-		SetState(JUMPING);
-		//vy -= 0.05f;
-		//y += 30;		
+		SetState(JUMPING);				
 		SetAnimation(ANI_JUMP_STANDING);
 		animationJump_Standing->SetFrame(3, 9);
+		//vy -= 0.05f;
+		//y += 30;
 
 		keyUp[2] = false;
 		break;
@@ -935,24 +910,24 @@ void Aladdin::Jump()
 	case FALLCLIMB:
 	{
 		lastState = STANDING;
-		SetState(JUMPING);
-		vy -= 0.05f;
-		y += h;		
+		SetState(JUMPING);				
 		SetAnimation(ANI_JUMP_STANDING);
 		animationJump_Standing->SetFrame(3, 9);
+		// làm cho Aladdin rời khỏi dây khi trèo xuống hết dây
+		vy -= 0.05f;
+		y += h;
 
 		keyUp[2] = false;
 		break;
 	}
 	case CUTTING: case THROWING:
-	{
-		//
+	{		
 		if (lastState == FALL || lastState == CLIMB)
 		{
 			state = lastState;
 			Jump();
 			break;
-		}//
+		}
 
 		state = JUMPING;
 		SetAnimation(ANI_JUMP_RUNNING);
@@ -964,14 +939,14 @@ void Aladdin::Jump()
 	case JUMPING:
 	{
 		int i = currentAnimation->GetCurrentFrame();
-
 		if (currentAnimation == animationJump_Climbing && i == 8)
 		{
 			//y += 37;
 			SetAnimation(ANI_JUMP_STANDING);
 			animationJump_Standing->SetFrame(3, 9);			
 		}
-		if (ny == -1.0f && vy == 0)
+
+		if (ny == -1.0f && vy == 0)		// khi trên mặt đất
 		{
 			currentAnimation->ResetFrame();
 			if (KeyRight || KeyLeft)
@@ -979,7 +954,6 @@ void Aladdin::Jump()
 			else
 				Stand();
 		}
-
 		break;
 	}
 	default:
@@ -996,7 +970,7 @@ void Aladdin::Jump()
 		SetState(JUMPING);
 		SetAnimation(ANI_JUMP_STANDING);
 		animationJump_Standing->SetFrame(0, 9);
-		vy -= 0.4f;						//start jump if is not "on-air"	
+		vy -= ALADDIN_SPEED_JUMP;
 
 		keyUp[2] = false;
 		break;
@@ -1012,12 +986,11 @@ void Aladdin::Climb()
 	{		
 		if ((lastState != CLIMB && lastState != CLIMBING) || (lastState == CLIMB && vy > 0.22f) || (lastState == CLIMBING && vy > 0.22f))
 		{
-			SetState(CLIMB);
+			SetState(CLIMB);			
+			SetAnimation(ANI_CLIMB_1);
+			animationClimb_1->SetFrame(0, 0);
 			vx = 0;
 			vy = 0;
-			
-			SetAnimation(ANI_CLIMB_1);
-			animationClimb_1->SetFrame(0, 0);			
 		}
 		break;
 	}
@@ -1026,18 +999,18 @@ void Aladdin::Climb()
 		if (KeyUp)
 		{
 			lastState = state;
-			SetState(CLIMBING);
-			vx = 0;
-			vy = -0.08f;
+			SetState(CLIMBING);			
 			animationClimb_1->SetFrame(0, 9);
+			vx = 0;
+			vy = -ALADDIN_SPEED_CLIMB;
 		}
 		else if (KeyDown)
 		{
 			lastState = state;
-			SetState(CLIMBING);
-			vx = 0;
-			vy = 0.08f;
+			SetState(CLIMBING);			
 			animationClimb_1->SetFrame(9, 0);
+			vx = 0;
+			vy = ALADDIN_SPEED_CLIMB;
 		}
 		break;
 	}
@@ -1046,12 +1019,12 @@ void Aladdin::Climb()
 		if (KeyUp)
 		{
 			vx = 0;
-			vy = -0.08f;
+			vy = -ALADDIN_SPEED_CLIMB;
 		}
 		else if (KeyDown)
 		{
 			vx = 0;
-			vy = 0.08f;
+			vy = ALADDIN_SPEED_CLIMB;
 		}
 		else
 		{
@@ -1068,12 +1041,10 @@ void Aladdin::Climb()
 	{
 		if (currentAnimation->isActionFinish())
 		{
-			SetState(CLIMB);
-			vx = 0;
-			vy = 0;
+			SetState(CLIMB);			
 			SetAnimation(ANI_CLIMB_1);
-			/*int i = currentAnimation->GetCurrentFrame();
-			animationClimb_1->SetFrame(i, i);*/
+			vx = 0;
+			vy = 0;			
 		}
 		break;
 	}
@@ -1092,9 +1063,9 @@ void Aladdin::Cut()
 		SetState(CUTTING);
 		SetAnimation(ANI_CUT_LOOKINGUP);
 		animationCut_LookingUp->SetFrame(0, 11);
-		vx = 0;		
-		keyUp[0] = false;
+		vx = 0;	
 
+		keyUp[0] = false;
 		break;
 	}
 	case DUCKING:
@@ -1103,8 +1074,8 @@ void Aladdin::Cut()
 		SetState(CUTTING);
 		SetAnimation(ANI_CUT_DUCKING);
 		vx = 0;
-		keyUp[0] = false;
 
+		keyUp[0] = false;
 		break;
 	}
 	case JUMPING:
@@ -1114,17 +1085,17 @@ void Aladdin::Cut()
 		SetAnimation(ANI_CUT_JUMPING);
 		
 		keyUp[0] = false;
-
 		break;
 	}
 	case CLIMB: case FALL:
 	{		
 		lastState = state;
-		SetState(CUTTING);
+		SetState(CUTTING);		
+		SetAnimation(ANI_CUT_CLIMBING);
 		vy = 0;
+		// t.đổi y để animation lúc chém trùng vs lúc trèo
 		if (lastState == CLIMB)
 			y -= 25;
-		SetAnimation(ANI_CUT_CLIMBING);
 
 		keyUp[0] = false;
 		break;
@@ -1132,7 +1103,7 @@ void Aladdin::Cut()
 	case CUTTING:
 	{
 		int i = currentAnimation->GetCurrentFrame();
-
+		// lặp lại chém khi nhìn lên nhiều lần
 		if (currentAnimation == animationCut_LookingUp && animationCut_LookingUp->GetFirstFrame() == 0 && i == 10)
 			animationCut_LookingUp->SetFrame(2, 9);		
 		
@@ -1164,30 +1135,15 @@ void Aladdin::Cut()
 				break;
 			}	
 			case CLIMB:
-			{				
+			{	
+				// t.đổi y lại như cũ khi chém xong
 				y += 25;
 				Climb();
 				break;
-			}
-			//case JUMPING:
-			//{
-			//	//animationCut_Jumping->SetFrame(0, 0);
-			//	if ((vy != 0 && y + 20 < MAP_HEIGHT - 9))
-			//	{
-			//		Jump();
-			//		DebugOut(L"[jump] state: %d\n", state);
-			//	}
-			//	else if (vy == 0 && y + 20 >= MAP_HEIGHT - 9)
-			//	{
-			//		//animationCut_Jumping->SetFrame(0, 5);
-			//		Stand();
-			//	}
-
-			//	break;
-			//}
+			}			
 			default:
 			{				
-				if (ny == 0.0f || (ny == -1.0f && vy != 0))
+				if (ny == 0.0f || (ny == -1.0f && vy != 0))		// đang rơi hoặc gần rơi xuống đất
 					Jump();
 				else
 					Stand();
@@ -1195,57 +1151,10 @@ void Aladdin::Cut()
 			}
 			}			
 		}
-		if (lastState == JUMPING && vy == 0 && ny == -1.0f)
+		if (lastState == JUMPING && vy == 0 && ny == -1.0f)		// đang trên mặt đất sau khi nhảy xong
 		{
 			Stand();
-		}
-
-		// 10:43 13/11
-		//switch (lastState)
-		//{
-		//case LOOK_UP:
-		//{
-		//	if (i == 11)
-		//		Stand();
-
-		//	break;
-		//}
-		//case DUCKING:
-		//{
-		//	if (i == 6)
-		//	{
-		//		if (KeyDown)
-		//			Duck();
-		//		else
-		//			Stand();
-		//	}
-
-		//	break;
-		//}
-		//// 1:09 13/11
-		//case JUMPING:
-		//{
-		//	if (vy == 0 && y + 20 >= MAP_HEIGHT - 9)
-		//		Stand();
-
-		//	break;
-		//}
-		//default:
-		//{
-		//	if (currentAnimation->isActionFinish())
-		//		Stand();
-
-		//	break;
-		//}
-		//}
-
-		/*if (ny == 0 && lastState != JUMPING)
-		{
-			testCollision++;			
-			DebugOut(L"[COLL] collision: %d\n", testCollision);
-			state = FALL;
-			Jump();
-		}*/
+		}		
 		break;
 	}
 	default:
@@ -1260,9 +1169,9 @@ void Aladdin::Cut()
 		if (lastState == DUCKING && lastState == STANDING)
 			lastState = STANDING;
 
-		if (!(vy == 0 && ny == -1.0f))
+		if (!(ny == -1.0f && vy == 0))		// đang k trên mặt đất
 		{			
-			state = JUMPING;
+			SetState(JUMPING);
 			Cut();
 			break;
 		}
@@ -1270,8 +1179,8 @@ void Aladdin::Cut()
 		SetState(CUTTING);
 		SetAnimation(ANI_CUT_STANDING);		
 		vx = 0;
-		keyUp[0] = false;
 
+		keyUp[0] = false;
 		break;
 	}		
 	}	
@@ -1289,8 +1198,8 @@ void Aladdin::Throw()
 		SetState(THROWING);
 		SetAnimation(ANI_THROW_DUCKING);
 		vx = 0;
-		isAppleCreated = false;
 
+		isAppleCreated = false;
 		keyUp[1] = false;
 		break;
 	}
@@ -1299,27 +1208,29 @@ void Aladdin::Throw()
 		lastState = JUMPING;
 		SetState(THROWING);
 		SetAnimation(ANI_THROW_JUMPING);
-		isAppleCreated = false;
 
+		isAppleCreated = false;
 		keyUp[1] = false;
 		break;
 	}
 	case CLIMB: case FALL:
 	{
 		lastState = state;
-		SetState(THROWING);
+		SetState(THROWING);		
+		SetAnimation(ANI_THROW_CLIMBING);
 		vy = 0;
+		// t.đổi y để animation lúc ném trùng vs lúc trèo
 		if (lastState == CLIMB)
 			y -= 25;
-		SetAnimation(ANI_THROW_CLIMBING);
-		isAppleCreated = false;
 
+		isAppleCreated = false;
 		keyUp[1] = false;
 		break;
 	}
 	case THROWING:
 	{
-		int i = currentAnimation->GetCurrentFrame();		
+		int i = currentAnimation->GetCurrentFrame();
+		// tạo táo khi animation ném đến đc frame thứ 3
 		if ((currentAnimation == animationThrow_Standing && i == 3 || currentAnimation == animationThrow_Ducking && i == 3 || currentAnimation == animationThrow_Jumping && i == 3 || currentAnimation == animationThrow_Climbing && i == 4) && isAppleCreated == false)
 		{
 			GameSound::getInstance()->play(THROW_MUSIC);
@@ -1329,9 +1240,7 @@ void Aladdin::Throw()
 		}
 
 		if (currentAnimation->isActionFinish())
-		{
-			/*GameSound::getInstance()->play(CUT_MUSIC);*/
-
+		{			
 			switch (lastState)
 			{
 			case DUCKING:
@@ -1346,12 +1255,13 @@ void Aladdin::Throw()
 				break;
 			}
 			case CLIMB:
+				// t.đổi y như cũ lúc ném xong
 				y += 20;
 				Climb();
 				break;
 			default:
 			{				
-				if (ny == 0)
+				if (ny == 0)		// đang k trên mặt đất
 					Jump();
 				else
 					Stand();
@@ -1359,7 +1269,7 @@ void Aladdin::Throw()
 			}
 			}
 		}
-		if (lastState == JUMPING && vy == 0 && ny == -1.0f)
+		if (lastState == JUMPING && vy == 0 && ny == -1.0f)		// đang trên mặt đất sau khi nhảy xong
 		{
 			Stand();
 		}
@@ -1385,9 +1295,9 @@ void Aladdin::Throw()
 		if (lastState == DUCKING && lastState == STANDING)
 			lastState = STANDING;
 
-		if (ny == 0.0f || (ny == -1.0f && vy != 0))
+		if (ny == 0.0f || (ny == -1.0f && vy != 0))		// đang rơi hoặc gần rơi xuống đất
 		{
-			state = JUMPING;
+			SetState(JUMPING);
 			Throw();
 			break;
 		}
@@ -1414,6 +1324,7 @@ void Aladdin::Hurt()
 	default:
 	{
 		GameSound::getInstance()->play(ALADDIN_HURT_MUSIC);
+
 		if ((state == STANDING || state == WAITING_1 || state == WAITING_2))
 		{
 			SetState(HURT);
@@ -1422,9 +1333,9 @@ void Aladdin::Hurt()
 		}
 		isBlink = 1;
 		startBlink = GetTickCount();
-		blood--;
+		blood -= ALADDIN_HURT;
 
-		if (blood == 0)
+		if (blood <= 0)
 			Die();
 		break;
 	}
@@ -1460,7 +1371,8 @@ void Aladdin::Die()
 		isBlink = 0;
 		Abu::GetInstance()->SetPosition(x + 85, y + 20);
 		Abu::GetInstance()->isDead = false;
-		Abu::GetInstance()->beginStat = 0;
+		// Khỉ Abu quạt
+		Abu::GetInstance()->beginStat = 1;
 		Abu::GetInstance()->LoadResources();
 		break;
 	}
@@ -1477,7 +1389,7 @@ void Aladdin::RunNextScene()
 	}
 	default:
 	{
-		vx = -0.1f;
+		vx = -ALADDIN_SPEED_RUNNEXT;
 		vy = 0;
 		SetState(RUNNEXT);
 		SetAnimation(ANI_RUNNEXT);
@@ -1497,8 +1409,8 @@ void Aladdin::Fly()
 	}
 	default:
 	{
-		vx = 0.08f;
-		vy = -0.04f;
+		vx = ALADDIN_SPEED_FLY_VX;
+		vy = -ALADDIN_SPEED_FLY_VY;
 		SetState(FLY);
 		SetAnimation(ANI_FLY);
 		isBlink = 0;
@@ -1547,26 +1459,7 @@ void Aladdin::ResetPosition()
 	default:
 	{
 		GameSound::getInstance()->play(COMEIN_MUSIC);
-		/*if (xInit > 500)
-		{
-			SetState(RESETPOSITION);
-			SetAnimation(ANI_RESPAWN);
-			isBlink = 0;
-			xDraw = xInit;
-			yDraw = yInit;
-			x = xDraw + 6;
-			y = yDraw + 33;
-		}
-		else
-		{
-			isBlink = 1;
-			xDraw = xInit;
-			yDraw = yInit;
-			x = xDraw + 18;
-			y = yDraw + 50;
-			startBlink = GetTickCount();
-			Stand();
-		}*/
+
 		SetAnimation(ANI_RESPAWN);
 		SetState(RESETPOSITION);		
 		isBlink = 1;
@@ -1576,7 +1469,7 @@ void Aladdin::ResetPosition()
 		y = yDraw + 33;
 
 		isDie = false;
-		blood = 10;
+		blood = ALADDIN_BLOOD;
 		break;
 	}
 	}
@@ -1589,39 +1482,40 @@ vector<GameObject*>* Aladdin::GetList()
 
 void Aladdin::CreateApple()
 {
+	// trừ số táo của Aladdin lúc tạo táo khi ném
 	numApples--;
 	GameObject* apple = new Apple();	
 
 	if (lastState == FALL || lastState == CLIMB || lastState == CLIMBING)
 	{
 		apple->yDraw = (this->Top() + this->Bottom()) / 2;
-		// vận tốc ném lên (vy) của táo, ném ngang thì vx
-		apple ->vy = -0.07f;
+		// vận tốc ném lên (vy), ném ngang (vx) của táo
+		apple ->vy = -APPLE_SPEED_THROWCLIMB_VY;
 		if (!direction)
 		{
 			apple->xDraw = this->Right();
-			apple->vx = 0.35f;
+			apple->vx = APPLE_SPEED_THROWCLIMB_VX;
 		}
 		else
 		{
 			apple->xDraw = this->Left();
-			apple->vx = -0.35f;
+			apple->vx = -APPLE_SPEED_THROWCLIMB_VX;
 		}
 	}
 	else
 	{
 		apple->yDraw = this->Top();
-		// vận tốc ném lên (vy) của táo, ném ngang thì vx
-		apple->vy = -0.1f;
+		// vận tốc ném lên (vy), ném ngang (vx) của táo
+		apple->vy = -APPLE_SPEED_THROW_VY;
 		if (direction)
 		{
 			apple->xDraw = this->Right();
-			apple->vx = 0.35f;
+			apple->vx = APPLE_SPEED_THROW_VX;
 		}
 		else
 		{
 			apple->xDraw = this->Left();
-			apple->vx = -0.35f;
+			apple->vx = -APPLE_SPEED_THROW_VX;
 		}
 	}
 
@@ -1682,7 +1576,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 	}
 	if (obj->collType == CollChains)
 	{
-		//Khi trèo xuống hết dây thì Aladdin tự nhảy xuống
+		// khi trèo xuống hết dây thì Aladdin tự nhảy xuống
 		if (y > obj->yDraw + obj->h && KeyDown)
 		{
 			if (state == CLIMBING)
@@ -1690,7 +1584,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 			Jump();
 			return;
 		}
-		//Khi chạm dây Aladdin sẽ chuyển sang trạng thái trèo (CLIMB)
+		// khi chạm dây Aladdin sẽ chuyển sang trạng thái trèo (CLIMB)
 		if (x > obj->xDraw + obj->w / 2 - 5 && x < obj->xDraw + obj->w / 2 + 5 && yDraw > obj->yDraw - 2)
 		{
 			if (!((lastState == CLIMB || lastState == CLIMBING) && state == JUMPING))
@@ -1712,7 +1606,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 		{		
 		case OBJBoss:
 		{
-			if (Collision::AABBCheck(this, obj))
+			if (Collision::AABBCheck(this, obj))		// k.tra collision kiểu "Va chạm"
 			{
 				if (isBlink == 0)
 					Hurt();
@@ -1721,7 +1615,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 		}
 		case OBJFire:
 		{
-			if (this->Bottom() > obj->Top() + 20)
+			if (this->Bottom() > obj->Top() + 18)
 			{
 				if (isBlink == 0)
 					Hurt();
@@ -1785,6 +1679,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 			GameSound::getInstance()->play(WOW_MUSIC);
 			break;
 		case OBJGenieJar:
+			// vị trí hồi sinh
 			xInit = obj->xDraw;
 			yInit = obj->yDraw;
 			break;
@@ -1799,8 +1694,3 @@ void Aladdin::OnIntersect(GameObject * obj)
 		}
 	}
 }
-
-//void Aladdin::SetCamera(Camera * camera)
-//{
-//	this->camera = camera;
-//}

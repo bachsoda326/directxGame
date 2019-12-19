@@ -1,4 +1,4 @@
-#include "NextScene.h"
+﻿#include "NextScene.h"
 #include "SceneManager.h"
 #include "BossScene.h"
 #include "EndScene.h"
@@ -8,8 +8,8 @@ NextScene::NextScene(int sceneId)
 	GameSound::getInstance()->stop(GAME1_MUSIC);
 	GameSound::getInstance()->stop(GAME2_MUSIC);
 	GameSound::getInstance()->play(NEXT_MUSIC);
-	LoadResources();
 
+	LoadResources();
 	this->sceneId = sceneId;
 }
 
@@ -21,9 +21,12 @@ void NextScene::LoadResources()
 	Camera::GetInstance()->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	aladdin->direction = true;
 	aladdin->SetPosition(350, 220);
+	// Aladdin chạy qua màn
 	aladdin->RunNextScene();
+
 	abu->SetPosition(300, 220);
-	abu->beginStat = 1;
+	// Khỉ Abu chạy
+	abu->beginStat = 0;
 	abu->LoadResources();
 }
 
@@ -31,7 +34,7 @@ void NextScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	aladdin->Update(dt);
 	abu->Update(dt);
-
+	// k.tra khi chạy xong thì chuyển màn
 	if (aladdin->x + 50 <= 0)
 	{
 		if (sceneId == 3)
@@ -62,7 +65,7 @@ void NextScene::Render()
 		d3ddv->EndScene();
 	}
 
-	// Display back buffer content to the screen
+	// display back buffer content to the screen
 	d3ddv->Present(0, 0, 0, 0);
 }
 

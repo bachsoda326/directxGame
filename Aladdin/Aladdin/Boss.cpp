@@ -1,4 +1,4 @@
-#include "Boss.h"
+﻿#include "Boss.h"
 
 Boss * Boss::__instance = NULL;
 
@@ -35,10 +35,10 @@ Boss * Boss::GetInstance()
 void Boss::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texBoss = Textures::GetInstance()->Get(ID_TEX_BOSS);
-
+	// khởi tạo các animation
 	animationMan = new Animation("Jafar", XML_BOSS_ANIMATION_PATH, texBoss, 100);
 	animationSnake = new Animation("Jafar_Snake", XML_BOSS_ANIMATION_PATH, texBoss, 100);
-
+	// animation ban đầu
 	SetState(STANDING);
 	currentAnimation = animationMan;
 	animationMan->SetFrame(0, 0);	
@@ -47,23 +47,24 @@ void Boss::LoadResources()
 }
 
 void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
+{	
+	// khi máu <= 10 thì người sẽ chuyển thành rắn
 	if (blood > 10)
 		typeBoss = 0;
 	else
 		typeBoss = 1;
 
+	// khi c.bị chết thì chết
 	if (isDie)
 	{
 		Die();
 		return;
 	}
-
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case ATTACK:
+		// k tấn công khi Aladdin đang hồi sinh hoặc chết
 		if (Aladdin::GetInstance()->GetState() == Aladdin::RESETPOSITION || Aladdin::GetInstance()->GetState() == Aladdin::DIE)
 			Stand();
 		else
@@ -95,8 +96,7 @@ void Boss::SetAnimation(BossAnimations ani)
 	switch (ani)
 	{
 	case ANI_SNAKE:
-	{
-		//reset frame when press event
+	{		
 		currentAnimation = animationSnake;
 		currentAnimation->ResetFrame();
 		break;
@@ -142,6 +142,7 @@ void Boss::Attack()
 		{
 			if (currentAnimation == animationMan && currentAnimation->GetCurrentFrame() == 6 /*&& isCreate == false*/)
 			{
+				// sau t giây sẽ tạo sao
 				DWORD endCut = GetTickCount();
 				if (endCut - startCut > 150)
 				{
@@ -189,6 +190,25 @@ void Boss::Die()
 	Enemy::Die();
 }
 
+vector<GameObject*>* Boss::GetList()
+{
+	return &list;;
+}
+
+void Boss::CreateStar()
+{
+	Star* obj = new Star();
+	obj->GetBoss(this);
+	obj->yDraw = (this->Bottom() + this->Top()) / 2 - 3;
+	if (direction)
+		obj->xDraw = this->Right() + 2;
+	else
+		obj->xDraw = this->Left() - 2;
+	obj->direction = !this->direction;
+	obj->LoadResources();
+	list.push_back(obj);
+}
+
 void Boss::CreateFire()
 {
 	Fire* obj = new Fire();
@@ -211,9 +231,20 @@ void Boss::CreateFire()
 	list.push_back(obj);
 }
 
-vector<GameObject*>* Boss::GetList()
+void Boss::DeleteStar(GameObject * star)
 {
-	return &list;;
+	for (int i = 0; i < list.size();)
+	{
+		if (list.at(i) == star)
+		{
+			list.erase(list.begin() + i);
+			delete star;
+			star = nullptr;
+			return;
+		}
+		else
+			i++;
+	}
 }
 
 void Boss::DeleteFire(GameObject * fire)
@@ -225,36 +256,6 @@ void Boss::DeleteFire(GameObject * fire)
 			list.erase(list.begin() + i);
 			delete fire;
 			fire = nullptr;
-			return;
-		}
-		else
-			i++;
-	}
-}
-
-void Boss::CreateStar()
-{
-	Star* obj = new Star();
-	obj->GetBoss(this);
-	obj->yDraw = (this->Bottom() + this->Top()) / 2 - 3;
-	if (direction)
-		obj->xDraw = this->Right() + 2;
-	else
-		obj->xDraw = this->Left() - 2;
-	obj->direction = !this->direction;
-	obj->LoadResources();
-	list.push_back(obj);
-}
-
-void Boss::DeleteStar(GameObject * star)
-{
-	for (int i = 0; i < list.size();)
-	{
-		if (list.at(i) == star)
-		{
-			list.erase(list.begin() + i);
-			delete star;
-			star = nullptr;
 			return;
 		}
 		else
@@ -298,21 +299,20 @@ void Boss::OnIntersect(GameObject * obj)
 			if (blood == 0)
 			{
 				Die();
-				state = DIE;
+				SetState(DIE);
 				return;
 			}
 			isHurt = true;
 		}
 		if (Aladdin::GetInstance()->GetState() != Aladdin::CUTTING)
 			isHurt = false;
+
 		if (x < obj->x)
-		{
 			direction = true;
-		}
 		else
-		{
 			direction = false;
-		}
+
+		// khi Aladdin đứng gần 1 khoảng nhất định thì Boss sẽ k tạo sao nữa
 		if ((obj->x > this->Right() - 20 && obj->x < this->Left() + 20) || (obj->x > this->x - 20 && obj->x < this->x + 20))
 			Stand();
 		else
@@ -331,7 +331,7 @@ void Boss::OnIntersect(GameObject * obj)
 		if (blood == 0)
 		{
 			Die();
-			state = DIE;
+			SetState(DIE);
 			return;
 		}
 	}

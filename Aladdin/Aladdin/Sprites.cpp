@@ -45,56 +45,54 @@ void Sprite::DrawTest(float x, float y, D3DXVECTOR2 transform, int alpha)
 }
 
 void Sprite::Draw(float x, float y, D3DXVECTOR2 transform)
-{
-	// position with old camera
-	//D3DXVECTOR3 p(floor(x - cam_x), floor(y - cam_y), 0);
-
+{	
+	// vị trí vẽ trên màn hình
 	D3DXVECTOR3 p(floor(x), floor(y), 0);
+	// vị trí lấy ảnh vẽ trên texture
 	RECT r;
 	r.left = left;
 	r.top = top;
 	r.right = r.left + width;
 	r.bottom = r.top + height;
 
+	// vector dời ảnh
 	D3DXVECTOR2 inTranslation = transform;
-
+	// các matrix để áp dụng các kiểu dời, lật ngược ảnh
 	D3DXMATRIX oldMatrix, newMatrix;
 	Game::GetInstance()->GetSpriteHandler()->GetTransform(&oldMatrix);
 	D3DXMatrixTransformation2D(&newMatrix, 0, 0, 0, 0, 0, &inTranslation);
 
 	Game::GetInstance()->GetSpriteHandler()->SetTransform(&newMatrix);
-
 	Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
-
-	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lai matrix cu~ de Sprite chi ap dung transfrom voi class nay
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix);	// set lại matrix cũ để Sprite chỉ áp dụng transfrom vs class này
 }
 
 void Sprite::Draw(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int isBlink)
 {
-	// position with old camera
-	//D3DXVECTOR3 p(floor(x - cam_x), floor(y - cam_y), 0);
-
 	xDraw = (float)(x - oX);
 	yDraw = (float)(y - oY);
 	w = width;
 	h = height;
 
+	// vị trí vẽ trên màn hình
 	D3DXVECTOR3 p(floor(xDraw), floor(yDraw), 0);
+	// vị trí lấy ảnh vẽ trên texture
 	RECT r;
 	r.left = left;
 	r.top = top;
 	r.right = r.left + width;
 	r.bottom = r.top + height;
 
+	// vector dời ảnh
 	D3DXVECTOR2 inTranslation = transform;
-
+	// các matrix để áp dụng các kiểu dời, lật ngược ảnh
 	D3DXMATRIX oldMatrix, newMatrix;
 	Game::GetInstance()->GetSpriteHandler()->GetTransform(&oldMatrix);
 
 	// lật ngược ảnh
 	if (direction == false)
 	{
-		//set correct position of x and y
+		// set correct position of x and y
 		xDraw = (float)(x - w + oX);
 		yDraw = (float)(y - oY);
 
@@ -115,7 +113,7 @@ void Sprite::Draw(float x, float y, float &xDraw, float &yDraw, float &w, float 
 		Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(100, 255, 255, 255));
 	else
 		Game::GetInstance()->GetSpriteHandler()->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(255, 255, 255, 255));	
-	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix); // set lại matrix cũ để Sprite chỉ áp dụng transfrom vs class này
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix);	// set lại matrix cũ để Sprite chỉ áp dụng transfrom vs class này
 }
 
 void Sprites::Add(int id, float left, float top, float width, float height, float oX, float oY, LPDIRECT3DTEXTURE9 tex)
@@ -128,7 +126,6 @@ LPSPRITE Sprites::Get(int id)
 {
 	return sprites[id];
 }
-
 
 Animation::Animation(char* animationName, char* xmlPath, LPDIRECT3DTEXTURE9 texture, int defaultTime)
 {
@@ -204,6 +201,7 @@ void Animation::Render(float x, float y, float &xDraw, float &yDraw, float &w, f
 	}
 	else
 	{
+		// sau t giây sẽ chuyển frame animation
 		DWORD t = frames[currentFrame]->GetTime();
 		if (now - lastFrameTime > t)
 		{

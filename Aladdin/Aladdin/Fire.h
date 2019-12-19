@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Enemy.h"
 #include "FireCarpet.h"
 #include "Boss.h"
@@ -8,44 +8,47 @@ class Boss;
 
 class Fire : public Enemy
 {
-private:	
+private:
+	// thảm lửa (vòng boss)
 	FireCarpet *fireCarpet;
 	Boss *boss;
 
 public:
-	int typeFire;
-
-	Fire();
-
-	LPANIMATION animationBurn,
-		animationFire;
-
 	enum FireStates
 	{
-		MOVING,
-		DESTROY
+		MOVING,						// di chuyển
+		DESTROY						// bị hủy
 	};
-
 	enum FireAnimations
-	{		
-		ANI_BURN,
-		ANI_FIRE
+	{
+		ANI_BURN,					// lửa đốt
+		ANI_FIRE					// lửa Boss phun
 	};
+	LPANIMATION animationBurn,		// animation lửa đốt
+		animationFire;				// animation lửa Boss phun
+
+	// 0: lửa Boss phun | 1: lửa đốt của thảm lửa
+	int typeFire;
+
+public:
+	Fire();	
 
 	void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 
+	// Action của lửa
+	void Move();					// di chuyển
+	void Destroy();					// bị hủy
+
 	void SetAnimation(FireAnimations ani);
-	//get Fire Carpet
+	// lấy thảm lửa chứa lửa đang xét
 	void GetFireCarpet(FireCarpet *obj);
-	//get Boss
-	void GetBoss(Boss*obj);
+	// lấy Boss
+	void GetBoss(Boss*obj);	
 
-	//action of Fire
-	void Move();
-	void Destroy();
-
+	// Va chạm vs đất, cột
 	void OnCollision(GameObject *obj, float nx, float ny);
+	// Giao nhau với Aladdin
 	void OnIntersect(GameObject *obj);
 
 	~Fire();

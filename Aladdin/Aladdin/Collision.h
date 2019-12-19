@@ -1,30 +1,25 @@
-#pragma once
+﻿#pragma once
 #include <algorithm>
 #include "GameObject.h"
 
 class Collision
 {
-public:
-	//contructor of SweptAABB
+public:	
 	Collision();
 
-	//check collision between 2 GameObject(retangle)
 	static float SweptAABB(GameObject* obj1, GameObject* obj2, float& nx, float& ny);
+	// Trường hợp ngoại lệ của va chạm, trả về collisionTime
 	static void ExceptionalCase(GameObject* obj1, GameObject* obj2, float& nx, float& ny, float& collisionTime);
-	static void FilterCollision(float &t, float &nx, float &ny, float dnx, float dny);
-
-	//check broad-phasing
+	// check broad-phasing
 	static GameObject* GetSweptBroadphaseBaseObject(GameObject* obj);
-
-	//check AABB
+	// Kiểm tra 2 bao obj có đụng nhau k
 	static bool AABBCheck(GameObject* obj1, GameObject* obj2);
 
-	//check collision
+	// Check collision 2 obj
 	static void CheckCollision(GameObject* obj1, GameObject* obj2);
+	// Ngăn di chuyển
 	static void PreventMove(GameObject* obj1, GameObject* obj2, float nx, float ny);
-	static void CollisionLine(GameObject* obj1, GameObject* obj2, float nx, float ny);
-
-	//destructor of SweptAABB
+	
 	~Collision();
 };
 

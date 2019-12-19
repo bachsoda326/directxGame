@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include <string>
 #include <d3d9.h>
@@ -21,10 +21,16 @@ public:
 	void LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath);
 	void Render();
 
-private:		
+private:
+	// listTiles (list chứa các số trong file mapTile)
 	std::vector<int> listTiles;
+	// listSprites (ảnh) tương ứng vs các tiles
 	std::vector<LPSPRITE> listSprites;
-	int numXTiles, numYTiles;
+	// số tiles theo chiều ngang
+	int numXTiles;
+	// số tiles theo chiều dọc
+	int numYTiles;
+	// id để tạo texture map
 	int id;
 };
 

@@ -18,30 +18,29 @@ Bat::Bat(float left, float top, float width, float height)
 void Bat::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texBat = Textures::GetInstance()->Get(ID_TEX_BAT);
-
+	// khởi tạo các animation
 	animationStand = new Animation("Stand", XML_BAT_ANIMATION_PATH, texBat, 200);
 	animationAttack = new Animation("Attack", XML_BAT_ANIMATION_PATH, texBat, 100);
 	animationDieByApple = new Animation("DieByApple", XML_BAT_ANIMATION_PATH, texBat, 70);
-
+	// animation ban đầu
 	SetAnimation(ANI_STAND);
 	animationStand->SetFrame(0, 0);
 }
 
 void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	// update v.trí di chuyển vs v.tốc hiện tại
 	GameObject::Update(dt);
-
 	/*x += dx;
-	y = yInit + 30*sin((2*M_PI*dt) + dy);*/
+	y = yInit + 30*sin((2*M_PI*dt) + dy);*/	
 
-	
-
+	// khi c.bị chết thì chết
 	if (isDie)
 	{
 		Die();
 		return;
 	}
-	
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{	
 	case ATTACKING: case PREPARING:
@@ -73,7 +72,7 @@ void Bat::SetAnimation(BatAnimations ani)
 	case ANI_DIE_BY_APPLE:
 	{
 		currentAnimation = animationDieByApple;
-		//currentAnimation->ResetFrame();
+		currentAnimation->ResetFrame();
 		break;
 	}	
 	}
@@ -104,7 +103,7 @@ void Bat::Attack()
 	{
 		vx += 0.02f;
 		vy += 0.01f;		
-
+		// update v.trí di chuyển vs v.tốc hiện tại
 		x = x + 2 * cos(2 * 3.14 + vx);
 		y = y + 0.5 * sin(2 * 3.14 + vy);
 
@@ -124,8 +123,6 @@ void Bat::Attack()
 		SetState(PREPARING);
 		SetAnimation(ANI_STAND);
 		animationStand->SetFrame(1, 3);
-		/*vx += 0.02f;
-		vy += 0.05f;*/
 		break;
 	}
 	}
@@ -148,8 +145,9 @@ void Bat::Die()
 	{
 		SetState(DIE);
 		SetAnimation(ANI_DIE_BY_APPLE);
-		isDie = true;
+		vx = 0;
 		vy = 0.1f;
+		isDie = true;		
 		break;
 	}
 	default:
@@ -188,6 +186,7 @@ void Bat::OnIntersect(GameObject * obj)
 	{
 		SetState(DIEBYAPPLE);
 		Die();
+		// cộng điểm
 		Aladdin::GetInstance()->score += 20;
 		return;
 	}
@@ -198,6 +197,7 @@ void Bat::OnIntersect(GameObject * obj)
 			if (((obj->Right() > this->Left() && obj->x < this->x) || (obj->Left() < this->Right() && obj->x > this->x)) && (obj->Top() < this->Bottom() && obj->Bottom() > this->Top()))
 			{
 				Die();
+				// cộng điểm
 				Aladdin::GetInstance()->score += 10;
 			}
 			return;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Constants.h"
 #include "Aladdin.h"
@@ -7,17 +7,19 @@
 class Ruby : public Item
 {
 public:
-	Ruby();
-	Ruby(float left, float top, float width, float height);
+	LPANIMATION animationDefault;		// animation mặc định
 
-	LPANIMATION animationDefault;
+public:
+	// Xài cho Ruby của Aladdin
+	Ruby();
+	Ruby(float left, float top, float width, float height);	
 
 	void LoadResources();
 	void Render();
 
-	// action of GenieFace
-	void Active();
-	void NonActive();
+	// Action của ruby
+	void Active();						// đc ăn
+	void NonActive();					// chưa đc ăn
 
 	~Ruby();
 };

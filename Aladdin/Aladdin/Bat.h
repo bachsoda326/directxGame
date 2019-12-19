@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Constants.h"
 #include "Aladdin.h"
@@ -7,21 +7,14 @@
 class Bat : public Enemy
 {
 public:
-	Bat(float left, float top, float width, float height);
-
-	LPANIMATION animationStand,
-		animationAttack,
-		animationDieByApple;
-
 	enum BatStates
 	{
-		STANDING,
-		PREPARING,
-		ATTACKING,
-		DIEBYAPPLE,
-		DIE
+		STANDING,						// đứng
+		PREPARING,						// chuẩn bị tấn công
+		ATTACKING,						// tấn công
+		DIEBYAPPLE,						// chết bởi táo
+		DIE								// chết
 	};
-
 	enum BatAnimations
 	{
 		ANI_STAND,
@@ -29,21 +22,28 @@ public:
 		ANI_DIE_BY_APPLE,
 		ANI_DIE
 	};
+	LPANIMATION animationStand,			// animation đứng
+		animationAttack,				// animation tấn công
+		animationDieByApple;			// animation bị chết bởi táo
+
+public:
+	Bat(float left, float top, float width, float height);	
 
 	void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 
-	void SetAnimation(BatAnimations ani);
+	// Action của dơi
+	void Stand();						// đứng
+	void Attack();						// tấn công
+	void Die();							// chết
 
-	// Action
-	void Stand();
-	void Attack();
-	void Die();
+	void SetAnimation(BatAnimations ani);	
 
-	// Change and reset frame size
+	// Đổi và reset frame size (khoảng cách để xét va chạm với các obj khác)
 	void ChangeFrameSize(GameObject*obj);
 	void ResetFrameSize(GameObject*obj);
 
+	// Giao nhau với Aladdin, táo
 	void OnIntersect(GameObject *obj);
 
 	~Bat();

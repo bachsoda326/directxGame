@@ -1,4 +1,4 @@
-#include "Star.h"
+﻿#include "Star.h"
 
 Star::Star()
 {
@@ -14,10 +14,10 @@ Star::~Star()
 void Star::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texBoss = Textures::GetInstance()->Get(ID_TEX_BOSS);
-
+	// khởi tạo các animation
 	animationFling = new Animation("Star", XML_BOSSATTACK_ANIMATION_PATH, texBoss, 100);
 	animationDestroy = new Animation("Star_Hit", XML_BOSSATTACK_ANIMATION_PATH, texBoss, 100);
-
+	// animation ban đầu
 	currentAnimation = animationFling;
 	SetState(FLING);
 
@@ -29,11 +29,12 @@ void Star::LoadResources()
 
 void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	GameObject::Update(dt);
-	
+	// update v.trí di chuyển vs v.tốc hiện tại
+	GameObject::Update(dt);	
 	x += dx;
 	y += dy;
 
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case DESTROY:
@@ -110,7 +111,7 @@ void Star::Fly()
 	}
 	default:
 	{
-		state = FLING;
+		SetState(FLING);
 		SetAnimation(ANI_FLING);
 		break;
 	}

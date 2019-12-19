@@ -15,9 +15,9 @@ GenieJar::GenieJar(float left, float top, float width, float height)
 void GenieJar::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texItems = Textures::GetInstance()->Get(ID_TEX_ITEM);
-
+	// khởi tạo các animation
 	animationDefault = new Animation("Animation", XML_GENIEJAR_ANIMATION_PATH, texItems, 100);
-
+	// animation ban đầu
 	currentAnimation = animationDefault;
 	animationDefault->SetFrame(0, 0);	
 

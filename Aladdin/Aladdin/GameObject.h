@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include <Windows.h>
 #include <d3dx9.h>
 #include <vector>
@@ -15,87 +14,64 @@ using namespace std;
 // kiểu va chạm
 enum CollisionType
 {
-	CollGround,
-	CollFence,
-	CollBrick,
-	CollChains,
-	CollCollarBeam,
-	CollStair,
-	CollCamel,
-	CollApple,
-	CollLine,
-	CollAladdin,
-	CollEnemy,
-	CollItem,
-	CollRod,
-	CollFireCarpet,
-	CollStar,
-	CollUnknown
+	CollGround,					// kiểu va chạm mặt đất
+	CollFence,					// kiểu va chạm hàng rào
+	CollBrick,					// kiểu va chạm gạch đá
+	CollChains,					// kiểu va chạm dây xích
+	CollApple,					// kiểu va chạm táo
+	CollAladdin,				// kiểu va chạm Aladdin
+	CollEnemy,					// kiểu va chạm địch
+	CollItem,					// kiểu va chạm item
+	CollFireCarpet,				// kiểu va chạm thảm lửa
+	CollStar,					// kiểu va chạm sao (do Boss bắn ra)
+	CollUnknown					// kiểu va chạm khác
 };
 
 // kiểu obj
 enum ObjectType
 {
-	OBJGround,
-	OBJFence,
-	OBJRope,
-	OBJCamel,
-	OBJApple,	
-	OBJRod,
-	OBJItem,
-	OBJSword,
-	OBJJar,
-	OBJAbuItem,
-	OBJBlueHeart,
-	OBJGenieFace,
-	OBJGenieJar,
-	OBJLamp,
-	OBJRuby,
-	OBJNormalGuard,
-	OBJThinGuard,
-	OBJAladdin,
-	OBJAbu,
-	OBJBoss,
-	OBJStar,
-	OBJAladdinFace,	
-	OBJGenie,
-	OBJBallTrap,
-	OBJBat,
-	OBJBoomSkeleton,
-	OBJBone,
-	OBJPeddler,
-	OBJStall,
-	OBJSharpTrap,
-	OBJStoneBrick,
-	OBJFireCarpet,
-	OBJFire
+	OBJGround,					// OBJ mặt đất
+	OBJFence,					// OBJ hàng rào
+	OBJApple,					// OBJ táo
+	OBJItem,					// OBJ item
+	OBJBlueHeart,				// OBJ tim xanh
+	OBJGenieFace,				// OBJ mặt Genie
+	OBJGenieJar,				// OBJ bình Genie (điểm hồi sinh)
+	OBJRuby,					// OBJ ruby
+	OBJNormalGuard,				// OBJ enemy béo
+	OBJThinGuard,				// OBJ enemy gầy
+	OBJAladdin,					// OBJ Aladdin
+	OBJAbu,						// OBJ khỉ Abu
+	OBJBoss,					// OBJ Boss
+	OBJStar,					// OBJ sao (do Boss bắn ra)	
+	OBJBat,						// OBJ dơi
+	OBJBoomSkeleton,			// OBJ bộ xương boom
+	OBJBone,					// OBJ xương (do bộ xương boom tạo)
+	OBJPeddler,					// OBJ người bán hàng
+	OBJStall,					// OBJ shop (của người bán hàng)
+	OBJBallTrap,				// OBJ bẫy bóng
+	OBJSharpTrap,				// OBJ bẫy nhọn
+	OBJStoneBrick,				// OBJ gạch đá
+	OBJFireCarpet,				// OBJ thảm lửa
+	OBJFire						// OBJ lửa
 };
 
 class GameObject;
 typedef GameObject * LPGAMEOBJECT;
 
-// Sự kiện va chạm
-struct CollisionEvent;
-typedef CollisionEvent * LPCOLLISIONEVENT;
-struct CollisionEvent
-{
-	LPGAMEOBJECT obj;
-	// t.gian, hướng va chạm ngang, hướng va chạm dọc
-	float t, nx, ny;
-	CollisionEvent(float t, float nx, float ny, LPGAMEOBJECT obj = NULL) { this->t = t; this->nx = nx; this->ny = ny; this->obj = obj; }
-
-	static bool compare(const LPCOLLISIONEVENT &a, LPCOLLISIONEVENT &b)
-	{
-		return a->t < b->t;
-	}
-};
-
 class GameObject
 {
 public:
-	int id, cellIndex;
-	// active dùng cho các đối tượng có kiểu va chạm là Item
-	bool isDie, isDead, isActived;
+	int id;
+	// id của cell grid chứa obj
+	int cellIndex;
+
+	// c.bị chết 
+	bool isDie;
+	// đã chết
+	bool isDead;
+	// true: đã đc ăn | false: chưa đc ăn
+	bool isActived;
 
 	// vị trí ban đầu của các đối tượng
 	float xInit, yInit;
@@ -105,19 +81,20 @@ public:
 	float w, h;
 	// vị trí vẽ (để cân xứng giữa các frame hình của animation)
 	float xDraw, yDraw;
-	// vận tốc
-	float xLimLeft, xLimRight;
+	// vận tốc	
 	float vx, vy;
 	// dx = vx*dt; dy = vy*dt
 	float dx, dy;
-
+	// kiểu va chạm
 	CollisionType collType;
+	// kiểu obj
 	ObjectType objType;
-	// hướng có khả năng va chạm x ngang y dọc
+	// hướng có khả năng va chạm nx ngang ny dọc
 	float nx, ny;
 
 	// trạng thái
 	int state;
+	// animation hiện tại
 	LPANIMATION currentAnimation;
 	// hướng của đối tượng; phải = true, trái = false
 	bool direction;
@@ -127,66 +104,46 @@ public:
 public:
 	GameObject();
 
+	// Set vị trí
 	void SetPosition(float x, float y);
+	// Set vận tốc
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
-
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	D3DXVECTOR3 GetPosition() { return D3DXVECTOR3(x, y, 0); }	
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	int GetState() { return this->state; }	
-
-	// Vẽ RECT của obj
-	void RenderBoundingBox();
 
 	// Trả về các biên(của RECT) của obj
 	float Left();
 	float Top();
 	float Right();	
 	float Bottom();
-
-	// Mở rộng vủa SweptAABB để xử lý va chạm 2 obj di chuyển
-	//LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
-	// Trường hợp đặc biệt khi va chạm(chủ yếu là khi va chạm ngang dọc vs đất, cột)
-	//void ExceptionCase(LPGAMEOBJECT coObj, float &t, float &nx, float &ny);
-	/*
-	Tính toán các obj có thể va chạm vs obj đang gọi hàm
-	coObjects: listObjs có thể va chạm
-	coEvents: list va chạm có thể xảy ra
-	*/
-	//void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
-	/*void FilterCollision(
-		vector<LPCOLLISIONEVENT> &coEvents,
-		vector<LPCOLLISIONEVENT> &coEventsResult,
-		float &min_tx,
-		float &min_ty,
-		float &nx,
-		float &ny);*/
-
+		
 	// Khởi tạo obj
 	virtual void LoadResources();
+	// Update trạng thái hoạt động obj
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	// Vẽ obj
 	virtual void Render();
+	// Vẽ RECT của obj
+	void RenderBoundingBox();
 
-	//process input
-	virtual void ProcessInput();
-	// Set kiểu object từ object's id
-	virtual void SetObjectFromID();
 	// Set trạng thái cho obj
-	virtual void SetState(int state) { this->state = state; }
-		
+	virtual void SetState(int state) { this->state = state; }		
 	// Get biên(RECT) obj 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	//get list createdObjs of Obj 
+	// Get list obj con đc tạo of OBJ đang xét 
 	virtual vector<GameObject*>* GetList();
+	// Khôi phục các thuộc tính
 	virtual void ResetProper();
 
-	//change and reset frame size
+	// Đổi và reset frame size (khoảng cách để xét va chạm với các obj khác)
 	virtual void ChangeFrameSize(GameObject*obj);
 	virtual void ResetFrameSize(GameObject*obj);
 
-	// 
+	// Va chạm (Aladdin với ground (đất, gỗ, hàng rào, cột))
 	virtual void OnCollision(GameObject*obj, float nx, float ny);
-	// giao nhau (Aladdin vs items, enemy, dây xích đu)
+	// Giao nhau (Aladdin vs item, enemy, dây xích đu; ném táo vs ground, enemy)
 	virtual void OnIntersect(GameObject*obj);
 
 	~GameObject();

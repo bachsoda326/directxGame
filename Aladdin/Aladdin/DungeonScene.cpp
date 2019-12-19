@@ -36,13 +36,11 @@ void DungeonScene::LoadResources()
 	map->LoadTileMap(ID_TEX_TILESHEET_MAP, TEX_TILESHEET_MAP_PATH, TXT_TILEMAP_MAP_PATH);
 	frontMap = new TileMap();
 	frontMap->LoadTileMap(ID_TEX_TILESHEET_FRONTMAP, TEX_TILESHEET_FRONTMAP_PATH, TXT_TILEMAP_FRONTMAP_PATH);
-	
+		
+	aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
 	//aladdin->SetPosition(2000, 200);
-	aladdin->SetPosition(150, 1050);
-	//aladdin->SetPosition(950, 587);	// error fence climb_jump
-	/*aladdin->SetPosition(250, 480);*/		// peddler
-	//aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
-	//aladdin->SetCamera::GetInstance()(Camera::GetInstance());			
+	//aladdin->SetPosition(950, 587);		// error fence climb_jump
+	/*aladdin->SetPosition(250, 480);*/		// peddler		
 
 	baseGround = new Ground(0, 1112, 2270, 27);
 	baseGround->collType = CollGround;
@@ -51,30 +49,29 @@ void DungeonScene::LoadResources()
 
 	for (int i = 0; i < listObjs.size(); i ++)
 	{
-		listObjs[i]->LoadResources();
-		//grid->AddObjToCell(listStoneBricks[i]);
+		listObjs[i]->LoadResources();		
 	}
 	for (int i = 0; i < listStoneBricks.size(); i += 2)
 	{
-		listStoneBricks[i]->LoadResources(true);
-		//grid->AddObjToCell(listStoneBricks[i]);		
+		listStoneBricks[i]->LoadResources(true);		
 	}
 	for (int i = 1; i < listStoneBricks.size(); i += 2)
 	{
-		listStoneBricks[i]->LoadResources(false);
-		//grid->AddObjToCell(listStoneBricks[i]);
+		listStoneBricks[i]->LoadResources(false);		
 	}	
 }
 
 void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 {	
-	CheckCameraAndWorldMap(CAMERA_MAP_WIDTH, CAMERA_MAP_HEIGHT);
+	UpdateCamera(CAMERA_MAP_WIDTH, CAMERA_MAP_HEIGHT);
 	//DebugOut("[SIZE]: %d\n", coObjects.size());
 	coObjects.clear();
 	coObjects.push_back(baseGround);
 	coObjects.push_back(basePillar);
+	// tính toán những obj nằm trong vùng camera rồi đưa vào list coObjects
 	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
+	// nếu obj đã chết thì xóa obj khỏi grid, listObjs và list coObjects
 	for (int i = 0; i < coObjects.size(); i++)
 	{
 		if (coObjects[i]->isDead)
@@ -100,26 +97,27 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 			coObjects.erase(coObjects.begin() + i);
 		}
 	}
-	//aladdin->HandleKeyBoard();	
+		
 	aladdin->Update(dt);
 	Scene::Update(dt);
 
+	// set lại gía trị va chạm nx, ny của Aladdin
 	aladdin->nx = 0;
 	aladdin->ny = 0;
 	for (int i = 0; i < coObjects.size(); i++)
 	{
-		Collision::CheckCollision(aladdin, coObjects[i]);
 		coObjects[i]->Update(dt);
+
+		Collision::CheckCollision(aladdin, coObjects[i]);
+		// xét collision táo của Aladdin vs coObjects[i]
 		for (int j = 0; j < aladdin->GetList()->size(); j++)
 		{
 			Collision::CheckCollision(aladdin->GetList()->at(j), coObjects[i]);
 		}
-	}
-	for (int i = 0; i < Aladdin::GetInstance()->GetList()->size(); i++)
-		Aladdin::GetInstance()->GetList()->at(i)->ProcessInput();
+	}	
 	Collision::CheckCollision(aladdin, baseGround);
-
-	//aladdin->CheckCollision(&coObjects);
+	
+	// k.tra Aladdin ở vị trí chuyển màn
 	if (aladdin->x >= 2240 && aladdin->y <= 250)
 	{
 		SceneManager::GetInstance()->ReplaceScene(new NextScene(3));
@@ -140,6 +138,7 @@ void DungeonScene::Render()
 		coObjects.clear();
 		coObjects.push_back(baseGround);
 		coObjects.push_back(basePillar);
+		// tính toán những obj nằm trong vùng camera rồi đưa vào list coObjects
 		grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
@@ -172,7 +171,7 @@ void DungeonScene::Render()
 		d3ddv->EndScene();
 	}
 
-	// Display back buffer content to the screen
+	// display back buffer content to the screen
 	d3ddv->Present(0, 0, 0, 0);
 }
 
@@ -216,7 +215,6 @@ void DungeonScene::LoadStaticObj(string path)
 			objGround = new Chains(xDraw, yDraw, width, height);
 			objGround->id = index;
 		}
-
 		listStaticObjs.push_back(objGround);
 	}
 
@@ -349,6 +347,7 @@ void DungeonScene::LoadGridStaticObj(string path)
 			{
 				if (listStaticObjs[t]->id == objIndex)
 				{
+					// thêm obj vào cell của grid
 					grid->AddObjToCell(cellIndex, listStaticObjs[t]);
 					break;
 				}
@@ -390,6 +389,7 @@ void DungeonScene::LoadGridObj(string path)
 				if (isAdded == true) break;
 				if (listStoneBricks[t]->id == objIndex)
 				{
+					// thêm obj vào cell của grid
 					grid->AddObjToCell(cellIndex, listStoneBricks[t]);
 					isAdded = true;
 					break;
@@ -400,6 +400,7 @@ void DungeonScene::LoadGridObj(string path)
 				if (isAdded == true) break;
 				if (listObjs[t]->id == objIndex)
 				{
+					// thêm obj vào cell của grid
 					grid->AddObjToCell(cellIndex, listObjs[t]);
 					listObjs[t]->cellIndex = cellIndex;
 					isAdded = true;

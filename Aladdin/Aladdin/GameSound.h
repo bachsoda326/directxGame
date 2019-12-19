@@ -9,8 +9,6 @@ using namespace std;
 typedef map<string, Sound*> SoundMap;
 typedef pair<string, Sound*> SoundPair;
 
-
-
 class GameSound
 {
 public:

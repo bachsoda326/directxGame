@@ -4,48 +4,48 @@ Collision::Collision()
 {
 }
 
-//check collision between 2 GameObject*(retangle)
+// check collision between 2 GameObject*(retangle)
 float Collision::SweptAABB(GameObject* obj1, GameObject* obj2, float& nx, float& ny)
 {
-	float t = -1.0f;			// no collision
+	float t = -1.0f;			// k có collision
 	nx = ny = 0;
 
 	if (obj1->dx == 0 && obj1->dy == 0) 
 		return t;
 
-	//distance is the nearest between two GameObject*
+	// distance is the nearest between two GameObject*
 	float dx_entry, dy_entry;
-	//distance is the farest between two GameObject*
+	// distance is the farest between two GameObject*
 	float dx_exit, dy_exit;
 	
-	//find the distance between two GameObject on near and far GameObject's side
-	//obj1 chạy theo hướng từ trái sang phải
+	// find the distance between two GameObject on near and far GameObject's side
+	// obj1 chạy theo hướng từ trái sang phải
 	if (obj1->dx > 0.0f)
 	{
 		dx_entry = obj2->Left() - obj1->Right();
 		dx_exit = obj2->Right() - obj1->Left();
 	}
-	//obj1 chạy theo hướng từ phải sang trái (dx_entry, tx_exit <= 0)
+	// obj1 chạy theo hướng từ phải sang trái (dx_entry, tx_exit <= 0)
 	else
 	{
 		dx_entry = obj2->Right() - obj1->Left();
 		dx_exit = obj2->Left() - obj1->Right();
 	}
 
-	//obj1 chạy theo hướng từ trên xuống dưới
+	// obj1 chạy theo hướng từ trên xuống dưới
 	if (obj1->dy > 0.0f)
 	{
 		dy_entry = obj2->Top() - obj1->Bottom();
 		dy_exit = obj2->Bottom() - obj1->Top();
 	}
-	//obj1 chạy theo hướng từ dưới lên trên (dy_entry, ty_exit <= 0)
+	// obj1 chạy theo hướng từ dưới lên trên (dy_entry, ty_exit <= 0)
 	else
 	{
 		dy_entry = obj2->Bottom() - obj1->Top();
 		dy_exit = obj2->Top() - obj1->Bottom();
 	}
 
-	//find time of collision and time of leaving for each axis (if statement is to prevent divide by zero)
+	// find time of collision and time of leaving for each axis (if statement is to prevent divide by zero)
 	float tx_entry, ty_entry;
 	float tx_exit, ty_exit;
 
@@ -74,7 +74,7 @@ float Collision::SweptAABB(GameObject* obj1, GameObject* obj2, float& nx, float&
 	if (tx_entry < 0.0f && ty_entry < 0.0f || tx_entry > 1.0f || ty_entry > 1.0f)
 		return t;
 
-	//find the earliest/lastest times of collision
+	// find the earliest/lastest times of collision
 	float t_entry = max(tx_entry, ty_entry);
 	float t_exit = min(tx_exit, ty_exit);
 
@@ -94,7 +94,7 @@ float Collision::SweptAABB(GameObject* obj1, GameObject* obj2, float& nx, float&
 	}
 }
 
-//check broad-phasing
+// check broad-phasing
 GameObject* Collision::GetSweptBroadphaseBaseObject(GameObject* obj)
 {
 	GameObject* broadPhase = new GameObject();
@@ -113,10 +113,9 @@ bool Collision::AABBCheck(GameObject* obj1, GameObject* obj2)
 	return !(obj1->Right()<obj2->Left() || obj1->Left()>obj2->Right() || obj1->Bottom()<obj2->Top() || obj1->Top()>obj2->Bottom());
 }
 
-//check 2 GameObject* collised
 void Collision::CheckCollision(GameObject* obj1, GameObject* obj2)
 {
-	//kiểm tra đã đặt lại kích thước box chưa
+	// kiểm tra đã đặt lại kích thước box chưa
 	bool isResetFrameSize = false;
 
 	if (obj1->isDie || obj2->isDie || obj1 == obj2)
@@ -146,7 +145,7 @@ void Collision::CheckCollision(GameObject* obj1, GameObject* obj2)
 			obj1->ny = -1.0;
 	}
 
-	//broadPhase là đối tượng trong tương lai của obj1 (vị trí obj1 ở frame sau)
+	// broadPhase là đối tượng trong tương lai của obj1 (vị trí obj1 ở frame sau)
 	GameObject* broadPhase = GetSweptBroadphaseBaseObject(obj1);
 	if (AABBCheck(broadPhase, obj2))
 	{
@@ -154,15 +153,13 @@ void Collision::CheckCollision(GameObject* obj1, GameObject* obj2)
 		float collisionTime = SweptAABB(obj1, obj2, nx, ny);
 		ExceptionalCase(obj1, obj2, nx, ny, collisionTime);
 
-		//Cập nhật lại nx, ny
+		// cập nhật lại nx, ny
 		if (nx != 0)
 			obj1->nx = nx;
 		if (ny != 0)
 			obj1->ny = ny;
-
-		//FilterCollision(collisionTime, obj1->nx, obj1->ny, nx, ny);
 		
-		// Xử lý va chạm obj1 với obj2, obj2 với obj1
+		// xử lý va chạm obj1 với obj2, obj2 với obj1
 		if (collisionTime <= 1.0f && collisionTime >= 0)
 		{
 			obj1->OnCollision(obj2, nx, ny);
@@ -173,10 +170,9 @@ void Collision::CheckCollision(GameObject* obj1, GameObject* obj2)
 	delete broadPhase;
 }
 
-//trường hợp ngoại lệ của va chạm, trả về collisionTime
 void Collision::ExceptionalCase(GameObject* obj1, GameObject* obj2, float& nx, float& ny, float& collisionTime)
 {
-
+	// nếu là kiểu va chạm item thì k xét collision kiểu "Va chạm"
 	if (obj2->collType == CollItem)
 	{
 		ny = 0;
@@ -184,7 +180,7 @@ void Collision::ExceptionalCase(GameObject* obj1, GameObject* obj2, float& nx, f
 		collisionTime = 1.0f;
 		return;
 	}
-
+	// k cho rơi khỏi mặt đất theo chiều dọc
 	if (obj1->x > obj2->Left() && obj1->x < obj2->Right())
 	{
 		if ((int)obj1->y >= (int)obj2->Top() && (int)obj1->y <= (int)obj2->Top() + 35 && obj1->vy > 0)
@@ -195,7 +191,7 @@ void Collision::ExceptionalCase(GameObject* obj1, GameObject* obj2, float& nx, f
 			return;
 		}		
 	}
-
+	// k cho vượt qua hàng rào theo chiều ngang
 	if (obj1->Top()<obj2->Bottom() - 20 && obj1->Bottom()>obj2->Top() + 20 && obj2->collType == CollFence)
 	{
 		if (obj1->Right() >= obj2->Left() && obj1->Right() < obj2->Right() && obj1->vx > 0 && obj1->direction)
@@ -216,29 +212,7 @@ void Collision::ExceptionalCase(GameObject* obj1, GameObject* obj2, float& nx, f
 	}
 }
 
-void Collision::FilterCollision(float & t, float & nx, float & ny, float dnx, float dny)
-{
-	float min_tx = 1.0f;
-	float min_ty = 1.0f;
-	int min_ix = -1;
-	int min_iy = -1;
-
-	nx = 0.0f;
-	ny = 0.0f;
-		
-	if (t < min_tx && dnx != 0) {
-		min_tx = t; nx = dnx; min_ix = 0;
-	}
-
-	if (t < min_ty  && dny != 0) {
-		min_ty = t; ny = dny; min_ix = 0;
-	}
-
-	if (min_ix != 0)
-		t = -1.0f;
-}
-
-//obj obj1 là đối tượng di chuyển, obj obj2 là đối tượng tĩnh
+// obj1 là đối tượng di chuyển, obj obj2 là đối tượng tĩnh
 void Collision::PreventMove(GameObject* obj1, GameObject* obj2, float nx, float ny)
 {
 	if (obj1->x > obj2->Left() && obj1->x < obj2->Right())
@@ -259,7 +233,7 @@ void Collision::PreventMove(GameObject* obj1, GameObject* obj2, float nx, float 
 		}*/
 	}
 
-	//Xét va chạm theo phương ngang, bên trái bên phải obj1
+	// xét va chạm theo phương ngang, bên trái bên phải obj1
 	if (nx != 0 && obj2->collType == CollFence)
 	{
 		//obj1 va chạm phía bên TRÁI obj2
@@ -270,7 +244,7 @@ void Collision::PreventMove(GameObject* obj1, GameObject* obj2, float nx, float 
 		obj1->vx = 0;
 	}
 
-	//Xét va chạm theo phương dọc, bên trên bên dưới obj1
+	// xét va chạm theo phương dọc, bên trên bên dưới obj1
 	if (ny == -1.0f && obj2->collType != CollFence)
 	{
 		if (obj1->Bottom() - obj2->Top() <= 12)
@@ -280,31 +254,6 @@ void Collision::PreventMove(GameObject* obj1, GameObject* obj2, float nx, float 
 		}
 	}
 
-}
-
-void Collision::CollisionLine(GameObject* obj1, GameObject* obj2, float nx, float ny)
-{
-
-	if (obj1->x > obj2->Left() && obj1->x < obj2->Right())
-	{
-		if ((int)obj1->y == (int)obj2->Top() && obj1->y < obj1->Bottom() && obj1->vy > 0)
-		{
-			obj1->vy = 0;
-			return;
-		}
-		if ((int)obj1->y >= (int)obj2->Top() && (int)obj1->y <= (int)obj2->Top() + 35 && obj1->vy > 0)
-		{
-			obj1->y = obj2->Top();
-			obj1->vy = 0;
-			return;
-		}
-	}
-
-	if (ny == -1.0f)
-	{
-		obj1->y += obj2->Top() - obj1->Bottom();
-		obj1->vy = 0;
-	}
 }
 
 Collision::~Collision()

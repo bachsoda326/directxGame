@@ -1,11 +1,11 @@
-#include "Abu.h"
+﻿#include "Abu.h"
 
 Abu * Abu::__instance = NULL;
 
 Abu::Abu()
 {
 	LPDIRECT3DTEXTURE9 texAbu = Textures::GetInstance()->Get(ID_TEX_ABU);
-
+	// khởi tạo các animation
 	animationFan = new Animation("Fan", XML_ABU_ANIMATION_PATH, texAbu, 100);
 	animationRun = new Animation("Run", XML_ABU_ANIMATION_PATH, texAbu, 100);
 
@@ -20,11 +20,7 @@ Abu * Abu::GetInstance()
 }
 
 void Abu::LoadResources()
-{	
-	/*xInit = xDraw;
-	yInit = yDraw;
-	x = xDraw;
-	y = yDraw;*/
+{		
 	direction = true;
 	isDie = false;
 	isDead = false;
@@ -36,22 +32,23 @@ void Abu::LoadResources()
 	if (beginStat == 0)
 	{
 		SetState(RUN);
-		Fan();
+		Run();
 	}
 	else
 	{
 		SetState(FAN);
-		Run();
+		Fan();
 	}
 }
 
 void Abu::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	// update v.trí di chuyển vs v.tốc hiện tại
 	GameObject::Update(dt);
-
 	x += dx;
 	y += dy;
 
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case RUN:
@@ -92,7 +89,7 @@ void Abu::Run()
 	{
 		SetState(RUN);
 		SetAnimation(ANI_RUN);
-		vx = -0.1f;
+		vx = -ABU_SPEED_RUN;
 		vy = 0;
 		break;
 	}

@@ -11,6 +11,7 @@ BoomSkeleton::BoomSkeleton(float left, float top, float width, float height)
 	isDead = false;
 	blood = 1;
 	direction = true;
+	isBlink = 0;
 	collType = CollEnemy;
 	objType = OBJBoomSkeleton;
 }
@@ -18,27 +19,30 @@ BoomSkeleton::BoomSkeleton(float left, float top, float width, float height)
 void BoomSkeleton::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texBoomSkeleton = Textures::GetInstance()->Get(ID_TEX_BOOMSKELETON);
-
+	// khởi tạo các animation
 	animationDefault = new Animation("Animation", XML_BOOMSKELETON_ANIMATION_PATH, texBoomSkeleton, 100);
-
+	// animation ban đầu
 	currentAnimation = animationDefault;
 	animationDefault->SetFrame(0, 0);
 	SetState(STANDING);
 }
 
 void BoomSkeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
-	/*x += dx;
-	y += dy;*/
-
-	if (isDie)
+{	
+	for (int i = 0; i < listBones.size(); i++)
 	{
-		Die();
-		/*return;*/
+		listBones[i]->Update(dt);
+		// xét collision giữa xương đc tạo ra vs Aladdin
+		Collision::CheckCollision(Aladdin::GetInstance(), listBones[i]);
 	}
 
+	// khi c.bị chết thì chết
+	if (isDie)
+	{
+		Die();		
+		return;
+	}
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{	
 	case DOING:
@@ -50,23 +54,17 @@ void BoomSkeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	default:
 		Stand();
 		break;
-	}
-
-	currentTime = GetTickCount();
-
-	if (currentTime - startTime > 3000)
-		DeleteListBones();
-
-	for (int i = 0; i < listBones.size(); i++)
-	{
-		listBones[i]->Update(dt);
-		Collision::CheckCollision(Aladdin::GetInstance(), listBones[i]);
-	}
+	}	
 }
 
 void BoomSkeleton::Render()
 {
-	GameObject::Render();
+	if (!isDead && isBlink != 1)
+	{
+		// Vector trans giúp dời ảnh theo camera
+		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
+		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans);
+	}
 
 	for (int i = 0; i < listBones.size(); i++)
 	{
@@ -90,6 +88,7 @@ void BoomSkeleton::Doing()
 		{
 			GameSound::getInstance()->play(BOOMSKELETON_MUSIC);
 			Die();
+			// tạo xương khi nổ
 			CreateBone();
 			SetState(DIE);
 		}
@@ -121,8 +120,10 @@ void BoomSkeleton::Hurt()
 			GameSound::getInstance()->play(GUARD_HIT_MUSIC);*/
 		if (blood == 0)
 		{
+			startTime = GetTickCount();
 			Die();
 			SetState(DIE);
+			// cộng điểm
 			Aladdin::GetInstance()->score += 10;
 		}
 		break;
@@ -132,10 +133,28 @@ void BoomSkeleton::Hurt()
 
 void BoomSkeleton::Die()
 {
-	Enemy::Die();
+	if (!isDie)
+	{
+		currentAnimation = animationDie;
+		vy = 0;
+		vx = 0;
+		y = (this->Top() + this->Bottom()) / 2;
+		isDie = true;
+	}
+	else
+	{		
+		if (currentAnimation->isActionFinish())
+		{
+			isBlink = 1;
+		}
+		// sau t giây sẽ xóa list xương
+		currentTime = GetTickCount();
+		if (currentTime - startTime > 1300)
+			DeleteListBones();
+	}
 }
 
-vector<GameObject*>* BoomSkeleton::GetListBones()
+vector<GameObject*>* BoomSkeleton::GetList()
 {
 	return &listBones;
 }
@@ -185,19 +204,7 @@ void BoomSkeleton::CreateBone()
 void BoomSkeleton::DeleteListBones()
 {
 	listBones.clear();
-}
-
-void BoomSkeleton::DeleteBone(GameObject *bone)
-{
-	for (int i = 0; i < listBones.size(); i++)
-	{
-		if (listBones[i] == bone)
-		{
-			listBones.erase(listBones.begin() + i);
-			delete bone;
-			bone = 0;
-		}
-	}
+	isDead = true;
 }
 
 void BoomSkeleton::ChangeFrameSize(GameObject * obj)
@@ -227,6 +234,7 @@ void BoomSkeleton::OnIntersect(GameObject * obj)
 	if (obj->collType == CollApple)
 	{
 		SetState(DIE);
+		startTime = GetTickCount();
 		Die();
 		return;
 	}

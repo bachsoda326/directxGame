@@ -14,19 +14,15 @@ SharpTrap::SharpTrap(float left, float top, float width, float height)
 void SharpTrap::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texSharpTrap = Textures::GetInstance()->Get(3);
-
+	// khởi tạo các animation
 	animationDefault = new Animation("Animation", XML_SHARPTRAP_ANIMATION_PATH, texSharpTrap, 80);
-
+	// animation ban đầu
 	currentAnimation = animationDefault;
 	//animationDefault->SetFrame(0, 0);
 }
 
 void SharpTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
-	/*x += dx;
-	y += dy;*/
+{	
 }
 
 void SharpTrap::Render()
@@ -36,7 +32,7 @@ void SharpTrap::Render()
 	if (i == 0)
 	{
 		animationDefault->SetFrame(0, 0);
-
+		// sau t giây sẽ chọt ra
 		if (startWait - startTime > 6000)
 		{
 			GameSound::getInstance()->play(SHARPTRAP_MUSIC);
@@ -47,7 +43,7 @@ void SharpTrap::Render()
 	if (i == 5)
 	{
 		animationDefault->SetFrame(5, 5);
-		
+		// sau t gian sẽ thụt vào
 		if (startWait - startTime > 1500)
 		{
 			animationDefault->SetFrame(4, 0);

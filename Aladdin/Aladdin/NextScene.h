@@ -9,10 +9,11 @@ class NextScene : public Scene
 	LPSPRITE nextMap;
 	Aladdin *aladdin = Aladdin::GetInstance();
 	Abu *abu = Abu::GetInstance();
+	// 3: màn Boss || 4: màn End
 	int sceneId;
 
 public:
-	// 3: màn Boss || 4: màn End
+	// sceneId; 3: màn Boss || 4: màn End
 	NextScene(int sceneId);
 		
 	void LoadResources();

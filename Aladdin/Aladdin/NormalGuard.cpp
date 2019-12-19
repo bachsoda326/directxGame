@@ -1,19 +1,6 @@
 ﻿#include "NormalGuard.h"
 #include "Textures.h"
 
-NormalGuard::NormalGuard()
-{
-	w = 30;
-	h = 20;
-	vx = 0;
-	vy = 0;
-	isDie = false;
-	isDead = false;
-	blood = 2;
-	objType = OBJNormalGuard;
-	currentAnimation = new Animation(100);
-}
-
 NormalGuard::NormalGuard(float Left, float top, float width, float height)
 {
 	xDraw = Left;
@@ -31,34 +18,31 @@ NormalGuard::NormalGuard(float Left, float top, float width, float height)
 void NormalGuard::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texGuards = Textures::GetInstance()->Get(ID_TEX_GUARDS);
-
+	// khởi tạo các animation
 	animationIdle = new Animation("Idle", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 300);
 	animationRun = new Animation("Run", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 300);
 	animationRunOnFire = new Animation("RunOnFire", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 100);
 	animationCut_1 = new Animation("Cut_1", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 100);
 	animationCut_2 = new Animation("Cut_2", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 100);
 	animationHurt = new Animation("Hurt", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 100);
-
+	// animation ban đầu
 	currentAnimation = animationIdle;
 	//animationIdle->SetFrame(0, 0);
 }
 
 void NormalGuard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	GameObject::Update(dt);
-
+	//GameObject::Update(dt);
 	/*x += dx;
 	y += dy;*/
 
+	// khi c.bị chết thì chết
 	if (isDie)
 	{
 		Die();
 		return;
 	}
-
-	/*if (this->x < xLimLeft + 20 && vx < 0 || this->x > xLimRight - 20 && vx > 0)
-		Stand();*/
-
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case PROVOKE:
@@ -84,8 +68,7 @@ void NormalGuard::SetAnimation(NormalGuardAnimations ani)
 	switch (ani)
 	{
 	case ANI_IDLE:
-	{
-		//reset frame when press event
+	{		
 		currentAnimation = animationIdle;
 		currentAnimation->ResetFrame();
 		break;
@@ -99,7 +82,7 @@ void NormalGuard::SetAnimation(NormalGuardAnimations ani)
 	case ANI_RUN_ON_FIRE:
 	{
 		currentAnimation = animationRunOnFire;
-		//currentAnimation->ResetFrame();
+		currentAnimation->ResetFrame();
 		break;
 	}
 	case ANI_CUT_1:
@@ -133,6 +116,7 @@ void NormalGuard::Cut()
 		{
 			GameSound::getInstance()->play(GUARD_CUT_MUSIC);
 		}
+		// sau t.gian ngẫu nhiên sẽ đổi animation chém
 		srand(time(0));
 		if (currentAnimation->isActionFinish() && rand() % 3 == 1)
 		{
@@ -207,6 +191,7 @@ void NormalGuard::Hurt()
 		{
 			Die();
 			SetState(DIE);
+			// cộng điểm
 			Aladdin::GetInstance()->score += 10;
 		}
 		break;
@@ -264,32 +249,27 @@ void NormalGuard::OnIntersect(GameObject * obj)
 
 	if (obj->collType == CollAladdin)
 	{
-		/*if (this->x > xLimLeft && this->x < xLimRight)
-		{*/
-			if (Aladdin::GetInstance()->GetState() == Aladdin::CUTTING)
-			{
-				if ((obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (!obj->direction && obj->Left() < this->Right() && obj->x > this->x))
-					Hurt();
-			}
-			else if (state != HURT)
-			{
-				if (obj->x < this->x)
-					direction = true;
-				else
-					direction = false;
-				
-				if (this->x - 115 <= obj->x && obj->x <= this->x + 115 && this->Top() <= obj->Bottom() - 8 && this->Bottom() > obj->Top() + 8)
-					Cut();
-				else if (this->x - 150 <= obj->x && obj->x <= this->x + 150)
-					Provoke();
-				/*else if (this->x - 230 <= obj->x && obj->x <= this->x + 230)
-					Run();*/
-				else
-					Stand();
-			}
-			/*if (this->x < xLimLeft + 20 && vx < 0 || this->x > xLimRight - 20 && vx > 0)
-				Stand();*/
-		/*}*/
+		if (Aladdin::GetInstance()->GetState() == Aladdin::CUTTING)
+		{
+			if ((obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (!obj->direction && obj->Left() < this->Right() && obj->x > this->x))
+				Hurt();
+		}
+		else if (state != HURT)
+		{
+			if (obj->x < this->x)
+				direction = true;
+			else
+				direction = false;
+
+			if (this->x - 115 <= obj->x && obj->x <= this->x + 115 && this->Top() <= obj->Bottom() - 8 && this->Bottom() > obj->Top() + 8)
+				Cut();
+			else if (this->x - 150 <= obj->x && obj->x <= this->x + 150)
+				Provoke();
+			/*else if (this->x - 230 <= obj->x && obj->x <= this->x + 230)
+				Run();*/
+			else
+				Stand();
+		}
 	}
 }
 

@@ -15,6 +15,17 @@ struct Cell
 class Grid
 {
 public:
+	// dài, rộng của grid
+	int width, height;
+	// độ lớn của mỗi cell trong grid
+	int cellSize;
+	std::vector<Cell> listCells;
+	// số cell theo chiều ngang grid
+	int numXCells;
+	// số cell theo chiều rộng grid
+	int numYCells;
+
+public:
 	Grid(int width, int height, int cellSize);
 	~Grid();
 
@@ -29,10 +40,5 @@ public:
 
 	// Tính toán các obj có thể bị va chạm (Tính toán các cell cần đc update với vị trí của camera)
 	void CalcColliableObjs(Camera *camera, vector<LPGAMEOBJECT>& coObjs);
-public:
-	int width, height;
-	int cellSize;
-	std::vector<Cell> listCells;
-	int numXCells, numYCells;
 };
 

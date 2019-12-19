@@ -148,11 +148,11 @@ void Apple::OnIntersect(GameObject * obj)
 {
 	if (collType == CollApple && obj->collType != CollItem)
 	{
-		if (obj->objType == OBJSword)
+		/*if (obj->objType == OBJSword)
 		{
 			Split_Half();
-		}
-		else if (obj->objType != OBJStoneBrick && obj->objType != OBJBallTrap && obj->objType != OBJSharpTrap && obj->collType != CollChains)
+		}*/
+		if (obj->objType != OBJStoneBrick && obj->objType != OBJBallTrap && obj->objType != OBJSharpTrap && obj->collType != CollChains)
 		{
 			if (!(vy < 0))
 			{

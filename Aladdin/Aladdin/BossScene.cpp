@@ -48,15 +48,17 @@ void BossScene::LoadResources()
 
 void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 {
-	CheckCameraAndWorldMap(CAMERA_BOSSMAP_WIDTH, CAMERA_BOSSMAP_HEIGHT);
+	UpdateCamera(CAMERA_BOSSMAP_WIDTH, CAMERA_BOSSMAP_HEIGHT);
 	
 	coObjects.clear();
+	// tính toán những obj nằm trong vùng camera rồi đưa vào list coObjects
 	grid->CalcColliableObjs(Camera::GetInstance(), coObjects);		
 
 	aladdin->Update(dt);
 	boss->Update(dt);
 	Scene::Update(dt);
 
+	// khi Aladdin hết táo thì có thể tạo táo khi màn k còn táo
 	if (aladdin->numApples == 0)
 	{		
 		canCreateApple = true;
@@ -97,21 +99,22 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 		}
 	}
 
+	// set lại gía trị va chạm nx, ny của Aladdin
 	aladdin->nx = 0;
 	aladdin->ny = 0;
 	for (int i = 0; i < coObjects.size(); i++)
 	{
 		coObjects[i]->Update(dt);
 		Collision::CheckCollision(aladdin, coObjects[i]);
-		// va chạm táo Aladdin vs các vật
+		// va chạm táo Aladdin vs các obj
 		for (int j = 0; j < aladdin->GetList()->size(); j++)
 		{
 			Collision::CheckCollision(aladdin->GetList()->at(j), coObjects[i]);
 		}
-		// va chạm các thứ đc tạo bởi vật vs Aladdin
+		// va chạm của lửa tạo bởi thảm lửa vs Aladdin
 		switch (coObjects[i]->id)
 		{
-		case 5: case 6: case 7: case 8:
+		case 5: case 6: case 7: case 8:				// 5,6,7,8 là id của thảm lửa
 		{
 			for (int k = 0; k < coObjects[i]->GetList()->size(); k++)
 			{
@@ -121,11 +124,13 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 		}
 		}		
 	}	
-	Collision::CheckCollision(aladdin, boss);	
+	Collision::CheckCollision(aladdin, boss);
+	// va chạm táo của Aladdin vs Boss
 	for (int i = 0; i < aladdin->GetList()->size(); i++)
 	{
 		Collision::CheckCollision(aladdin->GetList()->at(i), boss);		
 	}
+	// va chạm sao hoặc lửa của Boss vs aladdin, nền đất, cột
 	for (int j = 0; j < boss->GetList()->size(); j++)
 	{
 		Collision::CheckCollision(boss->GetList()->at(j), aladdin);
@@ -136,6 +141,7 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 		}
 	}	
 
+	// chuyển màn khi Boss chết
 	if (boss->isDead)
 	{
 		SceneManager::GetInstance()->ReplaceScene(new NextScene(4));
@@ -154,6 +160,7 @@ void BossScene::Render()
 	if (d3ddv->BeginScene())
 	{
 		coObjects.clear();
+		// tính toán những obj nằm trong vùng camera rồi đưa vào list coObjects
 		grid->CalcColliableObjs(Camera::GetInstance(), coObjects);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
@@ -182,7 +189,7 @@ void BossScene::Render()
 		d3ddv->EndScene();
 	}
 
-	// Display back buffer content to the screen
+	// display back buffer content to the screen
 	d3ddv->Present(0, 0, 0, 0);
 }
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Constants.h"
 #include "Aladdin.h"
@@ -7,16 +7,17 @@
 class GenieFace : public Item
 {
 public:
-	GenieFace(float left, float top, float width, float height);
+	LPANIMATION animationDefault,			// animation mặc định
+		animationExplosion_Actived;			// animation khi đc ăn
 
-	LPANIMATION animationDefault,
-		animationExplosion_Actived;	
+public:
+	GenieFace(float left, float top, float width, float height);
 
 	void LoadResources();
 
-	// action of GenieFace
-	void Active();
-	void NonActive();
+	// Action của item mặt Genie
+	void Active();							// đc ăn
+	void NonActive();						// chưa đc ăn
 
 	~GenieFace();
 };

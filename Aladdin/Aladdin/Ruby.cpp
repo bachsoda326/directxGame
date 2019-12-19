@@ -23,10 +23,11 @@ Ruby::Ruby(float left, float top, float width, float height)
 void Ruby::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texItems = Textures::GetInstance()->Get(ID_TEX_ITEM);
-
+	// khởi tạo các animation
 	animationDefault = new Animation("Animation", XML_RUBY_ANIMATION_PATH, texItems, 100);
-
-	currentAnimation = animationDefault;	
+	// animation ban đầu
+	currentAnimation = animationDefault;
+	// animation của Ruby của Aladdin
 	if (collType == CollUnknown)
 		animationDefault->SetFrame(9, 9);
 
@@ -39,7 +40,7 @@ void Ruby::Render()
 		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, D3DXVECTOR2(0, 0));
 	else if (!isDead)
 	{
-		// // Vector trans giúp dời ảnh theo camera
+		// Vector trans giúp dời ảnh theo camera
 		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
 		currentAnimation->Render(x, y, xDraw, yDraw, w, h, direction, trans);
 	}
@@ -63,6 +64,7 @@ void Ruby::Active()
 		currentAnimation = animationItemActived;
 		vy = 0;
 		vx = 0;
+		// set vị trí bị hủy ở chính giữa item
 		x = (this->Left() + this->Right()) / 2;
 		y = (this->Top() + this->Bottom()) / 2;
 		isDie = true;
@@ -76,6 +78,7 @@ void Ruby::NonActive()
 {	
 	if (collType != CollUnknown && currentAnimation->isActionFinish())
 	{
+		// sau t giây sẽ set animation chuyển động
 		DWORD endWait = GetTickCount();
 		if (endWait - startWait > 3500)
 		{

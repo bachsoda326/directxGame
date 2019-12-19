@@ -1,4 +1,4 @@
-#include "Fire.h"
+﻿#include "Fire.h"
 
 Fire::Fire()
 {
@@ -9,11 +9,10 @@ Fire::Fire()
 void Fire::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texBoss = Textures::GetInstance()->Get(ID_TEX_BOSS);
-
+	// khởi tạo các animation
 	animationBurn = new Animation("Burn", XML_FIRE_ANIMATION_PATH, texBoss, 100);
-	animationFire = new Animation("Fire", XML_FIRE_ANIMATION_PATH, texBoss, 100);		
-
-	SetState(MOVING);
+	animationFire = new Animation("Fire", XML_FIRE_ANIMATION_PATH, texBoss, 100);
+	// animation ban đầu
 	if (typeFire == 1)
 		currentAnimation = animationBurn;
 	else
@@ -21,6 +20,7 @@ void Fire::LoadResources()
 		currentAnimation = animationFire;
 		animationFire->SetFrame(0, 0);
 	}
+	SetState(MOVING);
 
 	x = xDraw + 12;
 	y = yDraw;
@@ -30,11 +30,12 @@ void Fire::LoadResources()
 
 void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	// update v.trí di chuyển vs v.tốc hiện tại
 	GameObject::Update(dt);
-
 	x += dx;
 	y += dy;
 
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case DESTROY:
@@ -45,7 +46,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 	}
 
-	//simulate fall down (gravity)
+	// v.tốc rơi (khi là lửa Boss phun)
 	if (typeFire == 2)
 		vy += 0.1f;
 }
@@ -55,8 +56,7 @@ void Fire::SetAnimation(FireAnimations ani)
 	switch (ani)
 	{
 	case ANI_BURN:
-	{
-		//reset frame when press event
+	{		
 		currentAnimation = animationBurn;
 		currentAnimation->ResetFrame();
 		break;
@@ -84,13 +84,9 @@ void Fire::Move()
 	{
 	case MOVING:
 	{
-		if (currentAnimation->isActionFinish() && typeFire == 1)
-			Destroy();
-		/*{
-			isDead = true;
-			delete this;
-		}*/
-		if (ny == -1.0f && typeFire == 2 && currentAnimation == animationFire && currentAnimation->GetLastFrame() == 0)
+		if (typeFire == 1 && currentAnimation->isActionFinish())
+			Destroy();		
+		if (typeFire == 2 && ny == -1.0f && currentAnimation == animationFire && currentAnimation->GetLastFrame() == 0)
 		{
 			SetAnimation(ANI_FIRE);
 			animationFire->SetFrame(0, 7);
@@ -129,6 +125,7 @@ void Fire::Destroy()
 		isDead = true;
 		vx = 0;
 		vy = 0;
+		// xác định xem là lửa của thảm hay lửa của Boss rồi xóa
 		if (fireCarpet != NULL)
 			fireCarpet->DeleteFire(this);
 		else if (boss != NULL)

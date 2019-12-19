@@ -1,17 +1,18 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 
 class Enemy : public GameObject
 {
 public:
-	Enemy();
-	
-	LPANIMATION animationDie;
+	LPANIMATION animationDie;		// animation chết
+
+public:
+	Enemy();	
 
 	void LoadResources();
-	//void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);	
 
-	void Die();
+	// Action của enemy
+	void Die();						// chết
 
 	~Enemy();
 };

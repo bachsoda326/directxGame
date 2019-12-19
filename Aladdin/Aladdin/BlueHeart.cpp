@@ -14,9 +14,9 @@ BlueHeart::BlueHeart(float left, float top, float width, float height)
 void BlueHeart::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texItems = Textures::GetInstance()->Get(ID_TEX_ITEM);
-
+	// khởi tạo các animation
 	animationDefault = new Animation("Animation", XML_BLUEHEART_ANIMATION_PATH, texItems, 100);
-
+	// animation ban đầu
 	currentAnimation = animationDefault;	
 
 	Item::LoadResources();
@@ -27,8 +27,7 @@ void BlueHeart::Active()
 	switch (state)
 	{
 	case ACTIVED:
-	{
-		//Thực hiện animation actived xong đặt isDead = true để xóa item ra khỏi danh sách
+	{		
 		if (currentAnimation->isActionFinish())
 			isDead = true;
 		break;
@@ -40,6 +39,7 @@ void BlueHeart::Active()
 		currentAnimation = animationItemActived;
 		vy = 0;
 		vx = 0;
+		// set vị trí bị hủy ở chính giữa item
 		x = (this->Left() + this->Right()) / 2;
 		y = (this->Top() + this->Bottom()) / 2;
 		isDie = true;
@@ -53,6 +53,7 @@ void BlueHeart::NonActive()
 {
 	if (currentAnimation->isActionFinish())
 	{
+		// sau t giây sẽ set animation chuyển động
 		DWORD endWait = GetTickCount();
 		if (endWait - startWait > 2500)
 		{

@@ -1,11 +1,9 @@
 ﻿#include "Item.h"
 
-
-
 Item::Item()
 {
 	LPDIRECT3DTEXTURE9 texItemActived = Textures::GetInstance()->Get(ID_TEX_ITEMACTIVED);
-
+	// khởi tạo các animation
 	animationItemActived = new Animation("Animation", XML_ITEMACTIVED_ANIMATION_PATH, texItemActived, 100);
 }
 
@@ -25,11 +23,12 @@ void Item::LoadResources()
 
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	// update v.trí di chuyển vs v.tốc hiện tại
 	GameObject::Update(dt);
-
 	x += dx;
 	y += dy;
 
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case ACTIVED:
@@ -56,8 +55,7 @@ void Item::Active()
 	switch (state)
 	{
 	case ACTIVED:
-	{
-		//Thực hiện animation actived xong đặt isDead = true để xóa item ra khỏi danh sách
+	{		
 		if (currentAnimation->isActionFinish())
 			isDead = true;
 		break;
@@ -68,6 +66,7 @@ void Item::Active()
 		currentAnimation = animationItemActived;		
 		vy = 0;
 		vx = 0;
+		// set vị trí bị hủy ở chính giữa item
 		x = (this->Left() + this->Right()) / 2;
 		y = (this->Top() + this->Bottom()) / 2;
 		isDie = true;

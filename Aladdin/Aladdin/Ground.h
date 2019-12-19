@@ -12,8 +12,6 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
 
-	//void SetAnimation(NormalGuardAnimations ani);
-
 	~Ground();
 };
 

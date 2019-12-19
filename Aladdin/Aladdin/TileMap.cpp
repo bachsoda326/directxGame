@@ -1,4 +1,4 @@
-#include "TileMap.h"
+﻿#include "TileMap.h"
 
 TileMap::TileMap()
 {
@@ -12,6 +12,7 @@ TileMap::~TileMap()
 void TileMap::LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath)
 {	
 	this->id = id;
+	// tạo texture map
 	Textures::GetInstance()->Add(id, texMapPath, D3DCOLOR_XRGB(255, 255, 255));
 
 	fstream fs;
@@ -19,9 +20,9 @@ void TileMap::LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath)
 
 	fs >> numXTiles;
 	fs >> numYTiles;
-
+	// đặt lại size cho listTiles
 	listTiles.resize(numXTiles*numYTiles);
-
+	// set các tile = các số trong file
 	for (int i = 0; i < listTiles.size(); i++)
 	{
 		fs >> listTiles[i];		
@@ -45,6 +46,7 @@ void TileMap::LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath)
 		xIndex = tileIndex - yIndex * numColumns;
 		left = xIndex * 32;
 		top = yIndex * 32;
+		// tạo sprite tương ứng vs các tile từ texture map
 		sprite = new Sprite(i, left, top, 32, 32, 0, 0, texture);
 		listSprites.push_back(sprite);
 	}

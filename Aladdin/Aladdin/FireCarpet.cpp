@@ -1,4 +1,4 @@
-#include "FireCarpet.h"
+﻿#include "FireCarpet.h"
 
 FireCarpet::FireCarpet(float left, float top, float width, float height)
 {	
@@ -40,12 +40,7 @@ void FireCarpet::CreateFire(GameObject * obj)
 {
 	Fire* fire = new Fire();
 	fire->GetFireCarpet(this);
-	fire->yDraw = obj->y;
-	/*if (obj->arx < this->left())
-		fire->x = this->left() + 24;
-	else if (obj->arx>this->right())
-		fire->x = this->right() - 24;
-	else*/
+	fire->yDraw = obj->y;	
 	fire->xDraw = obj->x - 24;
 	fire->typeFire = 1;
 	fire->LoadResources();
@@ -79,10 +74,12 @@ void FireCarpet::OnCollision(GameObject * obj, float nx, float ny)
 
 void FireCarpet::OnIntersect(GameObject * obj)
 {
-	if (Boss::GetInstance()->typeBoss != 0 && obj->collType == CollAladdin && obj->y == this->Top())
+	// sẽ xét giao nhau khi Boss là Rắn (typeBoss == 1)
+	if (Boss::GetInstance()->typeBoss == 1 && obj->collType == CollAladdin && obj->y == this->Top())
 	{
 		if (obj->x > this->Left() && obj->x < this->Right())
 		{
+			// sau t giây sẽ tạo lửa
 			DWORD endDelay = GetTickCount();
 			if (endDelay - startDelay > 500)
 			{
@@ -93,7 +90,6 @@ void FireCarpet::OnIntersect(GameObject * obj)
 		}
 	}
 }
-
 
 FireCarpet::~FireCarpet()
 {

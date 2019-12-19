@@ -18,10 +18,11 @@ StoneBrick::StoneBrick(float left, float top, float width, float height)
 void StoneBrick::LoadResources(bool check)
 {
 	LPDIRECT3DTEXTURE9 texBrickTrap = Textures::GetInstance()->Get(ID_TEX_BRICK_TRAP);
-
+	// khởi tạo các animation
 	animationDefault = new Animation("Animation", XML_STONEBRICK_ANIMATION_PATH, texBrickTrap, 200);
-
+	// animation ban đầu
 	currentAnimation = animationDefault;
+	// biến check để khởi tạo animation ban đầu ngược nhau của các gạch đá
 	if (check)
 		animationDefault->SetFrame(0, 4);
 	else
@@ -31,11 +32,7 @@ void StoneBrick::LoadResources(bool check)
 }
 
 void StoneBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
-	/*x += dx;
-	y += dy;*/
+{	
 }
 
 void StoneBrick::Render()
@@ -45,7 +42,7 @@ void StoneBrick::Render()
 	if (i == 0)
 	{
 		animationDefault->SetFrame(0, 0);
-
+		// sau t giây thì lồi ra
 		if (startWait - startTime > 2200)
 		{
 			GameSound::getInstance()->play(STONEBRICK_MUSIC);
@@ -56,7 +53,7 @@ void StoneBrick::Render()
 	if (i == 4)
 	{
 		animationDefault->SetFrame(4, 4);
-
+		// sau t giây thì thụt vào
 		if (startWait - startTime > 2200)
 		{
 			animationDefault->SetFrame(3, 0);

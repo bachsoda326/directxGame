@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Constants.h"
 #include "Aladdin.h"
@@ -7,15 +7,16 @@
 class GenieJar : public Item
 {
 public:
-	GenieJar(float left, float top, float width, float height);
+	LPANIMATION animationDefault;		// animation mặc định
 
-	LPANIMATION animationDefault;
+public:
+	GenieJar(float left, float top, float width, float height);
 
 	void LoadResources();
 
-	// action of GenieJar
-	void Active();
-	void NonActive();
+	// Action của bình Genie (điểm hồi sinh)
+	void Active();						// đc ăn
+	void NonActive();					// chưa đc ăn
 
 	~GenieJar();
 };

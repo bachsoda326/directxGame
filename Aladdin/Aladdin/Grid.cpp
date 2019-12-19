@@ -45,11 +45,12 @@ Cell & Grid::GetCell(D3DXVECTOR3 & posObj)
 
 void Grid::CalcColliableObjs(Camera *camera, vector<LPGAMEOBJECT>& coObjs)
 {
+	// tính vị trí topleft và botright của camera
 	int xTopLeftCamera = camera->GetPosition().x - SCREEN_WIDTH / 2;
 	int yTopLeftCamera = camera->GetPosition().y - SCREEN_HEIGHT / 2;
 	int xBotRightCamera = camera->GetPosition().x + SCREEN_WIDTH / 2;
 	int yBotRightCamera = camera->GetPosition().y + SCREEN_HEIGHT / 2;
-
+	// tính vị trí topleft và botright của cell
 	int xTopLeftCell = xTopLeftCamera / cellSize;
 	int yTopLeftCell = yTopLeftCamera / cellSize;
 	int xBotRightCell = xBotRightCamera / cellSize;

@@ -1,9 +1,10 @@
-#include "EndScene.h"
+﻿#include "EndScene.h"
 
 EndScene::EndScene()
 {
 	GameSound::getInstance()->stop(GAME2_MUSIC);
 	GameSound::getInstance()->play(BACKGROUND_MUSIC, true);
+
 	LoadResources();
 }
 
@@ -14,13 +15,14 @@ void EndScene::LoadResources()
 
 	Camera::GetInstance()->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	aladdin->SetPosition(0, 180);
+	// Aladdin lúc đầu bay từ trái qua
 	aladdin->Fly();
 }
 
 void EndScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	aladdin->Update(dt);
-
+	// khi bay hết thì chuyển qua ôm
 	if (aladdin->x >= 350)
 	{
 		aladdin->SetPosition(310, 250);
@@ -47,7 +49,7 @@ void EndScene::Render()
 		d3ddv->EndScene();
 	}
 
-	// Display back buffer content to the screen
+	// display back buffer content to the screen
 	d3ddv->Present(0, 0, 0, 0);
 }
 

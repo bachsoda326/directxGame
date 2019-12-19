@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Constants.h"
 #include "Aladdin.h"
@@ -7,15 +7,16 @@
 class BlueHeart : public Item
 {
 public:
-	BlueHeart(float left, float top, float width, float height);
+	LPANIMATION animationDefault;		// animation mặc định
 
-	LPANIMATION animationDefault;
+public:
+	BlueHeart(float left, float top, float width, float height);	
 
 	void LoadResources();
 
-	// action of GenieFace
-	void Active();
-	void NonActive();
+	// Action của tim xanh
+	void Active();						// đc ăn
+	void NonActive();					// chưa đc ăn
 
 	~BlueHeart();
 };

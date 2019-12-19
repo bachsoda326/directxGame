@@ -9,7 +9,7 @@ Enemy::Enemy()
 void Enemy::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texEnemyDead = Textures::GetInstance()->Get(ID_TEX_ENEMYDEAD);
-
+	// khởi tạo các animation
 	animationDie = new Animation("Animation", XML_ENEMYDEAD_ANIMATION_PATH, texEnemyDead, 50);
 }
 
@@ -24,8 +24,7 @@ void Enemy::Die()
 		isDie = true;
 	}
 	else
-	{
-		//Thực hiện animation chết xong đặt isDead = true để xóa enemy ra khỏi danh sách
+	{		
 		if (currentAnimation->isActionFinish())
 		{
 			isDead = true;			

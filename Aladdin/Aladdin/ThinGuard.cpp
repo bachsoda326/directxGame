@@ -18,32 +18,25 @@ ThinGuard::ThinGuard(float Left, float top, float width, float height)
 void ThinGuard::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texGuards = Textures::GetInstance()->Get(ID_TEX_GUARDS);
-
+	// khởi tạo các animation
 	animationRun = new Animation("Run", XML_THINGUARD_ANIMATION_PATH, texGuards, 100);
 	animationCut_1 = new Animation("Cut_1", XML_THINGUARD_ANIMATION_PATH, texGuards, 100);
 	animationHurt = new Animation("Hurt", XML_THINGUARD_ANIMATION_PATH, texGuards, 90);
 	animationDie = new Animation("Animation", XML_ENEMYDEAD_ANIMATION_PATH, texGuards, 100);
-	
+	// animation ban đầu
 	currentAnimation = animationCut_1;
 	animationCut_1->SetFrame(5, 5);
 }
 
 void ThinGuard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
-	/*x += dx;
-	y += dy;*/
-
+{	
+	// khi c.bị chết thì chết
 	if (isDie)
 	{
 		Die();
 		return;
 	}
-
-	/*if (this->x < xLimLeft + 10 && vx < 0 || this->x > xLimRight - 10 && vx > 0)
-		Stand();*/
-
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case CUTTING_1:
@@ -66,8 +59,7 @@ void ThinGuard::SetAnimation(ThinGuardAnimations ani)
 	switch (ani)
 	{
 	case ANI_RUN:
-	{
-		//reset frame when press event
+	{		
 		currentAnimation = animationRun;
 		currentAnimation->ResetFrame();
 		break;
@@ -99,7 +91,7 @@ void ThinGuard::Cut()
 {
 	switch (state)
 	{
-	case CUTTING_1: /*case HURT:*/
+	case CUTTING_1:
 		if (currentAnimation->isActionFinish())
 			GameSound::getInstance()->play(GUARD_CUT_MUSIC);		
 		break;
@@ -117,16 +109,16 @@ void ThinGuard::Run()
 {
 	switch (state)
 	{
-	case RUNNING: /*case HURT:*/
+	case RUNNING:
 		break;
 	default:
 	{
 		SetState(RUNNING);
 		SetAnimation(ANI_RUN);
 		if (direction)
-			vx = -0.5f;
+			vx = -0.2f;
 		else
-			vx = 0.5f;
+			vx = 0.2f;
 		break;
 	}
 	}
@@ -172,6 +164,7 @@ void ThinGuard::Hurt()
 		{
 			Die();
 			SetState(DIE);
+			// cộng điểm
 			Aladdin::GetInstance()->score += 5;
 		}
 		break;
@@ -212,30 +205,25 @@ void ThinGuard::OnIntersect(GameObject * obj)
 
 	if (obj->collType == CollAladdin)
 	{
-		/*if (this->x > xLimLeft && this->x < xLimRight)
-		{*/
-			if (Aladdin::GetInstance()->GetState() == Aladdin::CUTTING)
-			{
-				if ((obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (!obj->direction && obj->Left() < this->Right() && obj->x > this->x))
-					Hurt();
-			}
-			else if (state != HURT)
-			{
-				if (obj->x < this->x)
-					direction = true;
-				else
-					direction = false;
+		if (Aladdin::GetInstance()->GetState() == Aladdin::CUTTING)
+		{
+			if ((obj->direction && obj->Right() > this->Left() && obj->x < this->x) || (!obj->direction && obj->Left() < this->Right() && obj->x > this->x))
+				Hurt();
+		}
+		else if (state != HURT)
+		{
+			if (obj->x < this->x)
+				direction = true;
+			else
+				direction = false;
 
-				if (this->x - 100 <= obj->x && obj->x <= this->x + 100 && this->Top() <= obj->Bottom() - 8 && this->Bottom() > obj->Top() + 8)
-					Cut();
-				/*else if (this->x - 200 <= obj->x && obj->x <= this->x + 200)
-					Run();*/
-				else
-					Stand();
-			}
-			/*if (this->x < xLimLeft + 10 && vx < 0 || this->x > xLimRight - 10 && vx > 0)
-				Stand();*/
-		/*}*/
+			if (this->x - 100 <= obj->x && obj->x <= this->x + 100 && this->Top() <= obj->Bottom() - 8 && this->Bottom() > obj->Top() + 8)
+				Cut();
+			/*else if (this->x - 200 <= obj->x && obj->x <= this->x + 200)
+				Run();*/
+			else
+				Stand();
+		}
 	}
 }
 

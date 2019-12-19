@@ -12,6 +12,10 @@ Chains::Chains(float left, float top, float width, float height)
 	collType = CollChains;
 }
 
+void Chains::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+}
+
 void Chains::Render()
 {
 	//RenderBoundingBox();

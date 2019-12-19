@@ -15,25 +15,19 @@ Peddler::Peddler(float left, float top, float width, float height)
 }
 
 void Peddler::LoadResources()
-{
-	/*stall->LoadResources();*/
-
+{	
 	LPDIRECT3DTEXTURE9 texPeddler = Textures::GetInstance()->Get(ID_TEX_PEDDLER);
-
+	// khởi tạo các animation
 	animationStand = new Animation("Stand", XML_PEDDLER_ANIMATION_PATH, texPeddler, 100);
 	animationCreate = new Animation("Create", XML_PEDDLER_ANIMATION_PATH, texPeddler, 62);
-
+	// animation ban đầu
 	currentAnimation = animationStand;
 	SetState(STANDING);
 }
 
 void Peddler::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	GameObject::Update(dt);
-
-	/*x += dx;
-	y += dy;*/
-
+{	
+	// update action theo tr.thái hiện tại
 	switch (state)
 	{
 	case CREATING:
@@ -47,7 +41,7 @@ void Peddler::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (stall != nullptr)
 	{
 		stall->Update(dt);
-
+		// k.tra va chạm giữa Aladdin vs shop
 		Collision::CheckCollision(Aladdin::GetInstance(), stall);
 	}
 }
@@ -65,8 +59,7 @@ void Peddler::SetAnimation(PeddlerAnimations ani)
 	switch (ani)
 	{
 	case ANI_STAND:
-	{
-		//reset frame when press event
+	{		
 		currentAnimation = animationStand;
 		currentAnimation->ResetFrame();
 		break;
@@ -74,7 +67,7 @@ void Peddler::SetAnimation(PeddlerAnimations ani)
 	case ANI_CREATE:
 	{
 		currentAnimation = animationCreate;
-		//currentAnimation->ResetFrame();
+		currentAnimation->ResetFrame();
 		break;
 	}
 	}

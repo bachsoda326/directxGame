@@ -60,7 +60,7 @@ void Scene::Render()
 	aladdinRuby->Render();
 }
 
-void Scene::CheckCameraAndWorldMap(int mapWidth, int mapHeight)
+void Scene::UpdateCamera(int mapWidth, int mapHeight)
 {
 	// test Camera move when Mario is not on center screen
 	//mCamera->SetPosition(mPlayer->GetPosition() + D3DXVECTOR3(100,0,0));
@@ -119,7 +119,7 @@ void Scene::LoadFont()
 
 void Scene::DrawFont(LPD3DXFONT font, float x, float y, float width, float height, int value)
 {
-	// set position of font 
+	// set vị trí của font 
 	RECT rect;
 	rect.top = (int)y;
 	rect.left = (int)x;

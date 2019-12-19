@@ -72,10 +72,17 @@ typedef AnimationFrame *LPANIMATION_FRAME;
 
 class Animation
 {
+	// t.gian của frame animation trước đó
 	DWORD lastFrameTime;
+	// t.gian mặc định chuyển frame animation
 	int defaultTime;
-	int firstFrame, lastFrame;
+	// frame đầu của animation
+	int firstFrame;
+	// frame cuối của animation
+	int lastFrame;
+	// frame hiện tại của animation
 	int currentFrame;
+	// true: animation đã xong | false: animation chưa xong
 	bool isActionDone;
 	// listFrames; mỗi frame gồm 1 sprite và time (t.gian chuyển frame)
 	vector<LPANIMATION_FRAME> frames;
@@ -92,7 +99,9 @@ public:
 	// Add sprite vào listFrames của animation
 	void Add(int spriteId, DWORD time = 0);
 	void Render(float x, float y, float &xDraw, float &yDraw, float &w, float &h, bool direction, D3DXVECTOR2 transform, int isBlink = 0);
+	// reset frame animation về đầu
 	void ResetFrame();
+	// set firstFrame đến lastFrame
 	void SetFrame(int firstFrame, int lastFrame);
 	void SetCurrentFrame(int i);
 	int GetCurrentFrame();
