@@ -1335,8 +1335,8 @@ void Aladdin::Hurt()
 		startBlink = GetTickCount();
 		blood -= ALADDIN_HURT;
 
-		/*if (blood <= 0)
-			Die();*/
+		if (blood <= 0)
+			Die();
 		break;
 	}
 	}

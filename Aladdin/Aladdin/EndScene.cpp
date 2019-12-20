@@ -1,4 +1,6 @@
 ﻿#include "EndScene.h"
+#include "SceneManager.h"
+#include "OpenScene.h"
 
 EndScene::EndScene()
 {
@@ -21,12 +23,20 @@ void EndScene::LoadResources()
 
 void EndScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Scene::UpdateKey();
 	aladdin->Update(dt);
 	// khi bay hết thì chuyển qua ôm
 	if (aladdin->x >= ENDSCENE_PASS_FLY_X)
 	{
 		aladdin->SetPosition(ALADDIN_POTISION_ENDSCENE_HUG_X, ALADDIN_POTISION_ENDSCENE_HUG_Y);
 		aladdin->Hug();
+	}
+
+	// k.tra nhấn phím chuyển màn
+	if (isKey1Up)
+	{
+		SceneManager::GetInstance()->ReplaceScene(new OpenScene());
+		return;
 	}
 }
 

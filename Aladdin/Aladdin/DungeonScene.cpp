@@ -19,7 +19,9 @@
 
 DungeonScene::DungeonScene()
 {
+	GameSound::getInstance()->stop(BACKGROUND_MUSIC);
 	GameSound::getInstance()->play(GAME1_MUSIC, true);
+
 	LoadResources();
 }
 
@@ -42,6 +44,10 @@ void DungeonScene::LoadResources()
 	//aladdin->SetPosition(2000, 200);
 	//aladdin->SetPosition(950, 587);		// error fence climb_jump
 	/*aladdin->SetPosition(250, 480);*/		// peddler		
+	aladdin->xInit = ALADDIN_POTISION_X_INIT;
+	aladdin->yInit = ALADDIN_POTISION_Y_INIT;
+	aladdin->SetState(Aladdin::STANDING);
+	aladdin->vx = 0;
 
 	baseGround = new Ground(0, 1112, 2270, 27);
 	baseGround->collType = CollGround;
@@ -64,6 +70,7 @@ void DungeonScene::LoadResources()
 
 void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 {	
+	Scene::UpdateKey();
 	UpdateCamera(CAMERA_MAP_WIDTH, CAMERA_MAP_HEIGHT);
 	//DebugOut("[SIZE]: %d\n", coObjects.size());
 	coObjects.clear();
@@ -99,7 +106,7 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	}
 		
 	aladdin->Update(dt);
-	Scene::Update(dt);
+	bloodBar->Update(dt);
 
 	// set lại gía trị va chạm nx, ny của Aladdin
 	aladdin->nx = 0;
@@ -117,7 +124,7 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	}
 	
 	// k.tra Aladdin ở vị trí chuyển màn
-	if (aladdin->x >= MAP_PASS_X && aladdin->y <= MAP_PASS_Y)
+	if (aladdin->x >= MAP_PASS_X && aladdin->y <= MAP_PASS_Y || isKey1Up)
 	{
 		SceneManager::GetInstance()->ReplaceScene(new NextScene(3));
 		return;

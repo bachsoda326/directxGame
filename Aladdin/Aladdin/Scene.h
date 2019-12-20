@@ -26,6 +26,9 @@ public:
 	Apple *aladdinApple;
 	Ruby *aladdinRuby;
 
+	Game *keyBoard = Game::GetInstance();
+	bool isKey1Up, isKeyEnterUp;
+
 public:
 	Scene();
 
@@ -39,6 +42,8 @@ public:
 	void DrawFont(LPD3DXFONT font, float x, float y, float width, float height, int value);
 	// Vẽ các chỉ số của Aladdin
 	void DrawFonts();
+	// Update phím qua màn
+	void UpdateKey();
 
 	~Scene();
 };

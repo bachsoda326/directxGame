@@ -32,10 +32,12 @@ void NextScene::LoadResources()
 
 void NextScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Scene::UpdateKey();
 	aladdin->Update(dt);
 	abu->Update(dt);
+
 	// k.tra khi chạy xong thì chuyển màn
-	if (aladdin->x + 50 <= NEXTSCENE_PASS_X)
+	if (aladdin->x + 50 <= NEXTSCENE_PASS_X || isKey1Up)
 	{
 		if (sceneId == 3)
 			SceneManager::GetInstance()->ReplaceScene(new BossScene());

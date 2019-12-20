@@ -1,18 +1,17 @@
 #pragma once
 #include "Scene.h"
 
-class EndScene : public Scene
+class OpenScene : public Scene
 {
-	LPSPRITE endMap;
-	Aladdin *aladdin = Aladdin::GetInstance();
+	LPSPRITE openMap;
 
 public:
-	EndScene();
+	OpenScene();
 
 	void LoadResources();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
 
-	~EndScene();
+	~OpenScene();
 };
 

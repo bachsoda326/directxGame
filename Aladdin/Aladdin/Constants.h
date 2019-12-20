@@ -32,6 +32,7 @@
 #define ID_TEX_TILESHEET_BOSSMAP 102
 #define ID_TEX_NEXTSCENE 200
 #define ID_TEX_ENDSCENE 201
+#define ID_TEX_OPENSCENE 202
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 
 // Đường dẫn texture lớn
@@ -53,6 +54,7 @@
 #define TEX_ABU_PATH "textures\\Abu.png"
 #define TEX_NEXTSCENE_PATH "textures\\Next.png"
 #define TEX_ENDSCENE_PATH "textures\\End.png"
+#define TEX_OPENSCENE_PATH "textures\\Open.png"
 #define TEX_BBOX_PATH "textures\\bbox.png"
 
 // Đường dẫn file animation
@@ -158,7 +160,7 @@
 #define ALADDIN_POTISION_X_INIT 120				// vị trí b.đầu hồi sinh lúc đầu Aladdin map 1
 #define ALADDIN_POTISION_Y_INIT 1100
 #define ALADDIN_POTISION_BOSSMAP_X 300			// vị trí b.đầu Aladdin map boss
-#define ALADDIN_POTISION_BOSSMAP_Y 180
+#define ALADDIN_POTISION_BOSSMAP_Y 280
 #define ALADDIN_POTISION_BOSSMAP_X_INIT 300		// vị trí b.đầu hồi sinh lúc đầu Aladdin map boss
 #define ALADDIN_POTISION_BOSSMAP_Y_INIT 180
 #define ALADDIN_POTISION_NEXTSCENE_X 350		// vị trí b.đầu Aladdin map next

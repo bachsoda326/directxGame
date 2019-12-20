@@ -48,6 +48,7 @@ void BossScene::LoadResources()
 
 void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 {
+	Scene::UpdateKey();
 	UpdateCamera(CAMERA_BOSSMAP_WIDTH, CAMERA_BOSSMAP_HEIGHT);
 	
 	coObjects.clear();
@@ -57,7 +58,7 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 
 	aladdin->Update(dt);
 	boss->Update(dt);
-	Scene::Update(dt);
+	bloodBar->Update(dt);
 
 	// khi Aladdin hết táo thì có thể tạo táo khi màn k còn táo
 	if (aladdin->numApples == 0)
@@ -144,7 +145,7 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	}	
 
 	// chuyển màn khi Boss chết
-	if (boss->isDead)
+	if (boss->isDead || isKey1Up)
 	{
 		SceneManager::GetInstance()->ReplaceScene(new NextScene(4));
 		return;

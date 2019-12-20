@@ -35,6 +35,7 @@ void Scene::LoadResources()
 	textures->Add(ID_TEX_NEXTSCENE, TEX_NEXTSCENE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_TEX_ENDSCENE, TEX_ENDSCENE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_TEX_ABU, TEX_ABU_PATH, D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_TEX_OPENSCENE, TEX_OPENSCENE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_TEX_BBOX, TEX_BBOX_PATH, D3DCOLOR_XRGB(255, 255, 255));
 
 	LoadFont();
@@ -46,10 +47,7 @@ void Scene::LoadResources()
 }
 
 void Scene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	/*CheckCameraAndWorldMap();*/
-
-	bloodBar->Update(dt);	
+{		
 }
 
 void Scene::Render()
@@ -154,6 +152,12 @@ void Scene::DrawFonts()
 	DrawFont(numRubies, NUMRUBY_POSITION_X, NUMRUBY_POSITION_Y, 35, 25, Aladdin::GetInstance()->numRubies);
 	DrawFont(numApples, NUMAPPLE_POSITION_X, NUMAPPLE_POSITION_Y, 35, 25, Aladdin::GetInstance()->numApples);
 	//DrawFont(fps, 280, 5, 35, 25, ifps);
+}
+
+void Scene::UpdateKey()
+{	
+	isKey1Up = keyBoard->KeyDown(DIK_1);
+	isKeyEnterUp = keyBoard->KeyDown(DIK_RETURN);
 }
 
 Scene::~Scene()

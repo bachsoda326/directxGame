@@ -145,6 +145,7 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="NextScene.h" />
+    <ClInclude Include="OpenScene.h" />
     <ClInclude Include="Ruby.h" />
     <ClInclude Include="GenieFace.h" />
     <ClInclude Include="GenieJar.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="NextScene.cpp" />
+    <ClCompile Include="OpenScene.cpp" />
     <ClCompile Include="Ruby.cpp" />
     <ClCompile Include="GenieFace.cpp" />
     <ClCompile Include="GenieJar.cpp" />
