@@ -2,7 +2,7 @@
 
 #define WINDOW_CLASS_NAME "AladdinWindow"
 #define MAIN_WINDOW_TITLE "Aladdin"
-#define MAX_FRAME_RATE 120		// FPS
+#define MAX_FRAME_RATE 180		// FPS
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
 #define SCREEN_WIDTH 340

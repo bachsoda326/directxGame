@@ -147,13 +147,13 @@ void DungeonScene::Render()
 		}
 		if (!aladdin->isDie)
 		{
-			map->Render();
+			map->Render(Camera::GetInstance());
 			for (int i = 0; i < coObjects.size(); i++)
 			{
 				coObjects[i]->Render();
 			}
 			aladdin->Render();
-			frontMap->Render();
+			frontMap->Render(Camera::GetInstance());
 			Scene::Render();
 		}
 		else

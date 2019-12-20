@@ -62,6 +62,14 @@ void Scene::Render()
 
 void Scene::UpdateCamera(int mapWidth, int mapHeight)
 {
+	//tính fps của game
+	/*DWORD endRender = GetTickCount();
+	if (endRender - beginRender > 0 && endRender - beginRender < 1000)
+		ifps = 1000 / (endRender - beginRender);
+	else
+		ifps = 1000;
+	beginRender = endRender;*/
+
 	// test Camera move when Mario is not on center screen
 	//mCamera->SetPosition(mPlayer->GetPosition() + D3DXVECTOR3(100,0,0));
 	Camera::GetInstance()->SetPosition(Aladdin::GetInstance()->GetPosition());
@@ -111,10 +119,14 @@ void Scene::LoadFont()
 	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numApples);
 	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numRubies);
 	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &numLifes);
+	//D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &fps);
 	desc.Height = 20;
 	desc.Width = 10;
 	desc.Weight = 400;
 	D3DXCreateFontIndirect(Game::GetInstance()->GetDirect3DDevice(), &desc, &score);
+
+	// bắt đầu tính thời gian(tính fps)
+		/*beginRender = GetTickCount();*/
 }
 
 void Scene::DrawFont(LPD3DXFONT font, float x, float y, float width, float height, int value)
@@ -141,6 +153,7 @@ void Scene::DrawFonts()
 	DrawFont(numLifes, NUMLIFE_POSITION_X, NUMLIFE_POSITION_Y, 35, 25, Aladdin::GetInstance()->numLifes);
 	DrawFont(numRubies, NUMRUBY_POSITION_X, NUMRUBY_POSITION_Y, 35, 25, Aladdin::GetInstance()->numRubies);
 	DrawFont(numApples, NUMAPPLE_POSITION_X, NUMAPPLE_POSITION_Y, 35, 25, Aladdin::GetInstance()->numApples);
+	//DrawFont(fps, 280, 5, 35, 25, ifps);
 }
 
 Scene::~Scene()

@@ -174,7 +174,7 @@ void BossScene::Render()
 		}
 		if (!aladdin->isDie)
 		{
-			bossMap->Render();
+			bossMap->Render(Camera::GetInstance());
 			boss->Render();
 			for (int i = 0; i < coObjects.size(); i++)
 			{

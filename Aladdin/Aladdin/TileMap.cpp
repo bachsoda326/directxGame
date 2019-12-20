@@ -52,9 +52,45 @@ void TileMap::LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath)
 	}
 }
 
-void TileMap::Render()
+void TileMap::Render(Camera *camera)
 {	
-	int xDrawIndex, yDrawIndex, xDraw, yDraw;
+	// tính vị trí topleft và botright của camera
+	int xTopLeftCamera = camera->GetPosition().x - SCREEN_WIDTH / 2;
+	int yTopLeftCamera = camera->GetPosition().y - SCREEN_HEIGHT / 2;
+	int xBotRightCamera = camera->GetPosition().x + SCREEN_WIDTH / 2;
+	int yBotRightCamera = camera->GetPosition().y + SCREEN_HEIGHT / 2;
+	// tính vị trí topleft và botright của cell
+	int xTopLeftCell = xTopLeftCamera / CELL_SIZE;
+	int yTopLeftCell = yTopLeftCamera / CELL_SIZE;
+	int xBotRightCell = xBotRightCamera / CELL_SIZE;
+	int yBotRightCell = yBotRightCamera / CELL_SIZE;
+	// tính vị trí topleft và botright của tile
+	int xTopLeft = xTopLeftCell * CELL_SIZE / 32;
+	int yTopLeft = yTopLeftCell * CELL_SIZE / 32;
+	int xBotRight = ((xBotRightCell * CELL_SIZE) + CELL_SIZE) / 32;
+	int yBotRight = ((yBotRightCell * CELL_SIZE) + CELL_SIZE) / 32;
+	if (xBotRight >= numXTiles - 1)
+		xBotRight = numXTiles - 1;
+	if (yBotRight >= numYTiles - 1)
+		yBotRight = numYTiles - 1;
+
+	for (int x = xTopLeft; x <= xBotRight; x++)
+	{
+		for (int y = yTopLeft; y <= yBotRight; y++)
+		{
+			int xDrawIndex, yDrawIndex, xDraw, yDraw, i;
+			i = x + y * numXTiles;
+			yDrawIndex = i / numXTiles;
+			xDrawIndex = i - yDrawIndex * numXTiles;
+			xDraw = xDrawIndex * 32;
+			yDraw = yDrawIndex * 32;
+
+			D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
+			listSprites[i]->Draw(xDraw, yDraw, trans);
+		}
+	}
+
+	/*int xDrawIndex, yDrawIndex, xDraw, yDraw;
 		
 	for (int i = 0; i < listSprites.size(); i++)
 	{		
@@ -64,5 +100,5 @@ void TileMap::Render()
 		yDraw = yDrawIndex * 32;
 		D3DXVECTOR2 trans = D3DXVECTOR2(floor(SCREEN_WIDTH / 2 - Camera::GetInstance()->GetPosition().x), floor(SCREEN_HEIGHT / 2 - Camera::GetInstance()->GetPosition().y));
 		listSprites[i]->Draw(xDraw, yDraw, trans);
-	}
+	}*/
 }

@@ -15,6 +15,9 @@ public:
 	D3DXFONT_DESC desc;
 	// các font tương ứng số táo, ruby, mạng, điểm
 	LPD3DXFONT numApples, numRubies, numLifes, score;
+	/*LPD3DXFONT fps;
+	int ifps;
+	DWORD beginRender;*/
 
 	// thanh máu của Aladdin
 	BloodBar *bloodBar;

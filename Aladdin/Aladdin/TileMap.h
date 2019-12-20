@@ -14,13 +14,6 @@ using namespace std;
 
 class TileMap
 {
-public:
-	TileMap();
-	~TileMap();
-
-	void LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath);
-	void Render();
-
 private:
 	// listTiles (list chứa các số trong file mapTile)
 	std::vector<int> listTiles;
@@ -32,5 +25,12 @@ private:
 	int numYTiles;
 	// id để tạo texture map
 	int id;
+
+public:
+	TileMap();
+	~TileMap();
+
+	void LoadTileMap(int id, LPCSTR texMapPath, string txtMapPath);
+	void Render(Camera *camera);
 };
 
