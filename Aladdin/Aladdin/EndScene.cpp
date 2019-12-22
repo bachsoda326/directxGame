@@ -1,6 +1,5 @@
 ﻿#include "EndScene.h"
 #include "SceneManager.h"
-#include "OpenScene.h"
 
 EndScene::EndScene()
 {

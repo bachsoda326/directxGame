@@ -1,5 +1,10 @@
 ﻿#pragma once
 #include "Scene.h"
+#include "OpenScene.h"
+#include "DungeonScene.h"
+#include "BossScene.h"
+#include "NextScene.h"
+#include "EndScene.h"
 
 class SceneManager
 {

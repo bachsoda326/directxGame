@@ -150,7 +150,6 @@
     <ClInclude Include="GenieFace.h" />
     <ClInclude Include="GenieJar.h" />
     <ClInclude Include="Grid.h" />
-    <ClInclude Include="Map.h" />
     <ClInclude Include="NormalGuard.h" />
     <ClInclude Include="Peddler.h" />
     <ClInclude Include="Scene.h" />
@@ -201,7 +200,6 @@
     <ClCompile Include="GenieJar.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp" />
     <ClCompile Include="NormalGuard.cpp" />
     <ClCompile Include="Peddler.cpp" />
     <ClCompile Include="Scene.cpp" />

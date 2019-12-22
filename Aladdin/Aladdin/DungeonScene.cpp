@@ -15,7 +15,6 @@
 #include "SharpTrap.h"
 #include "BallTrap.h"
 #include "SceneManager.h"
-#include "NextScene.h"
 
 DungeonScene::DungeonScene()
 {
@@ -40,14 +39,17 @@ void DungeonScene::LoadResources()
 	frontMap->LoadTileMap(ID_TEX_TILESHEET_FRONTMAP, TEX_TILESHEET_FRONTMAP_PATH, TXT_TILEMAP_FRONTMAP_PATH);
 		
 	aladdin->SetPosition(ALADDIN_POTISION_X, ALADDIN_POTISION_Y);
-	//aladdin->SetPosition(1039, 790);
-	//aladdin->SetPosition(2000, 200);
-	//aladdin->SetPosition(950, 587);		// error fence climb_jump
-	/*aladdin->SetPosition(250, 480);*/		// peddler		
+	//aladdin->SetPosition(2000, 200);		// điểm qua màn
+	//aladdin->SetPosition(250, 480);		// điểm shop		
 	aladdin->xInit = ALADDIN_POTISION_X_INIT;
 	aladdin->yInit = ALADDIN_POTISION_Y_INIT;
 	aladdin->SetState(Aladdin::STANDING);
 	aladdin->vx = 0;
+	aladdin->blood = ALADDIN_BLOOD;
+	aladdin->score = ALADDIN_SCORE;
+	aladdin->numApples = ALADDIN_APPLE;
+	aladdin->numRubies = ALADDIN_RUBY;
+	aladdin->numLifes = ALADDIN_LIFE;
 
 	baseGround = new Ground(0, 1112, 2270, 27);
 	baseGround->collType = CollGround;
@@ -127,6 +129,11 @@ void DungeonScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 	if (aladdin->x >= MAP_PASS_X && aladdin->y <= MAP_PASS_Y || isKey1Up)
 	{
 		SceneManager::GetInstance()->ReplaceScene(new NextScene(3));
+		return;
+	}
+	if (aladdin->isDead)
+	{
+		SceneManager::GetInstance()->ReplaceScene(new OpenScene());
 		return;
 	}
 }

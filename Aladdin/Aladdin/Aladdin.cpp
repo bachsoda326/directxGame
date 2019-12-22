@@ -37,7 +37,7 @@ Aladdin::Aladdin()
 	score = ALADDIN_SCORE;
 	numApples = ALADDIN_APPLE;
 	numRubies = ALADDIN_RUBY;
-	numLifes = ALADDIN_LIFE;
+	numLifes = ALADDIN_BLOOD;
 	lastState = STANDING;
 	state = STANDING;
 	collType = CollAladdin;
@@ -87,6 +87,14 @@ void Aladdin::LoadResources()
 	// animation ban đầu
 	currentAnimation = animationJump_Standing;
 	standingTime = GetTickCount();
+
+	nx = 0;
+	ny = 0;
+	isBlink = 0;
+	isDead = false;
+	isDie = false;
+	direction = true;
+	isAppleCreated = false;
 }
 
 void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -1547,8 +1555,17 @@ void Aladdin::OnCollision(GameObject * obj, float nx, float ny)
 	case CollBrick:
 	{
 		int i = obj->currentAnimation->GetCurrentFrame();
-		if (i == 3 || i == 4)
-			Collision::PreventMove(this, obj, nx, ny);
+		int j = obj->currentAnimation->GetLastFrame();
+		if (j == 0)
+		{
+			if (i >= 2)
+				Collision::PreventMove(this, obj, nx, ny);
+		}
+		else
+		{
+			if (i == 3 || i == 4)
+				Collision::PreventMove(this, obj, nx, ny);
+		}
 		break; 
 	}	
 	}
@@ -1559,7 +1576,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 	if (obj->objType == OBJBallTrap)
 	{
 		int i = obj->currentAnimation->GetCurrentFrame();
-		if (i == 12 || i == 13 || i == 14)
+		if (i >= 11)
 		{
 			if (isBlink == 0)
 				Hurt();
@@ -1568,7 +1585,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 	if (obj->objType == OBJSharpTrap)
 	{
 		int i = obj->currentAnimation->GetCurrentFrame();
-		if (i == 3 || i == 4 || i == 5)
+		if (i >= 3)
 		{
 			if (isBlink == 0)
 				Hurt();
@@ -1600,6 +1617,7 @@ void Aladdin::OnIntersect(GameObject * obj)
 		}
 	}
 
+	// va chạm vs enemy
 	if (obj->collType == CollEnemy)
 	{
 		switch (obj->objType)
@@ -1667,15 +1685,17 @@ void Aladdin::OnIntersect(GameObject * obj)
 		}
 	}
 
+	// cộng điểm cộng máu khi ăn item
 	if (obj->collType == CollItem && obj->isActived == false)
 	{
 		switch (obj->objType)
 		{		
 		case OBJApple:
 			numApples++;
+			score += ALADDIN_SCORE_APPLE;
 			break;
 		case OBJGenieFace:
-			score += 250;
+			score += ALADDIN_SCORE_GENIEFACE;
 			GameSound::getInstance()->play(WOW_MUSIC);
 			break;
 		case OBJGenieJar:
@@ -1684,11 +1704,11 @@ void Aladdin::OnIntersect(GameObject * obj)
 			yInit = obj->yDraw;
 			break;
 		case OBJBlueHeart:
-			score += 150;
-			blood += 3;
+			score += ALADDIN_SCORE_BLUEHEART;
+			blood += ALADDIN_ADD_BLOOD;
 			break;
 		case OBJRuby:
-			score += 150;
+			score += ALADDIN_SCORE_RUBY;
 			numRubies++;
 			break;
 		}

@@ -1,7 +1,5 @@
 ﻿#include "BossScene.h"
 #include "SceneManager.h"
-#include "EndScene.h"
-#include "NextScene.h"
 
 BossScene::BossScene()
 {
@@ -150,6 +148,11 @@ void BossScene::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjs)
 		SceneManager::GetInstance()->ReplaceScene(new NextScene(4));
 		return;
 	}	
+	if (aladdin->isDead)
+	{
+		SceneManager::GetInstance()->ReplaceScene(new OpenScene());
+		return;
+	}
 }
 
 void BossScene::Render()

@@ -1,7 +1,5 @@
 ﻿#include "NextScene.h"
 #include "SceneManager.h"
-#include "BossScene.h"
-#include "EndScene.h"
 
 NextScene::NextScene(int sceneId)
 {

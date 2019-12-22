@@ -181,6 +181,11 @@
 #define ALADDIN_SCORE_NORMALGUARD 10			// điểm khi giết enemy mập
 #define ALADDIN_SCORE_THINGUARD 5				// điểm khi giết enemy gầy
 #define ALADDIN_SCORE_BAT 10					// điểm khi giết dơi
+#define ALADDIN_SCORE_GENIEFACE 75				// điểm khi ăn mặt thần đèn
+#define ALADDIN_SCORE_BLUEHEART 50				// điểm khi ăn tim xanh
+#define ALADDIN_ADD_BLOOD 3						// máu Aladdin tăng khi ăn tim xanh
+#define ALADDIN_SCORE_RUBY 30					// điểm khi ăn ruby
+#define ALADDIN_SCORE_APPLE 0					// điểm khi ăn táo
 
 #define ALADDIN_BLOOD 8					// số máu
 #define ALADDIN_LIFE 3					// số mạng

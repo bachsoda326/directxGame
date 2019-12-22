@@ -1,9 +1,11 @@
 #include "OpenScene.h"
 #include "SceneManager.h"
-#include "DungeonScene.h"
 
 OpenScene::OpenScene()
 {
+	GameSound::getInstance()->stop(GAME1_MUSIC);
+	GameSound::getInstance()->stop(GAME2_MUSIC);
+	GameSound::getInstance()->stop(NEXT_MUSIC);
 	GameSound::getInstance()->stop(BACKGROUND_MUSIC);
 	GameSound::getInstance()->play(BACKGROUND_MUSIC, true);
 

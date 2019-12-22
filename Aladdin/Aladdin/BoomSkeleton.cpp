@@ -199,7 +199,7 @@ void BoomSkeleton::CreateBone()
 	bone5->yDraw = (this->Top() + this->Bottom()) / 2;
 	bone5->vx = 0.25f;
 	bone5->LoadResources();
-	listBones.push_back(bone5);	
+	listBones.push_back(bone5);
 }
 
 void BoomSkeleton::DeleteListBones()
