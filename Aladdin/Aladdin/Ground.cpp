@@ -21,7 +21,7 @@ void Ground::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Ground::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 Ground::~Ground()

@@ -74,6 +74,10 @@ void Apple::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x += dx;
 	y += dy;
 
+	// k.tra nếu táo xa Aladdin quá (vượt xa camera) thì xóa táo
+	if (x - Aladdin::GetInstance()->x > 270 || x - Aladdin::GetInstance()->x < -270)
+		Aladdin::GetInstance()->DeleteApple(this);
+
 	switch (state)
 	{
 	case SPLIT_HALF:
@@ -154,11 +158,14 @@ void Apple::OnIntersect(GameObject * obj)
 		}*/
 		if (obj->objType != OBJStoneBrick && obj->objType != OBJBallTrap && obj->objType != OBJSharpTrap && obj->collType != CollChains)
 		{
-			if (!(vy < 0))
+			/*if (!(vy < 0))
 			{
 				Burst();
 				GameSound::getInstance()->play(APPLE_POP_MUSIC);
-			}
+			}*/
+
+			Burst();
+			GameSound::getInstance()->play(APPLE_POP_MUSIC);
 		}		
 	}
 	if (collType == CollItem && obj->collType == CollAladdin)

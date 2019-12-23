@@ -45,15 +45,28 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-/*
-Load all game resources
-In this example: load textures, sprites, animations and s.t object
-
-TO-DO: Improve this function by loading texture,sprite,animation,object from file
-*/
+// Tạo texture lớn (ảnh lớn)
 void LoadResources()
 {
-	SceneManager::GetInstance()->GetCurrentScene()->LoadResources();
+	Textures * textures = Textures::GetInstance();
+	// tạo texture lớn từ đường dẫn và add vào instance"textures"
+	textures->Add(ID_TEX_ALADDIN, TEX_ALADDIN_PATH, D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_TEX_ITEM, TEX_ITEMS_PATH, D3DCOLOR_XRGB(248, 0, 248));
+	textures->Add(ID_TEX_PEDDLER, TEX_PEDDLER_PATH, D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_TEX_BRICK_TRAP, TEX_BRICK_TRAP_PATH, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_GUARDS, TEX_GUARDS_PATH, D3DCOLOR_XRGB(120, 193, 152));
+	textures->Add(ID_TEX_BAT, TEX_BAT_PATH, D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_TEX_BOOMSKELETON, TEX_BOOMSKELETON_PATH, D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_TEX_ENEMYDEAD, TEX_ENEMYDEAD_PATH, D3DCOLOR_XRGB(186, 254, 202));
+	textures->Add(ID_TEX_ENEMYEXPLOSION, TEX_ENEMYEXPLOSION_PATH, D3DCOLOR_XRGB(186, 254, 202));
+	textures->Add(ID_TEX_ITEMACTIVED, TEX_ITEMACTIVED_PATH, D3DCOLOR_XRGB(255, 4, 253));
+	textures->Add(ID_TEX_BLOODBAR, TEX_BLOODBAR_PATH, D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_TEX_BOSS, TEX_BOSS_PATH, D3DCOLOR_XRGB(186, 254, 202));
+	textures->Add(ID_TEX_NEXTSCENE, TEX_NEXTSCENE_PATH, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_ENDSCENE, TEX_ENDSCENE_PATH, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_ABU, TEX_ABU_PATH, D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_TEX_OPENSCENE, TEX_OPENSCENE_PATH, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_BBOX, TEX_BBOX_PATH, D3DCOLOR_XRGB(255, 255, 255));
 }
 
 /*
@@ -170,11 +183,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->Init(hWnd);	
 	game->InitKeyboard();
 	//game->InitMouse();
-
+	// tạo các texture (ảnh lớn)
+	LoadResources();
 	// tạo vòng khởi đầu
 	SceneManager::GetInstance()->ReplaceScene(new OpenScene());
-
-	//LoadResources();
 
 	// phóng đại game lên 2 lần
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);

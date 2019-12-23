@@ -69,7 +69,7 @@ void Aladdin::LoadResources()
 	animationClimb_1 = new Animation("Climb_1", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationCut_Standing = new Animation("Cut_Standing", XML_ALADDIN_ANIMATION_PATH, texAladdin, 85);
 	animationCut_LookingUp = new Animation("Cut_LookingUp", XML_ALADDIN_ANIMATION_PATH, texAladdin, 80);
-	animationCut_Ducking = new Animation("Cut_Ducking", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
+	animationCut_Ducking = new Animation("Cut_Ducking", XML_ALADDIN_ANIMATION_PATH, texAladdin, 65);
 	animationCut_Jumping = new Animation("Cut_Jumping", XML_ALADDIN_ANIMATION_PATH, texAladdin, 80);
 	animationCut_Climbing = new Animation("Cut_Climbing", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
 	animationThrow_Standing = new Animation("Throw_Standing", XML_ALADDIN_ANIMATION_PATH, texAladdin, 100);
@@ -155,6 +155,13 @@ void Aladdin::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	for (int i = 0; i < listApples.size(); i++)
 	{
 		listApples[i]->Update(dt);
+	}
+	
+	// tăng 1 mạng nếu đc 1000 điểm rồi reset score
+	if (score >= 1000)
+	{
+		numLifes++;
+		score -= 1000;
 	}
 }
 
