@@ -162,9 +162,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -306,11 +303,9 @@
     <ClInclude Include="GameObject.h">
       <Filter>GameObject\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Constants.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -452,5 +447,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>GameObject\Object</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>

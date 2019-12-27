@@ -1537,6 +1537,47 @@ void Aladdin::CreateApple()
 	apple->direction = this->direction;
 	apple->LoadResources();
 	listApples.push_back(apple);
+
+	// tạo táo 2
+	//numApples--;
+	//GameObject* apple1 = new Apple();
+
+	//if (lastState == FALL || lastState == CLIMB || lastState == CLIMBING)
+	//{
+	//	apple1->yDraw = (this->Top() + this->Bottom()) / 2;
+	//	// vận tốc ném lên (vy), ném ngang (vx) của táo
+	//	apple1->vy = -(APPLE_SPEED_THROWCLIMB_VY + 0.2);
+	//	if (!direction)
+	//	{
+	//		apple1->xDraw = this->Right();
+	//		apple1->vx = APPLE_SPEED_THROWCLIMB_VX - 0.2;
+	//	}
+	//	else
+	//	{
+	//		apple1->xDraw = this->Left();
+	//		apple1->vx = -(APPLE_SPEED_THROWCLIMB_VX - 0.2);
+	//	}
+	//}
+	//else
+	//{
+	//	apple1->yDraw = this->Top();
+	//	// vận tốc ném lên (vy), ném ngang (vx) của táo
+	//	apple1->vy = -(APPLE_SPEED_THROWCLIMB_VY + 0.2);
+	//	if (direction)
+	//	{
+	//		apple1->xDraw = this->Right();
+	//		apple1->vx = APPLE_SPEED_THROW_VX - 0.2;
+	//	}
+	//	else
+	//	{
+	//		apple1->xDraw = this->Left();
+	//		apple1->vx = -(APPLE_SPEED_THROW_VX - 0.2);
+	//	}
+	//}
+
+	//apple1->direction = this->direction;
+	//apple1->LoadResources();
+	//listApples.push_back(apple1);
 }
 
 void Aladdin::DeleteApple(GameObject * apple)

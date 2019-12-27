@@ -1,5 +1,44 @@
 ﻿#pragma once
 
+// Enemy
+/*  -Bat: dơi
+	-BoomSkeleton: bộ xương boom
+		+Bone: xương
+	-Boss:
+		+Star: sao Boss bắn ra hút Aladdin về
+	-Guard:
+		+NormalGuard: địch béo
+		+ThinGuard: địch gầy
+*/
+
+// GroundObject
+/*  -Chain: xợi dây xích để trèo
+	-FireCarpet: thảm lửa (vòng Boss)
+	-Ground: mấy thứ như mặt đất, hàng rào, gỗ, thanh sắt
+*/
+
+// Item
+/*  -AladdinFace: mặt Aladdin (hình ảnh số mạng của Aladdin)
+	-BloodBar: thanh máu (đèn, khói)
+	-BlueHeart: tim xanh (+ máu, điểm)
+	-GenieFace: mặt thần đèn Genie (+ nhiều điểm)
+	-GenieJar: lọ thần đèn Genie (điểm hồi sinh)
+	-Ruby: (+ điểm, dùng 10 cái đổi lấy 5 mạng trong shop)
+*/
+
+// Object
+/*  -AbuMonkey: khỉ Abu (xuất hiện khi quạt cho Aladdin khi mất mạng; hoặc chạy cùng Aladdin khi qua màn
+	-Aladdin
+	-Apple: là táo ném hoặc táo item
+	-Fire: là lửa của thảm lửa hoặc của Boss phun ra
+	-Peddler: kẻ bán hàng rong
+		+Shop: shop của nó
+	-StoneBrick: gạch đá (lồi ra thụt vào)
+	-Trap: bẫy
+		+BallTrap: bẫy bóng
+		+SharpTrap: bẫy nhọn
+*/
+
 #define WINDOW_CLASS_NAME "AladdinWindow"
 #define MAIN_WINDOW_TITLE "Aladdin"
 #define MAX_FRAME_RATE 180		// FPS

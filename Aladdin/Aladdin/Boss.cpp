@@ -146,11 +146,19 @@ void Boss::Attack()
 		}
 		else
 		{
+			// animation boss đến frame 9 thì sẽ tạo 1 lửa
 			if (currentAnimation == animationSnake && currentAnimation->GetCurrentFrame() == 9 && isCreate == false)
 			{
 				CreateFire();
 				isCreate = true;
 			}
+			// hàm tạo lửa theo t.gian
+			/*DWORD endCut = GetTickCount();
+			if (endCut - startCut > 500)
+			{
+				startCut = GetTickCount();
+				CreateFire();				
+			}*/
 			if (currentAnimation->isActionFinish())
 				Stand();
 			break;

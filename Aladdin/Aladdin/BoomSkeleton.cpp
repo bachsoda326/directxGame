@@ -200,6 +200,15 @@ void BoomSkeleton::CreateBone()
 	bone5->vx = 0.25f;
 	bone5->LoadResources();
 	listBones.push_back(bone5);
+
+	// tạo xương 6, vx ngang vy dọc
+	//Bone* bone6 = new Bone();
+	//bone6->xDraw = (this->Right() + this->Left()) / 2;
+	//bone6->yDraw = (this->Top() + this->Bottom()) / 2;
+	////bone6->vx = 0.25f;
+	//bone4->vy = 0.15f;
+	//bone6->LoadResources();
+	//listBones.push_back(bone6);
 }
 
 void BoomSkeleton::DeleteListBones()

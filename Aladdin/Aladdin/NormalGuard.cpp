@@ -24,7 +24,7 @@ void NormalGuard::LoadResources()
 	animationRunOnFire = new Animation("RunOnFire", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 100);
 	animationCut_1 = new Animation("Cut_1", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 100);
 	animationCut_2 = new Animation("Cut_2", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 100);
-	animationHurt = new Animation("Hurt", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 100);
+	animationHurt = new Animation("Hurt", XML_NORMALGUARD_ANIMATION_PATH, texGuards, 50);
 	// animation ban đầu
 	currentAnimation = animationIdle;
 	//animationIdle->SetFrame(0, 0);

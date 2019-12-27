@@ -21,7 +21,7 @@ void ThinGuard::LoadResources()
 	// khởi tạo các animation
 	animationRun = new Animation("Run", XML_THINGUARD_ANIMATION_PATH, texGuards, 100);
 	animationCut_1 = new Animation("Cut_1", XML_THINGUARD_ANIMATION_PATH, texGuards, 100);
-	animationHurt = new Animation("Hurt", XML_THINGUARD_ANIMATION_PATH, texGuards, 90);
+	animationHurt = new Animation("Hurt", XML_THINGUARD_ANIMATION_PATH, texGuards, 60);
 	animationDie = new Animation("Animation", XML_ENEMYDEAD_ANIMATION_PATH, texGuards, 100);
 	// animation ban đầu
 	currentAnimation = animationCut_1;

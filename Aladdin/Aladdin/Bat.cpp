@@ -35,6 +35,10 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	/*x += dx;
 	y = yInit + 30*sin((2*M_PI*dt) + dy);*/	
 
+	// dơi theo Aladdin
+	/*x += dx;
+	y += dy;*/
+
 	// khi c.bị chết thì chết
 	if (isDie)
 	{
@@ -111,6 +115,14 @@ void Bat::Attack()
 		// update v.trí di chuyển vs v.tốc hiện tại
 		x = x + 2 * cos(2 * 3.14 + vx);
 		y = y + 0.5 * sin(2 * 3.14 + vy);
+
+		// dơi theo Aladdin
+		/*vx = ((Aladdin::GetInstance()->Left() + Aladdin::GetInstance()->Right()) / 2 - this->x);
+		vy = ((Aladdin::GetInstance()->Top() + Aladdin::GetInstance()->Bottom()) / 2 - this->y);
+		float max;
+		max = (abs(vx) > abs(vy)) ? abs(vx) : abs(vy);
+		vx = 0.1*vx / max;
+		vy = 0.1*vy / max;*/
 
 		break;
 	}
